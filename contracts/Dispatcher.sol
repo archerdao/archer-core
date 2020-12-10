@@ -18,20 +18,20 @@ contract Dispatcher is AccessControl, Trader {
     using SafeERC20 for IERC20;
 
     /// @notice Admin role to restrict withdrawal of funds from contract
+    bytes32 public constant APPROVER_ROLE = keccak256("APPROVER_ROLE");
+
+    /// @notice Admin role to restrict withdrawal of funds from contract
     bytes32 public constant WITHDRAW_ROLE = keccak256("WITHDRAW_ROLE");
 
-    /// @notice Caller role to restrict functions to set list of approved callers
-    bytes32 public constant CALLER_ROLE = keccak256("CALLER_ROLE");
+    /// @notice modifier to restrict functions to only users that have been added as an approver
+    modifier onlyApprover() {
+        require(hasRole(APPROVER_ROLE, msg.sender), "Caller must have APPROVER role");
+        _;
+    }
 
     /// @notice modifier to restrict functions to only users that have been added as a withdrawer
     modifier onlyWithdrawer() {
         require(hasRole(WITHDRAW_ROLE, msg.sender), "Caller must have WITHDRAW role");
-        _;
-    }
-
-     /// @notice modifier to restrict functions to only users that have been added as a caller
-    modifier onlyCaller() {
-        require(hasRole(CALLER_ROLE, msg.sender), "Caller must have CALLER role");
         _;
     }
 
@@ -48,11 +48,11 @@ contract Dispatcher is AccessControl, Trader {
     /// @notice Fallback function in case receive function is not matched
     fallback() external payable {}
 
-    /// @notice Returns true if given address is on the list of approved callers
+    /// @notice Returns true if given address is on the list of approvers
     /// @param addressToCheck the address to check
-    /// @return true if address is caller
-    function isCaller(address addressToCheck) external view returns(bool) {
-        return hasRole(CALLER_ROLE, addressToCheck);
+    /// @return true if address is withdrawer
+    function isApprover(address addressToCheck) external view returns(bool) {
+        return hasRole(APPROVER_ROLE, addressToCheck);
     }
 
     /// @notice Returns true if given address is on the list of approved withdrawers
@@ -68,7 +68,7 @@ contract Dispatcher is AccessControl, Trader {
     function tokenAllowAll(
         address[] memory tokensToApprove, 
         address spender
-    ) external onlyCaller {
+    ) external onlyTrader {
         for(uint i = 0; i < tokensToApprove.length; i++) {
             IERC20 token = IERC20(tokensToApprove[i]);
             if (token.allowance(address(this), spender) != uint256(-1)) {
@@ -85,7 +85,7 @@ contract Dispatcher is AccessControl, Trader {
         address[] memory tokensToApprove, 
         uint256[] memory approvalAmounts, 
         address spender
-    ) external onlyCaller {
+    ) external onlyTrader {
         require(tokensToApprove.length == approvalAmounts.length, "not same length");
         for(uint i = 0; i < tokensToApprove.length; i++) {
             IERC20 token = IERC20(tokensToApprove[i]);
@@ -98,26 +98,26 @@ contract Dispatcher is AccessControl, Trader {
     // /// @notice Deposit tokens to the smart contract
     // /// @param tokens the tokens to deposit
     // /// @param amount the amount of each token to deposit.  If zero, deposits the maximum allowed amount for each token
-    // function depositTokens(address[] calldata tokens, uint256 amount) external {
-    //     for (uint i = 0; i < tokens.length; i++) {
-    //         IERC20 token = IERC20(tokens[i]);
-    //         uint256 depositAmount;
-    //         uint256 tokenBalance = token.balanceOf(msg.sender);
-    //         uint256 tokenAllowance = token.allowance(msg.sender, address(this));
-    //         if (amount == 0) {
-    //             if (tokenBalance > tokenAllowance) {
-    //                 depositAmount = tokenAllowance;
-    //             } else {
-    //                 depositAmount = tokenBalance;
-    //             }
-    //         } else {
-    //             require(tokenBalance >= amount, "User balance too low");
-    //             require(tokenAllowance >= amount, "Increase token allowance");
-    //             depositAmount = amount;
-    //         }
-    //         require(token.transferFrom(msg.sender, address(this), depositAmount), "Could not deposit funds");
-    //     }
-    // }
+    function depositTokens(address[] calldata tokens, uint256 amount) external {
+        for (uint i = 0; i < tokens.length; i++) {
+            IERC20 token = IERC20(tokens[i]);
+            uint256 depositAmount;
+            uint256 tokenBalance = token.balanceOf(msg.sender);
+            uint256 tokenAllowance = token.allowance(msg.sender, address(this));
+            if (amount == 0) {
+                if (tokenBalance > tokenAllowance) {
+                    depositAmount = tokenAllowance;
+                } else {
+                    depositAmount = tokenBalance;
+                }
+            } else {
+                require(tokenBalance >= amount, "User balance too low");
+                require(tokenAllowance >= amount, "Increase token allowance");
+                depositAmount = amount;
+            }
+            token.safeTransferFrom(msg.sender, address(this), depositAmount);
+        }
+    }
 
     /// @notice Withdraw tokens from the smart contract
     /// @param tokens the tokens to withdraw
@@ -139,7 +139,7 @@ contract Dispatcher is AccessControl, Trader {
                 require(tokenAllowance >= amount, "Increase token allowance");
                 withdrawalAmount = amount;
             }
-            require(token.transferFrom(address(this), msg.sender, withdrawalAmount), "Could not withdraw funds");
+            token.safeTransferFrom(address(this), msg.sender, withdrawalAmount);
         }
     }
 

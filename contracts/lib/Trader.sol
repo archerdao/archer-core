@@ -5,12 +5,30 @@ import "../interfaces/IQueryEngine.sol";
 
 import "./BytesLib.sol";
 import "./CalldataEditor.sol";
+import "./AccessControl.sol";
+import "./ReentrancyGuard.sol";
 
-abstract contract Trader is CalldataEditor {
+abstract contract Trader is ReentrancyGuard, AccessControl, CalldataEditor {
     using BytesLib for bytes;
 
     /// @notice Query contract
     IQueryEngine public queryEngine;
+
+    /// @notice Trader role to restrict functions to set list of approved traders
+    bytes32 public constant TRADER_ROLE = keccak256("TRADER_ROLE");
+
+    /// @notice modifier to restrict functions to only users that have been added as a trader
+    modifier onlyTrader() {
+        require(hasRole(TRADER_ROLE, msg.sender), "Trader must have TRADER role");
+        _;
+    }
+
+    /// @notice Returns true if given address is on the list of approved traders
+    /// @param addressToCheck the address to check
+    /// @return true if address is trader
+    function isTrader(address addressToCheck) external view returns(bool) {
+        return hasRole(TRADER_ROLE, addressToCheck);
+    }
 
     /// @notice Makes a series of trades as single transaction if profitable without query
     /// @param executeScript the compiled bytecode for the series of function calls to execute the trade
@@ -18,7 +36,7 @@ abstract contract Trader is CalldataEditor {
     function makeTrade(
         bytes memory executeScript,
         uint256 ethValue
-    ) public {
+    ) public onlyTrader nonReentrant {
         uint256 contractBalanceBefore = address(this).balance;
         require(contractBalanceBefore >= ethValue, "Not enough ETH in contract");
         execute(executeScript, ethValue);
@@ -33,7 +51,7 @@ abstract contract Trader is CalldataEditor {
         bytes memory executeScript,
         uint256 ethValue,
         uint256 blockDeadline
-    ) public {
+    ) public onlyTrader nonReentrant {
         require(blockDeadline >= block.number, "trade expired");
         uint256 contractBalanceBefore = address(this).balance;
         require(contractBalanceBefore >= ethValue, "Not enough ETH in contract");
@@ -55,7 +73,7 @@ abstract contract Trader is CalldataEditor {
         uint256[] memory executeInputLocations,
         uint256 targetPrice,
         uint256 ethValue
-    ) public {
+    ) public onlyTrader nonReentrant {
         uint256 contractBalanceBefore = address(this).balance;
         require(contractBalanceBefore >= ethValue, "Not enough ETH in contract");
         bytes memory prices = queryEngine.queryAllPrices(queryScript, queryInputLocations);
@@ -83,7 +101,7 @@ abstract contract Trader is CalldataEditor {
         uint256 targetPrice,
         uint256 ethValue,
         uint256 blockDeadline
-    ) public {
+    ) public onlyTrader nonReentrant {
         require(blockDeadline >= block.number, "trade expired");
         uint256 contractBalanceBefore = address(this).balance;
         require(contractBalanceBefore >= ethValue, "Not enough ETH in contract");

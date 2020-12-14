@@ -1,14 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.7.0;
 
-import "./interfaces/IERC20.sol";
-import "./lib/SafeMath.sol";
 import "./lib/BytesLib.sol";
 import "./lib/CalldataEditor.sol";
-import "./lib/SafeERC20.sol";
-import "./lib/AccessControl.sol";
 
-contract QueryEngine is AccessControl, CalldataEditor {
+contract QueryEngine is CalldataEditor {
     // Allows easy manipulation on bytes
     using BytesLib for bytes;
 

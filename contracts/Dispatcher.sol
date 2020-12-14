@@ -59,6 +59,15 @@ contract Dispatcher is AccessControl, Trader {
         _;
     }
 
+    /// @notice Max liquidity updated event
+    event MaxLiquidityUpdated(uint256 indexed oldAmount, uint256 indexed newAmount, address asset);
+
+    /// @notice Liquidity Provided event
+    event LiquidityProvided(uint256 indexed amount, address indexed asset, address provider);
+
+    /// @notice Liquidity removed event
+    event LiquidityRemoved(uint256 indexed amount, address indexed asset, address provider);
+
     /// @notice Initializes contract, setting up initial contract permissions
     /// @param _queryEngine Address of query engine contract
     /// @param _roleManager Address allowed to manage contract roles
@@ -197,7 +206,9 @@ contract Dispatcher is AccessControl, Trader {
     }
 
     /// @notice Set max ETH liquidity to accept for this contract
+    /// @param newMax new max ETH liquidity
     function setMaxETHLiquidity(uint256 newMax) external onlyLPManager {
+        emit MaxLiquidityUpdated(MAX_LIQUIDITY, newMax, address(0));
         MAX_LIQUIDITY = newMax;
     }
 
@@ -206,6 +217,7 @@ contract Dispatcher is AccessControl, Trader {
         require(totalLiquidity.add(msg.value) <= MAX_LIQUIDITY, "amount exceeds max liquidity");
         totalLiquidity = totalLiquidity.add(msg.value);
         lpBalances[msg.sender] = lpBalances[msg.sender].add(msg.value);
+        emit LiquidityProvided(msg.value, address(0), msg.sender);
     }
 
     /// @notice Remove ETH liquidity from Dispatcher
@@ -218,6 +230,7 @@ contract Dispatcher is AccessControl, Trader {
         totalLiquidity = totalLiquidity.sub(amount);
         (bool success, ) = msg.sender.call{value: amount}("");
         require(success, "Could not withdraw ETH");
+        emit LiquidityRemoved(amount, address(0), msg.sender);
     }
 
     /// @notice Withdraw ETH from the smart contract

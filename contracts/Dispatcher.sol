@@ -11,21 +11,37 @@ import "./lib/AccessControl.sol";
 import "./lib/Trader.sol";
 
 contract Dispatcher is AccessControl, Trader {
+    // Allows safe math operations on uint256 values
+    using SafeMath for uint256;
+
     // Allows easy manipulation on bytes
     using BytesLib for bytes;
 
     // use safe ERC20 interface to gracefully handle non-compliant tokens
     using SafeERC20 for IERC20;
 
-    /// @notice Admin role to restrict withdrawal of funds from contract
-    bytes32 public constant APPROVER_ROLE = keccak256("APPROVER_ROLE");
+    /// @notice Admin role to manage whitelisted LPs
+    bytes32 public constant MANAGE_LP_ROLE = keccak256("MANAGE_LP_ROLE");
+
+    /// @notice Addresses with this role are allowed to provide liquidity to this contract.  
+    /// @dev If no addresses with this role exist, all addresses can provide liquidity
+    bytes32 public constant WHITELISTED_LP_ROLE = keccak256("WHITELISTED_LP_ROLE");
 
     /// @notice Admin role to restrict withdrawal of funds from contract
-    bytes32 public constant WITHDRAW_ROLE = keccak256("WITHDRAW_ROLE");
+    bytes32 public constant WITHDRAW_ROLE = keccak256("WITHDRAW_ROLE");    
 
-    /// @notice modifier to restrict functions to only users that have been added as an approver
-    modifier onlyApprover() {
-        require(hasRole(APPROVER_ROLE, msg.sender), "Caller must have APPROVER role");
+    /// @notice Maximum ETH liquidity allowed in Dispatcher
+    uint256 public MAX_LIQUIDITY;
+
+    /// @notice Total current liquidity provided to Dispatcher
+    uint256 public totalLiquidity;
+
+    /// @notice Mapping of lp address to liquidity provided
+    mapping(address => uint256) public lpBalances;
+
+    /// @notice modifier to restrict functions to only users that have been added as LP manager
+    modifier onlyLPManager() {
+        require(hasRole(MANAGE_LP_ROLE, msg.sender), "Caller must have MANAGE_LP role");
         _;
     }
 
@@ -35,11 +51,41 @@ contract Dispatcher is AccessControl, Trader {
         _;
     }
 
-    /// @notice Initializes contract, adding msg.sender as the admin
+    /// @notice modifier to restrict functions to only users that have been whitelisted as an LP
+    modifier onlyWhitelistedLP() {
+        if(getRoleMemberCount(WHITELISTED_LP_ROLE) > 0) {
+            require(hasRole(WHITELISTED_LP_ROLE, msg.sender), "Caller must have WHITELISTED_LP role");
+        }
+        _;
+    }
+
+    /// @notice Initializes contract, setting up initial contract permissions
     /// @param _queryEngine Address of query engine contract
-    constructor(address _queryEngine) {
+    /// @param _roleManager Address allowed to manage contract roles
+    /// @param _lpManager Address allowed to manage LP whitelist
+    /// @param _withdrawer Address allowed to withdraw profit from contract
+    /// @param _trader Address allowed to make trades via this contract
+    /// @param _initialMaxLiquidity Initial max liquidity allowed in contract
+    /// @param _lpWhitelist list of addresses that are allowed to provide liquidity to this contract
+    constructor(
+        address _queryEngine,
+        address _roleManager,
+        address _lpManager,
+        address _withdrawer,
+        address _trader,
+        uint256 _initialMaxLiquidity,
+        address[] memory _lpWhitelist
+    ) {
         queryEngine = IQueryEngine(_queryEngine);
-        _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        _setupRole(MANAGE_LP_ROLE, _lpManager);
+        _setRoleAdmin(WHITELISTED_LP_ROLE, MANAGE_LP_ROLE);
+        _setupRole(WITHDRAW_ROLE, _withdrawer);
+        _setupRole(TRADER_ROLE, _trader);
+        _setupRole(DEFAULT_ADMIN_ROLE, _roleManager);
+        MAX_LIQUIDITY = _initialMaxLiquidity;
+        for(uint i; i < _lpWhitelist.length; i++) {
+            _setupRole(WHITELISTED_LP_ROLE, _lpWhitelist[i]);
+        }
     }
 
     /// @notice Receive function to allow contract to accept ETH
@@ -48,18 +94,25 @@ contract Dispatcher is AccessControl, Trader {
     /// @notice Fallback function in case receive function is not matched
     fallback() external payable {}
 
-    /// @notice Returns true if given address is on the list of approvers
-    /// @param addressToCheck the address to check
-    /// @return true if address is withdrawer
-    function isApprover(address addressToCheck) external view returns(bool) {
-        return hasRole(APPROVER_ROLE, addressToCheck);
-    }
-
     /// @notice Returns true if given address is on the list of approved withdrawers
     /// @param addressToCheck the address to check
     /// @return true if address is withdrawer
     function isWithdrawer(address addressToCheck) external view returns(bool) {
         return hasRole(WITHDRAW_ROLE, addressToCheck);
+    }
+
+    /// @notice Returns true if given address is on the list of LP managers
+    /// @param addressToCheck the address to check
+    /// @return true if address is LP manager
+    function isLPManager(address addressToCheck) external view returns(bool) {
+        return hasRole(MANAGE_LP_ROLE, addressToCheck);
+    }
+
+    /// @notice Returns true if given address is on the list of whitelisted LPs
+    /// @param addressToCheck the address to check
+    /// @return true if address is whitelisted
+    function isWhitelistedLP(address addressToCheck) external view returns(bool) {
+        return hasRole(WHITELISTED_LP_ROLE, addressToCheck);
     }
 
     /// @notice Set approvals for external addresses to use Dispatcher contract tokens
@@ -143,15 +196,34 @@ contract Dispatcher is AccessControl, Trader {
         }
     }
 
+    /// @notice Provide ETH liquidity to Dispatcher
+    function provideETHLiquidity() external payable onlyWhitelistedLP {
+        require(totalLiquidity.add(msg.value) <= MAX_LIQUIDITY, "amount exceeds max liquidity");
+        totalLiquidity = totalLiquidity.add(msg.value);
+        lpBalances[msg.sender] = lpBalances[msg.sender].add(msg.value);
+    }
+
+    /// @notice Remove ETH liquidity from Dispatcher
+    /// @param amount amount of liquidity to remove
+    function removeETHLiquidity(uint256 amount) external {
+        require(lpBalances[msg.sender] >= amount, "amount exceeds liquidity provided");
+        require(totalLiquidity.sub(amount) >= 0, "amount exceeds total liquidity");
+        require(address(this).balance.sub(amount) >= 0, "amount exceeds contract balance");
+        lpBalances[msg.sender] = lpBalances[msg.sender].sub(amount);
+        totalLiquidity = totalLiquidity.sub(amount);
+        (bool success, ) = msg.sender.call{value: amount}("");
+        require(success, "Could not withdraw ETH");
+    }
+
     /// @notice Withdraw ETH from the smart contract
     /// @param amount the amount of ETH to withdraw.  If zero, withdraws the maximum allowed amount.
     function withdrawEth(uint256 amount) external onlyWithdrawer {
         uint256 withdrawalAmount;
-        uint256 contractBalance = address(this).balance;
+        uint256 withdrawableBalance = address(this).balance.sub(totalLiquidity);
         if (amount == 0) {
-            withdrawalAmount = contractBalance;
+            withdrawalAmount = withdrawableBalance;
         } else {
-            require(contractBalance >= amount, "amount exceeds contract balance");
+            require(withdrawableBalance >= amount, "amount exceeds withdrawable balance");
             withdrawalAmount = amount;
         }
         (bool success, ) = msg.sender.call{value: withdrawalAmount}("");

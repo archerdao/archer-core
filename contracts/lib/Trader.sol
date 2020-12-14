@@ -23,6 +23,20 @@ abstract contract Trader is ReentrancyGuard, AccessControl, CalldataEditor {
         _;
     }
 
+    /// @notice All trades must be profitable
+    modifier mustBeProfitable(uint256 ethRequested) {
+        uint256 contractBalanceBefore = address(this).balance;
+        require(contractBalanceBefore >= ethRequested, "Not enough ETH in contract");
+        _;
+        require(address(this).balance >= contractBalanceBefore, "missing ETH");
+    }
+
+    /// @notice Trades must not be expired
+    modifier notExpired(uint256 deadlineBlock) {
+        require(deadlineBlock >= block.number, "trade expired");
+        _;
+    }
+
     /// @notice Returns true if given address is on the list of approved traders
     /// @param addressToCheck the address to check
     /// @return true if address is trader
@@ -36,11 +50,8 @@ abstract contract Trader is ReentrancyGuard, AccessControl, CalldataEditor {
     function makeTrade(
         bytes memory executeScript,
         uint256 ethValue
-    ) public onlyTrader nonReentrant {
-        uint256 contractBalanceBefore = address(this).balance;
-        require(contractBalanceBefore >= ethValue, "Not enough ETH in contract");
+    ) public onlyTrader nonReentrant mustBeProfitable(ethValue) {
         execute(executeScript, ethValue);
-        require(address(this).balance >= contractBalanceBefore, "missing ETH");
     }
 
     /// @notice Makes a series of trades as single transaction if profitable without query + block deadline
@@ -51,12 +62,8 @@ abstract contract Trader is ReentrancyGuard, AccessControl, CalldataEditor {
         bytes memory executeScript,
         uint256 ethValue,
         uint256 blockDeadline
-    ) public onlyTrader nonReentrant {
-        require(blockDeadline >= block.number, "trade expired");
-        uint256 contractBalanceBefore = address(this).balance;
-        require(contractBalanceBefore >= ethValue, "Not enough ETH in contract");
+    ) public onlyTrader nonReentrant notExpired(blockDeadline) mustBeProfitable(ethValue) {
         execute(executeScript, ethValue);
-        require(address(this).balance >= contractBalanceBefore, "missing ETH");
     }
 
     /// @notice Makes a series of trades as single transaction if profitable
@@ -73,16 +80,13 @@ abstract contract Trader is ReentrancyGuard, AccessControl, CalldataEditor {
         uint256[] memory executeInputLocations,
         uint256 targetPrice,
         uint256 ethValue
-    ) public onlyTrader nonReentrant {
-        uint256 contractBalanceBefore = address(this).balance;
-        require(contractBalanceBefore >= ethValue, "Not enough ETH in contract");
+    ) public onlyTrader nonReentrant mustBeProfitable(ethValue) {
         bytes memory prices = queryEngine.queryAllPrices(queryScript, queryInputLocations);
         require(prices.toUint256(prices.length - 32) > targetPrice, "Not profitable");
         for(uint i = 0; i < executeInputLocations.length; i++) {
             replaceDataAt(executeScript, prices.slice(i*32, (i+1)*32), executeInputLocations[i]);
         }
         execute(executeScript, ethValue);
-        require(address(this).balance >= contractBalanceBefore, "missing ETH");
     }
 
     /// @notice Makes a series of trades as single transaction if profitable
@@ -101,17 +105,13 @@ abstract contract Trader is ReentrancyGuard, AccessControl, CalldataEditor {
         uint256 targetPrice,
         uint256 ethValue,
         uint256 blockDeadline
-    ) public onlyTrader nonReentrant {
-        require(blockDeadline >= block.number, "trade expired");
-        uint256 contractBalanceBefore = address(this).balance;
-        require(contractBalanceBefore >= ethValue, "Not enough ETH in contract");
+    ) public onlyTrader nonReentrant notExpired(blockDeadline) mustBeProfitable(ethValue) {
         bytes memory prices = queryEngine.queryAllPrices(queryScript, queryInputLocations);
         require(prices.toUint256(prices.length - 32) > targetPrice, "Not profitable");
         for(uint i = 0; i < executeInputLocations.length; i++) {
             replaceDataAt(executeScript, prices.slice(i*32, (i+1)*32), executeInputLocations[i]);
         }
         execute(executeScript, ethValue);
-        require(address(this).balance >= contractBalanceBefore, "missing ETH");
     }
 
     /// @notice Executes series of function calls as single transaction

@@ -95,9 +95,9 @@ contract Dispatcher is AccessControl, Trader {
         }
     }
 
-    // /// @notice Deposit tokens to the smart contract
-    // /// @param tokens the tokens to deposit
-    // /// @param amount the amount of each token to deposit.  If zero, deposits the maximum allowed amount for each token
+    /// @notice Deposit tokens to the smart contract
+    /// @param tokens the tokens to deposit
+    /// @param amount the amount of each token to deposit.  If zero, deposits the maximum allowed amount for each token
     function depositTokens(address[] calldata tokens, uint256 amount) external {
         for (uint i = 0; i < tokens.length; i++) {
             IERC20 token = IERC20(tokens[i]);

@@ -17,13 +17,13 @@ contract Dispatcher is AccessControl, Trader {
     // Allows easy manipulation on bytes
     using BytesLib for bytes;
 
-    // use safe ERC20 interface to gracefully handle non-compliant tokens
+    // Use safe ERC20 interface to gracefully handle non-compliant tokens
     using SafeERC20 for IERC20;
 
     /// @notice Admin role to manage whitelisted LPs
     bytes32 public constant MANAGE_LP_ROLE = keccak256("MANAGE_LP_ROLE");
 
-    /// @notice Addresses with this role are allowed to provide liquidity to this contract.  
+    /// @notice Addresses with this role are allowed to provide liquidity to this contract
     /// @dev If no addresses with this role exist, all addresses can provide liquidity
     bytes32 public constant WHITELISTED_LP_ROLE = keccak256("WHITELISTED_LP_ROLE");
 
@@ -194,6 +194,11 @@ contract Dispatcher is AccessControl, Trader {
             }
             token.safeTransferFrom(address(this), msg.sender, withdrawalAmount);
         }
+    }
+
+    /// @notice Set max ETH liquidity to accept for this contract
+    function setMaxETHLiquidity(uint256 newMax) external onlyLPManager {
+        MAX_LIQUIDITY = newMax;
     }
 
     /// @notice Provide ETH liquidity to Dispatcher

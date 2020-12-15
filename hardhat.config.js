@@ -10,6 +10,8 @@ const INFURA_KEY = process.env.INFURA_KEY
 const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY
 const DEPLOYER_ADDRESS = process.env.DEPLOYER_ADDRESS
 const DEPLOYER_PRIVATE_KEY = process.env.DEPLOYER_PRIVATE_KEY
+const DISPATCHER_FACTORY_ADMIN_ADDRESS = process.env.DISPATCHER_FACTORY_ADMIN_ADDRESS
+const DISPATCHER_FACTORY_ADMIN_PRIVATE_KEY = process.env.DISPATCHER_FACTORY_ADMIN_ADDRESS
 const REPORT_GAS = process.env.REPORT_GAS
 const CMC_API_KEY = process.env.CMC_API_KEY
 
@@ -49,6 +51,10 @@ let mainnetConfig = {
 if (DEPLOYER_PRIVATE_KEY && DEPLOYER_PRIVATE_KEY.length > 0) {
   rinkebyConfig.accounts = [DEPLOYER_PRIVATE_KEY]
   mainnetConfig.accounts = [DEPLOYER_PRIVATE_KEY]
+  if (DISPATCHER_FACTORY_ADMIN_PRIVATE_KEY && DISPATCHER_FACTORY_ADMIN_PRIVATE_KEY.length > 0) {
+    rinkebyConfig.accounts.push(DISPATCHER_FACTORY_ADMIN_PRIVATE_KEY)
+    mainnetConfig.accounts.push(DISPATCHER_FACTORY_ADMIN_PRIVATE_KEY)
+  }
 }
 
 
@@ -91,6 +97,11 @@ module.exports = {
       1: DEPLOYER_ADDRESS,
       4: DEPLOYER_ADDRESS
     },
+    admin: {
+      default: 1,
+      1: DISPATCHER_FACTORY_ADMIN_ADDRESS,
+      4: DISPATCHER_FACTORY_ADMIN_ADDRESS
+    }
   },
   paths: {
     deploy: 'deploy',

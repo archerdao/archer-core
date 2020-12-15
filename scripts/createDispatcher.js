@@ -33,8 +33,11 @@ async function createDispatcher(
     );
 
     if(receipt.status) {
-        console.log(`- New Dispatcher created`)
-        console.log(receipt)
+        for(const event of receipt.events) {
+            if(event.event == 'DispatcherCreated') {
+                console.log(`- New Dispatcher created at: ${event.args.dispatcher}`)
+            }
+        }
     } else {
         console.log(`- Error creating new Dispatcher:`)
         console.log(receipt)

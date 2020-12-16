@@ -11,6 +11,7 @@
     "compile": "npx hardhat compile",
     "script": "sh -c 'npx ./scripts/${0}.js'",
     "script:latest": "sh -c 'npx hardhat run ./scripts/${0}.js'",
+    "docs": "npx ./docify.js",
     "test": "export REPORT_GAS=false && npx hardhat test",
     "test:gas": "export REPORT_GAS=true && npx hardhat test",
     "test:current": "export REPORT_GAS=false && npx hardhat test --no-compile",
@@ -40,7 +41,9 @@
     "clean": "npx hardhat clean",
     "verify": "npx hardhat etherscan-verify --api-key $ETHERSCAN_API_KEY",
     "flatten": "mkdir -p flattened && npx hardhat flatten > ./flattened/Contract.sol",
-    "sync": "npx ./scripts/sync.js"
+    "tenderly:export": "sh -c 'tenderly export ${0}'",
+    "tenderly:push": "sh -c 'npx hardhat tenderly:push ${0}=${1}'",
+    "tenderly:verify": "sh -c 'npx hardhat tenderly:verify ${0}=${1}'"
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.0",
@@ -56,6 +59,8 @@
     "hardhat-deploy-ethers": "^0.3.0-beta.5",
     "hardhat-gas-reporter": "^1.0.0",
     "hardhat-log-remover": "^2.0.0",
+    "@tenderly/hardhat-tenderly": "^1.0.3",
+    "solidity-docgen": "^0.5.7",
     "mocha": "^8.2.0"
   }
 }

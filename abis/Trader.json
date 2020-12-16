@@ -245,6 +245,34 @@
     "inputs": [
       {
         "internalType": "bytes",
+        "name": "executeScript",
+        "type": "bytes"
+      },
+      {
+        "internalType": "uint256",
+        "name": "ethValue",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "minTimestamp",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "maxTimestamp",
+        "type": "uint256"
+      }
+    ],
+    "name": "makeTrade",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes",
         "name": "queryScript",
         "type": "bytes"
       },
@@ -271,6 +299,54 @@
       {
         "internalType": "uint256",
         "name": "ethValue",
+        "type": "uint256"
+      }
+    ],
+    "name": "makeTrade",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes",
+        "name": "queryScript",
+        "type": "bytes"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "queryInputLocations",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "bytes",
+        "name": "executeScript",
+        "type": "bytes"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "executeInputLocations",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "uint256",
+        "name": "targetPrice",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "ethValue",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "minTimestamp",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "maxTimestamp",
         "type": "uint256"
       }
     ],

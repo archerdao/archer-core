@@ -1,0 +1,19 @@
+# Summary
+* Archer Core
+  * [Dispatcher](pages/archer-core/Dispatcher.md)
+  * [DispatcherFactory](pages/archer-core/DispatcherFactory.md)
+  * [QueryEngine](pages/archer-core/QueryEngine.md)
+  * Interfaces
+    * [IERC20](pages/archer-core/interfaces/IERC20.md)
+    * [IQueryEngine](pages/archer-core/interfaces/IQueryEngine.md)
+  * Lib
+    * [AccessControl](pages/archer-core/lib/AccessControl.md)
+    * [Address](pages/archer-core/lib/Address.md)
+    * [BytesLib](pages/archer-core/lib/BytesLib.md)
+    * [CalldataEditor](pages/archer-core/lib/CalldataEditor.md)
+    * [Context](pages/archer-core/lib/Context.md)
+    * [EnumerableSet](pages/archer-core/lib/EnumerableSet.md)
+    * [ReentrancyGuard](pages/archer-core/lib/ReentrancyGuard.md)
+    * [SafeERC20](pages/archer-core/lib/SafeERC20.md)
+    * [SafeMath](pages/archer-core/lib/SafeMath.md)
+    * [Trader](pages/archer-core/lib/Trader.md)

@@ -25,6 +25,12 @@
         "type": "address"
       },
       {
+        "indexed": true,
+        "internalType": "uint8",
+        "name": "version",
+        "type": "uint8"
+      },
+      {
         "indexed": false,
         "internalType": "address",
         "name": "queryEngine",
@@ -52,6 +58,12 @@
         "indexed": false,
         "internalType": "address",
         "name": "trader",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "approver",
         "type": "address"
       },
       {
@@ -175,37 +187,42 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_queryEngine",
+        "name": "queryEngine",
         "type": "address"
       },
       {
         "internalType": "address",
-        "name": "_roleManager",
+        "name": "roleManager",
         "type": "address"
       },
       {
         "internalType": "address",
-        "name": "_lpManager",
+        "name": "lpManager",
         "type": "address"
       },
       {
         "internalType": "address",
-        "name": "_withdrawer",
+        "name": "withdrawer",
         "type": "address"
       },
       {
         "internalType": "address",
-        "name": "_trader",
+        "name": "trader",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "approver",
         "type": "address"
       },
       {
         "internalType": "uint256",
-        "name": "_initialMaxLiquidity",
+        "name": "initialMaxLiquidity",
         "type": "uint256"
       },
       {
         "internalType": "address[]",
-        "name": "_lpWhitelist",
+        "name": "lpWhitelist",
         "type": "address[]"
       }
     ],
@@ -358,6 +375,19 @@
     "name": "revokeRole",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "version",
+    "outputs": [
+      {
+        "internalType": "uint8",
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   }
 ]

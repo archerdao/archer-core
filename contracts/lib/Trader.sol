@@ -37,6 +37,13 @@ abstract contract Trader is ReentrancyGuard, AccessControl, CalldataEditor {
         _;
     }
 
+    /// @notice Trades must be executed within time window
+    modifier onTime(uint256 minTimestamp, uint256 maxTimestamp) {
+        require(maxTimestamp >= block.timestamp, "trade too late");
+        require(minTimestamp <= block.timestamp, "trade too early");
+        _;
+    }
+
     /// @notice Returns true if given address is on the list of approved traders
     /// @param addressToCheck the address to check
     /// @return true if address is trader
@@ -66,6 +73,20 @@ abstract contract Trader is ReentrancyGuard, AccessControl, CalldataEditor {
         execute(executeScript, ethValue);
     }
 
+    /// @notice Makes a series of trades as single transaction if profitable without query + within time window specified
+    /// @param executeScript the compiled bytecode for the series of function calls to execute the trade
+    /// @param ethValue the amount of ETH to send with initial contract call
+    /// @param minTimestamp minimum block timestamp to execute trade
+    /// @param maxTimestamp maximum timestamp to execute trade
+    function makeTrade(
+        bytes memory executeScript,
+        uint256 ethValue,
+        uint256 minTimestamp,
+        uint256 maxTimestamp
+    ) public onlyTrader nonReentrant onTime(minTimestamp, maxTimestamp) mustBeProfitable(ethValue) {
+        execute(executeScript, ethValue);
+    }
+
     /// @notice Makes a series of trades as single transaction if profitable
     /// @param queryScript the compiled bytecode for the series of function calls to get the final price
     /// @param queryInputLocations index locations within the queryScript to insert input amounts dynamically
@@ -89,7 +110,7 @@ abstract contract Trader is ReentrancyGuard, AccessControl, CalldataEditor {
         execute(executeScript, ethValue);
     }
 
-    /// @notice Makes a series of trades as single transaction if profitable
+    /// @notice Makes a series of trades as single transaction if profitable + block deadline
     /// @param queryScript the compiled bytecode for the series of function calls to get the final price
     /// @param queryInputLocations index locations within the queryScript to insert input amounts dynamically
     /// @param executeScript the compiled bytecode for the series of function calls to execute the trade
@@ -106,6 +127,33 @@ abstract contract Trader is ReentrancyGuard, AccessControl, CalldataEditor {
         uint256 ethValue,
         uint256 blockDeadline
     ) public onlyTrader nonReentrant notExpired(blockDeadline) mustBeProfitable(ethValue) {
+        bytes memory prices = queryEngine.queryAllPrices(queryScript, queryInputLocations);
+        require(prices.toUint256(prices.length - 32) > targetPrice, "Not profitable");
+        for(uint i = 0; i < executeInputLocations.length; i++) {
+            replaceDataAt(executeScript, prices.slice(i*32, (i+1)*32), executeInputLocations[i]);
+        }
+        execute(executeScript, ethValue);
+    }
+
+    /// @notice Makes a series of trades as single transaction if profitable + within time window specified
+    /// @param queryScript the compiled bytecode for the series of function calls to get the final price
+    /// @param queryInputLocations index locations within the queryScript to insert input amounts dynamically
+    /// @param executeScript the compiled bytecode for the series of function calls to execute the trade
+    /// @param executeInputLocations index locations within the executeScript to insert input amounts dynamically
+    /// @param targetPrice profit target for this trade, if ETH>ETH, this should be ethValue + gas estimate * gas price
+    /// @param ethValue the amount of ETH to send with initial contract call
+    /// @param minTimestamp minimum block timestamp to execute trade
+    /// @param maxTimestamp maximum timestamp to execute trade
+    function makeTrade(
+        bytes memory queryScript,
+        uint256[] memory queryInputLocations,
+        bytes memory executeScript,
+        uint256[] memory executeInputLocations,
+        uint256 targetPrice,
+        uint256 ethValue,
+        uint256 minTimestamp,
+        uint256 maxTimestamp
+    ) public onlyTrader nonReentrant onTime(minTimestamp, maxTimestamp) mustBeProfitable(ethValue) {
         bytes memory prices = queryEngine.queryAllPrices(queryScript, queryInputLocations);
         require(prices.toUint256(prices.length - 32) > targetPrice, "Not profitable");
         for(uint i = 0; i < executeInputLocations.length; i++) {

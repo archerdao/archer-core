@@ -23,7 +23,7 @@ async function createDispatcher(
     console.log(`- Creating new Dispatcher`)
     const receipt = await deployments.execute(
         'DispatcherFactory', 
-        {from: admin, gasLimit: 6000000 }, 
+        { from: admin, gasLimit: 6000000 }, 
         'createNewDispatcher',
         queryEngine.address,
         roleManager,

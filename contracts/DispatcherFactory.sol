@@ -6,23 +6,28 @@ import "./lib/AccessControl.sol";
 import "./Dispatcher.sol";
 
 contract DispatcherFactory is AccessControl {
+    /// @notice Version number of Dispatcher Factory
+    uint8 public version = 1;
+
     /// @notice Admin role to create new Dispatchers
     bytes32 public constant DISPATCHER_ADMIN_ROLE = keccak256("DISPATCHER_ADMIN_ROLE");
 
     /// @notice Create new Dispatcher event
     event DispatcherCreated(
-        address indexed dispatcher, 
+        address indexed dispatcher,
+        uint8 indexed version, 
         address queryEngine,
         address roleManager,
         address lpManager,
         address withdrawer,
         address trader,
+        address approver,
         uint256 initialMaxLiquidity,
         bool lpWhitelist
     );
 
     /// @notice modifier to restrict createNewDispatcher function
-    modifier onlyCreator() {
+    modifier onlyAdmin() {
         require(hasRole(DISPATCHER_ADMIN_ROLE, msg.sender), "Caller must have DISPATCHER_ADMIN role");
         _;
     }
@@ -39,45 +44,52 @@ contract DispatcherFactory is AccessControl {
     }
 
     /// @notice Create new Dispatcher contract
-    /// @param _queryEngine Address of query engine contract
-    /// @param _roleManager Address allowed to manage contract roles
-    /// @param _lpManager Address allowed to manage LP whitelist
-    /// @param _withdrawer Address allowed to withdraw profit from contract
-    /// @param _trader Address allowed to make trades via this contract
-    /// @param _initialMaxLiquidity Initial max liquidity allowed in contract
-    /// @param _lpWhitelist list of addresses that are allowed to provide liquidity to this contract
+    /// @param queryEngine Address of query engine contract
+    /// @param roleManager Address allowed to manage contract roles
+    /// @param lpManager Address allowed to manage LP whitelist
+    /// @param withdrawer Address allowed to withdraw profit from contract
+    /// @param trader Address allowed to make trades via this contract
+    /// @param approver Address allowed to make approvals on contract
+    /// @param initialMaxLiquidity Initial max liquidity allowed in contract
+    /// @param lpWhitelist list of addresses that are allowed to provide liquidity to this contract
+    /// @return dispatcher Address of new Dispatcher contract
     function createNewDispatcher(
-        address _queryEngine,
-        address _roleManager,
-        address _lpManager,
-        address _withdrawer,
-        address _trader,
-        uint256 _initialMaxLiquidity,
-        address[] memory _lpWhitelist
-    ) external onlyCreator returns (
+        address queryEngine,
+        address roleManager,
+        address lpManager,
+        address withdrawer,
+        address trader,
+        address approver,
+        uint256 initialMaxLiquidity,
+        address[] memory lpWhitelist
+    ) external onlyAdmin returns (
         address dispatcher
     ) {
         Dispatcher newDispatcher = new Dispatcher(
-            _queryEngine,
-            _roleManager,
-            _lpManager,
-            _withdrawer,
-            _trader,
-            _initialMaxLiquidity,
-            _lpWhitelist
+            version,
+            queryEngine,
+            roleManager,
+            lpManager,
+            withdrawer,
+            trader,
+            approver,
+            initialMaxLiquidity,
+            lpWhitelist
         );
 
         dispatcher = address(newDispatcher);
 
         emit DispatcherCreated(
             dispatcher,
-            _queryEngine,
-            _roleManager,
-            _lpManager,
-            _withdrawer,
-            _trader,
-            _initialMaxLiquidity,
-            _lpWhitelist.length > 0 ? true : false
+            version,
+            queryEngine,
+            roleManager,
+            lpManager,
+            withdrawer,
+            trader,
+            approver,
+            initialMaxLiquidity,
+            lpWhitelist.length > 0 ? true : false
         );
     }
 }

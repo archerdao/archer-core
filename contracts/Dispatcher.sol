@@ -20,12 +20,18 @@ contract Dispatcher is AccessControl, Trader {
     // Use safe ERC20 interface to gracefully handle non-compliant tokens
     using SafeERC20 for IERC20;
 
+    /// @notice Version number of Dispatcher
+    uint8 public version;
+
     /// @notice Admin role to manage whitelisted LPs
     bytes32 public constant MANAGE_LP_ROLE = keccak256("MANAGE_LP_ROLE");
 
     /// @notice Addresses with this role are allowed to provide liquidity to this contract
     /// @dev If no addresses with this role exist, all addresses can provide liquidity
     bytes32 public constant WHITELISTED_LP_ROLE = keccak256("WHITELISTED_LP_ROLE");
+
+    /// @notice Admin role to restrict approval of tokens on dispatcher
+    bytes32 public constant APPROVER_ROLE = keccak256("APPROVER_ROLE");  
 
     /// @notice Admin role to restrict withdrawal of funds from contract
     bytes32 public constant WITHDRAW_ROLE = keccak256("WITHDRAW_ROLE");    
@@ -45,6 +51,12 @@ contract Dispatcher is AccessControl, Trader {
         _;
     }
 
+    /// @notice modifier to restrict functions to only users that have been added as an approver
+    modifier onlyApprover() {
+        require(hasRole(APPROVER_ROLE, msg.sender), "Caller must have APPROVER role");
+        _;
+    }
+
     /// @notice modifier to restrict functions to only users that have been added as a withdrawer
     modifier onlyWithdrawer() {
         require(hasRole(WITHDRAW_ROLE, msg.sender), "Caller must have WITHDRAW role");
@@ -60,36 +72,42 @@ contract Dispatcher is AccessControl, Trader {
     }
 
     /// @notice Max liquidity updated event
-    event MaxLiquidityUpdated(uint256 indexed oldAmount, uint256 indexed newAmount, address asset);
+    event MaxLiquidityUpdated(address indexed asset, uint256 indexed newAmount, uint256 oldAmount);
 
     /// @notice Liquidity Provided event
-    event LiquidityProvided(uint256 indexed amount, address indexed asset, address provider);
+    event LiquidityProvided(address indexed asset, address indexed provider, uint256 amount);
 
     /// @notice Liquidity removed event
-    event LiquidityRemoved(uint256 indexed amount, address indexed asset, address provider);
+    event LiquidityRemoved(address indexed asset, address indexed provider, uint256 amount);
 
     /// @notice Initializes contract, setting up initial contract permissions
+    /// @param _version Version number of Dispatcher
     /// @param _queryEngine Address of query engine contract
     /// @param _roleManager Address allowed to manage contract roles
     /// @param _lpManager Address allowed to manage LP whitelist
     /// @param _withdrawer Address allowed to withdraw profit from contract
     /// @param _trader Address allowed to make trades via this contract
+    /// @param _approver Address allowed to make approvals via this contract
     /// @param _initialMaxLiquidity Initial max liquidity allowed in contract
     /// @param _lpWhitelist list of addresses that are allowed to provide liquidity to this contract
     constructor(
+        uint8 _version,
         address _queryEngine,
         address _roleManager,
         address _lpManager,
         address _withdrawer,
         address _trader,
+        address _approver,
         uint256 _initialMaxLiquidity,
         address[] memory _lpWhitelist
     ) {
+        version = _version;
         queryEngine = IQueryEngine(_queryEngine);
         _setupRole(MANAGE_LP_ROLE, _lpManager);
         _setRoleAdmin(WHITELISTED_LP_ROLE, MANAGE_LP_ROLE);
         _setupRole(WITHDRAW_ROLE, _withdrawer);
         _setupRole(TRADER_ROLE, _trader);
+        _setupRole(APPROVER_ROLE, _approver);
         _setupRole(DEFAULT_ADMIN_ROLE, _roleManager);
         MAX_LIQUIDITY = _initialMaxLiquidity;
         for(uint i; i < _lpWhitelist.length; i++) {
@@ -102,6 +120,13 @@ contract Dispatcher is AccessControl, Trader {
     
     /// @notice Fallback function in case receive function is not matched
     fallback() external payable {}
+
+    /// @notice Returns true if given address is on the list of approvers
+    /// @param addressToCheck the address to check
+    /// @return true if address is approver
+    function isApprover(address addressToCheck) external view returns(bool) {
+        return hasRole(APPROVER_ROLE, addressToCheck);
+    }
 
     /// @notice Returns true if given address is on the list of approved withdrawers
     /// @param addressToCheck the address to check
@@ -130,7 +155,7 @@ contract Dispatcher is AccessControl, Trader {
     function tokenAllowAll(
         address[] memory tokensToApprove, 
         address spender
-    ) external onlyTrader {
+    ) external onlyApprover {
         for(uint i = 0; i < tokensToApprove.length; i++) {
             IERC20 token = IERC20(tokensToApprove[i]);
             if (token.allowance(address(this), spender) != uint256(-1)) {
@@ -147,7 +172,7 @@ contract Dispatcher is AccessControl, Trader {
         address[] memory tokensToApprove, 
         uint256[] memory approvalAmounts, 
         address spender
-    ) external onlyTrader {
+    ) external onlyApprover {
         require(tokensToApprove.length == approvalAmounts.length, "not same length");
         for(uint i = 0; i < tokensToApprove.length; i++) {
             IERC20 token = IERC20(tokensToApprove[i]);
@@ -157,34 +182,10 @@ contract Dispatcher is AccessControl, Trader {
         }
     }
 
-    /// @notice Deposit tokens to the smart contract
-    /// @param tokens the tokens to deposit
-    /// @param amount the amount of each token to deposit.  If zero, deposits the maximum allowed amount for each token
-    function depositTokens(address[] calldata tokens, uint256 amount) external {
-        for (uint i = 0; i < tokens.length; i++) {
-            IERC20 token = IERC20(tokens[i]);
-            uint256 depositAmount;
-            uint256 tokenBalance = token.balanceOf(msg.sender);
-            uint256 tokenAllowance = token.allowance(msg.sender, address(this));
-            if (amount == 0) {
-                if (tokenBalance > tokenAllowance) {
-                    depositAmount = tokenAllowance;
-                } else {
-                    depositAmount = tokenBalance;
-                }
-            } else {
-                require(tokenBalance >= amount, "User balance too low");
-                require(tokenAllowance >= amount, "Increase token allowance");
-                depositAmount = amount;
-            }
-            token.safeTransferFrom(msg.sender, address(this), depositAmount);
-        }
-    }
-
-    /// @notice Withdraw tokens from the smart contract
+    /// @notice Rescue (withdraw) tokens from the smart contract
     /// @param tokens the tokens to withdraw
     /// @param amount the amount of each token to withdraw.  If zero, withdraws the maximum allowed amount for each token
-    function withdrawTokens(address[] calldata tokens, uint256 amount) external onlyWithdrawer {
+    function rescueTokens(address[] calldata tokens, uint256 amount) external onlyWithdrawer {
         for (uint i = 0; i < tokens.length; i++) {
             IERC20 token = IERC20(tokens[i]);
             uint256 withdrawalAmount;
@@ -208,7 +209,7 @@ contract Dispatcher is AccessControl, Trader {
     /// @notice Set max ETH liquidity to accept for this contract
     /// @param newMax new max ETH liquidity
     function setMaxETHLiquidity(uint256 newMax) external onlyLPManager {
-        emit MaxLiquidityUpdated(MAX_LIQUIDITY, newMax, address(0));
+        emit MaxLiquidityUpdated(address(0), newMax, MAX_LIQUIDITY);
         MAX_LIQUIDITY = newMax;
     }
 
@@ -217,7 +218,7 @@ contract Dispatcher is AccessControl, Trader {
         require(totalLiquidity.add(msg.value) <= MAX_LIQUIDITY, "amount exceeds max liquidity");
         totalLiquidity = totalLiquidity.add(msg.value);
         lpBalances[msg.sender] = lpBalances[msg.sender].add(msg.value);
-        emit LiquidityProvided(msg.value, address(0), msg.sender);
+        emit LiquidityProvided(address(0), msg.sender, msg.value);
     }
 
     /// @notice Remove ETH liquidity from Dispatcher
@@ -230,7 +231,7 @@ contract Dispatcher is AccessControl, Trader {
         totalLiquidity = totalLiquidity.sub(amount);
         (bool success, ) = msg.sender.call{value: amount}("");
         require(success, "Could not withdraw ETH");
-        emit LiquidityRemoved(amount, address(0), msg.sender);
+        emit LiquidityRemoved(address(0), msg.sender, amount);
     }
 
     /// @notice Withdraw ETH from the smart contract

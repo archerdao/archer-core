@@ -21,7 +21,7 @@ contract DispatcherFactory is AccessControl {
         address lpManager,
         address withdrawer,
         address trader,
-        address approver,
+        address supplier,
         uint256 initialMaxLiquidity,
         bool lpWhitelist
     );
@@ -49,7 +49,7 @@ contract DispatcherFactory is AccessControl {
     /// @param lpManager Address allowed to manage LP whitelist
     /// @param withdrawer Address allowed to withdraw profit from contract
     /// @param trader Address allowed to make trades via this contract
-    /// @param approver Address allowed to make approvals on contract
+    /// @param supplier Address allowed to supply opportunities to contract
     /// @param initialMaxLiquidity Initial max liquidity allowed in contract
     /// @param lpWhitelist list of addresses that are allowed to provide liquidity to this contract
     /// @return dispatcher Address of new Dispatcher contract
@@ -59,7 +59,7 @@ contract DispatcherFactory is AccessControl {
         address lpManager,
         address withdrawer,
         address trader,
-        address approver,
+        address supplier,
         uint256 initialMaxLiquidity,
         address[] memory lpWhitelist
     ) external onlyAdmin returns (
@@ -72,7 +72,7 @@ contract DispatcherFactory is AccessControl {
             lpManager,
             withdrawer,
             trader,
-            approver,
+            supplier,
             initialMaxLiquidity,
             lpWhitelist
         );
@@ -87,7 +87,7 @@ contract DispatcherFactory is AccessControl {
             lpManager,
             withdrawer,
             trader,
-            approver,
+            supplier,
             initialMaxLiquidity,
             lpWhitelist.length > 0 ? true : false
         );

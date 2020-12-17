@@ -4,17 +4,17 @@ const ROLE_MANAGER_ADDRESS = process.env.ROLE_MANAGER_ADDRESS
 const LP_MANAGER_ADDRESS = process.env.LP_MANAGER_ADDRESS
 const WITHDRAWER_ADDRESS = process.env.WITHDRAWER_ADDRESS
 const TRADER_ADDRESS = process.env.TRADER_ADDRESS
-const APPROVER_ADDRESS = process.env.APPROVER_ADDRESS
+const SUPPLIER_ADDRESS = process.env.SUPPLIER_ADDRESS
 const INITIAL_MAX_LIQUIDITY = process.env.INITIAL_MAX_LIQUIDITY
 
-const LP_WHITELIST = []
+const LP_WHITELIST = [SUPPLIER_ADDRESS]
 
 async function createDispatcher(
     roleManager,
     lpManager,
     withdrawer,
     trader,
-    approver,
+    supplier,
     initialMaxLiquidity,
     lpWhitelist
 ) {
@@ -30,7 +30,7 @@ async function createDispatcher(
         lpManager,
         withdrawer,
         trader,
-        approver,
+        supplier,
         initialMaxLiquidity,
         lpWhitelist
     );
@@ -53,7 +53,7 @@ if (require.main === module) {
         LP_MANAGER_ADDRESS,
         WITHDRAWER_ADDRESS,
         TRADER_ADDRESS,
-        APPROVER_ADDRESS,
+        SUPPLIER_ADDRESS,
         INITIAL_MAX_LIQUIDITY,
         LP_WHITELIST
     )

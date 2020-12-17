@@ -33,7 +33,7 @@
       },
       {
         "internalType": "address",
-        "name": "_approver",
+        "name": "_supplier",
         "type": "address"
       },
       {

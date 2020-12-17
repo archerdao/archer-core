@@ -87,7 +87,7 @@ contract Dispatcher is AccessControl, Trader {
     /// @param _lpManager Address allowed to manage LP whitelist
     /// @param _withdrawer Address allowed to withdraw profit from contract
     /// @param _trader Address allowed to make trades via this contract
-    /// @param _approver Address allowed to make approvals via this contract
+    /// @param _supplier Address allowed to send opportunities to this contract
     /// @param _initialMaxLiquidity Initial max liquidity allowed in contract
     /// @param _lpWhitelist list of addresses that are allowed to provide liquidity to this contract
     constructor(
@@ -97,7 +97,7 @@ contract Dispatcher is AccessControl, Trader {
         address _lpManager,
         address _withdrawer,
         address _trader,
-        address _approver,
+        address _supplier,
         uint256 _initialMaxLiquidity,
         address[] memory _lpWhitelist
     ) {
@@ -107,7 +107,8 @@ contract Dispatcher is AccessControl, Trader {
         _setRoleAdmin(WHITELISTED_LP_ROLE, MANAGE_LP_ROLE);
         _setupRole(WITHDRAW_ROLE, _withdrawer);
         _setupRole(TRADER_ROLE, _trader);
-        _setupRole(APPROVER_ROLE, _approver);
+        _setupRole(APPROVER_ROLE, _supplier);
+        _setupRole(APPROVER_ROLE, _withdrawer);
         _setupRole(DEFAULT_ADMIN_ROLE, _roleManager);
         MAX_LIQUIDITY = _initialMaxLiquidity;
         for(uint i; i < _lpWhitelist.length; i++) {

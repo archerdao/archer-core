@@ -63,7 +63,7 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "approver",
+        "name": "supplier",
         "type": "address"
       },
       {
@@ -212,7 +212,7 @@
       },
       {
         "internalType": "address",
-        "name": "approver",
+        "name": "supplier",
         "type": "address"
       },
       {

@@ -11,7 +11,7 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     contract: "DispatcherFactory",
     gas: 4000000,
     args: [DISPATCHER_FACTORY_ROLE_ADMIN_ADDRESS, DISPATCHER_FACTORY_ADMIN_ADDRESS],
-    skipIfAlreadyDeployed: true
+    skipIfAlreadyDeployed: false
   });
 
   if (deployResult.newlyDeployed) {

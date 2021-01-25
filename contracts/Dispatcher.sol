@@ -10,6 +10,10 @@ import "./lib/SafeERC20.sol";
 import "./lib/AccessControl.sol";
 import "./lib/Trader.sol";
 
+/**
+ * @title Dispatcher
+ * @dev Executes trades on behalf of suppliers and maintains bankroll to support supplier strategies
+ */
 contract Dispatcher is AccessControl, Trader {
     // Allows safe math operations on uint256 values
     using SafeMath for uint256;
@@ -89,7 +93,7 @@ contract Dispatcher is AccessControl, Trader {
     /// @param _trader Address allowed to make trades via this contract
     /// @param _supplier Address allowed to send opportunities to this contract
     /// @param _initialMaxLiquidity Initial max liquidity allowed in contract
-    /// @param _lpWhitelist list of addresses that are allowed to provide liquidity to this contract
+    /// @param _lpWhitelist List of addresses that are allowed to provide liquidity to this contract
     constructor(
         uint8 _version,
         address _queryEngine,

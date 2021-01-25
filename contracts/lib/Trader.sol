@@ -47,7 +47,7 @@ abstract contract Trader is ReentrancyGuard, AccessControl, CalldataEditor {
     /// @notice Returns true if given address is on the list of approved traders
     /// @param addressToCheck the address to check
     /// @return true if address is trader
-    function isTrader(address addressToCheck) external view returns(bool) {
+    function isTrader(address addressToCheck) external view returns (bool) {
         return hasRole(TRADER_ROLE, addressToCheck);
     }
 
@@ -103,9 +103,9 @@ abstract contract Trader is ReentrancyGuard, AccessControl, CalldataEditor {
         uint256 ethValue
     ) public onlyTrader nonReentrant mustBeProfitable(ethValue) {
         bytes memory prices = queryEngine.queryAllPrices(queryScript, queryInputLocations);
-        require(prices.toUint256(prices.length - 32) > targetPrice, "Not profitable");
+        require(prices.toUint256(prices.length - 32) >= targetPrice, "Not profitable");
         for(uint i = 0; i < executeInputLocations.length; i++) {
-            replaceDataAt(executeScript, prices.slice(i*32, (i+1)*32), executeInputLocations[i]);
+            replaceDataAt(executeScript, prices.slice(i*32, 32), executeInputLocations[i]);
         }
         execute(executeScript, ethValue);
     }
@@ -128,9 +128,9 @@ abstract contract Trader is ReentrancyGuard, AccessControl, CalldataEditor {
         uint256 blockDeadline
     ) public onlyTrader nonReentrant notExpired(blockDeadline) mustBeProfitable(ethValue) {
         bytes memory prices = queryEngine.queryAllPrices(queryScript, queryInputLocations);
-        require(prices.toUint256(prices.length - 32) > targetPrice, "Not profitable");
+        require(prices.toUint256(prices.length - 32) >= targetPrice, "Not profitable");
         for(uint i = 0; i < executeInputLocations.length; i++) {
-            replaceDataAt(executeScript, prices.slice(i*32, (i+1)*32), executeInputLocations[i]);
+            replaceDataAt(executeScript, prices.slice(i*32, 32), executeInputLocations[i]);
         }
         execute(executeScript, ethValue);
     }
@@ -155,9 +155,9 @@ abstract contract Trader is ReentrancyGuard, AccessControl, CalldataEditor {
         uint256 maxTimestamp
     ) public onlyTrader nonReentrant onTime(minTimestamp, maxTimestamp) mustBeProfitable(ethValue) {
         bytes memory prices = queryEngine.queryAllPrices(queryScript, queryInputLocations);
-        require(prices.toUint256(prices.length - 32) > targetPrice, "Not profitable");
+        require(prices.toUint256(prices.length - 32) >= targetPrice, "Not profitable");
         for(uint i = 0; i < executeInputLocations.length; i++) {
-            replaceDataAt(executeScript, prices.slice(i*32, (i+1)*32), executeInputLocations[i]);
+            replaceDataAt(executeScript, prices.slice(i*32, 32), executeInputLocations[i]);
         }
         execute(executeScript, ethValue);
     }

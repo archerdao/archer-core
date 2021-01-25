@@ -5,12 +5,21 @@ pragma experimental ABIEncoderV2;
 import "./lib/AccessControl.sol";
 import "./Dispatcher.sol";
 
+/**
+ * @title DispatcherFactory
+ * @dev Creates and keeps track of Dispatchers on the network
+ */
 contract DispatcherFactory is AccessControl {
+    using EnumerableSet for EnumerableSet.AddressSet;
+
     /// @notice Version number of Dispatcher Factory
-    uint8 public version = 1;
+    uint8 public version = 2;
 
     /// @notice Admin role to create new Dispatchers
     bytes32 public constant DISPATCHER_ADMIN_ROLE = keccak256("DISPATCHER_ADMIN_ROLE");
+
+    /// @dev Record of all Dispatchers
+    EnumerableSet.AddressSet private dispatchersSet;
 
     /// @notice Create new Dispatcher event
     event DispatcherCreated(
@@ -25,6 +34,12 @@ contract DispatcherFactory is AccessControl {
         uint256 initialMaxLiquidity,
         bool lpWhitelist
     );
+
+    /// @notice Add existing Dispatcher event
+    event DispatcherAdded(address indexed dispatcher);
+
+    /// @notice Remove existing Dispatcher event
+    event DispatcherRemoved(address indexed dispatcher);
 
     /// @notice modifier to restrict createNewDispatcher function
     modifier onlyAdmin() {
@@ -51,7 +66,7 @@ contract DispatcherFactory is AccessControl {
     /// @param trader Address allowed to make trades via this contract
     /// @param supplier Address allowed to supply opportunities to contract
     /// @param initialMaxLiquidity Initial max liquidity allowed in contract
-    /// @param lpWhitelist list of addresses that are allowed to provide liquidity to this contract
+    /// @param lpWhitelist List of addresses that are allowed to provide liquidity to this contract
     /// @return dispatcher Address of new Dispatcher contract
     function createNewDispatcher(
         address queryEngine,
@@ -78,6 +93,7 @@ contract DispatcherFactory is AccessControl {
         );
 
         dispatcher = address(newDispatcher);
+        dispatchersSet.add(dispatcher);
 
         emit DispatcherCreated(
             dispatcher,
@@ -91,5 +107,57 @@ contract DispatcherFactory is AccessControl {
             initialMaxLiquidity,
             lpWhitelist.length > 0 ? true : false
         );
+    }
+
+    /**
+     * @notice Admin function to allow addition of dispatchers created via other Dispatcher Factories
+     * @param dispatcherContracts Array of dispatcher contract addresses
+     */
+    function addDispatchers(address[] memory dispatcherContracts) external onlyAdmin {
+        for(uint i = 0; i < dispatcherContracts.length; i++) {
+            dispatchersSet.add(dispatcherContracts[i]);
+            emit DispatcherAdded(dispatcherContracts[i]);
+        }
+    }
+
+    /**
+     * @notice Admin function to allow removal of dispatchers from Dispatcher set
+     * @param dispatcherContracts Dispatcher contract addresses
+     */
+    function removeDispatchers(address[] memory dispatcherContracts) external onlyAdmin {
+        for(uint i = 0; i < dispatcherContracts.length; i++) {
+            dispatchersSet.remove(dispatcherContracts[i]);
+            emit DispatcherRemoved(dispatcherContracts[i]);
+        }
+    }
+
+    /**
+     * @notice Return list of Dispatcher contracts this factory indexes
+     * @return Array of Dispatcher addresses
+     */
+    function dispatchers() external view returns (address[] memory) {
+        uint256 dispatchersLength = dispatchersSet.length();
+        address[] memory dispatchersArray = new address[](dispatchersLength);
+        for(uint i = 0; i < dispatchersLength; i++) {
+            dispatchersArray[i] = dispatchersSet.at(i);
+        }
+        return dispatchersArray;
+    }
+
+    /**
+     * @notice Determine whether this factory is indexing a Dispatcher at the provided address
+     * @param dispatcherContract Dispatcher address
+     * @return true if Dispatcher is indexed 
+     */
+    function exists(address dispatcherContract) external view returns (bool) {
+        return dispatchersSet.contains(dispatcherContract);
+    }
+
+    /**
+     * @notice Returns the number of Dispatchers indexed by this factory
+     * @return number of Dispatchers indexed 
+     */
+    function numDispatchers() external view returns (uint256) {
+        return dispatchersSet.length();
     }
 }

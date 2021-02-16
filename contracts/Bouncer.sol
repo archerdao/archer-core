@@ -249,6 +249,27 @@ contract Bouncer is AccessControl {
     }
 
     /**
+     * @notice Gets all balances relevant to determining whether a given user can bankroll a dispatcher
+     * @return balances 
+     * 1) dispatcher bankroll available 
+     * 2) min voting power 
+     * 3) user voting power 
+     * 4) network deposit max 
+     * 5) account amount deposited 
+     * 6) max bankroll per account for dispatcher 
+     * 7) bankroll already provided by user to this dispatcher
+     */
+    function bankrollBalances(address account, address dispatcher) external view returns (uint256[7] memory balances) {
+        balances[0] = bankrollAvailable(IDispatcher(dispatcher));
+        balances[1] = requiredVotingPower;
+        balances[2] = votingPower(account);
+        balances[3] = maxDepositPerAccount();
+        balances[4] = amountDeposited[account];
+        balances[5] = maxBankrollPerAccount(IDispatcher(dispatcher));
+        balances[6] = bankrollProvidedETH[account][dispatcher];
+    }
+
+    /**
      * @notice Provide ETH bankroll to Dispatcher
      * @param dispatcher Dispatcher address
      */

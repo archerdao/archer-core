@@ -382,6 +382,30 @@
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "dispatcher",
+        "type": "address"
+      }
+    ],
+    "name": "bankrollBalances",
+    "outputs": [
+      {
+        "internalType": "uint256[7]",
+        "name": "balances",
+        "type": "uint256[7]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "contract IDispatcher",
         "name": "dispatcher",
         "type": "address"

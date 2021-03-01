@@ -220,6 +220,10 @@ contract Bouncer is AccessControl {
      * @return amount Bankroll available to account for given Dispatcher
      */
     function amountAvailableToBankroll(address account, address dispatcher) public view returns (uint256 amount) {
+        if (dispatcherFactory.exists(account)) {
+            return 0;
+        }
+
         if (votingPower(account) < requiredVotingPower) {
             return 0;
         }
@@ -274,6 +278,7 @@ contract Bouncer is AccessControl {
      * @param dispatcher Dispatcher address
      */
     function provideETHBankroll(address dispatcher) external payable {
+        require(!dispatcherFactory.exists(msg.sender), "dispatchers cannot provide bankroll");
         require(amountAvailableToBankroll(tx.origin, dispatcher) >= msg.value, "amount exceeds max");
         bankrollProvidedETH[tx.origin][dispatcher] = bankrollProvidedETH[tx.origin][dispatcher].add(msg.value);
         amountDeposited[tx.origin] = amountDeposited[tx.origin].add(msg.value);

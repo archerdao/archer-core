@@ -8,6 +8,7 @@ const SUPPLIER_ADDRESS = process.env.SUPPLIER_ADDRESS
 const INITIAL_MAX_LIQUIDITY = process.env.INITIAL_MAX_LIQUIDITY
 
 const LP_WHITELIST = [SUPPLIER_ADDRESS]
+const ADD_BOUNCER_TO_WHITELIST = true
 
 async function createDispatcher(
     roleManager,
@@ -16,10 +17,15 @@ async function createDispatcher(
     trader,
     supplier,
     initialMaxLiquidity,
-    lpWhitelist
+    lpWhitelist,
+    addBouncerAsLP
 ) {
     const { admin } = await getNamedAccounts()
     const queryEngine = await deployments.get('QueryEngine')
+    const bouncer = await deployments.get("Bouncer")
+    if(addBouncerAsLP) {
+        lpWhitelist.push(bouncer.address)
+    }
     console.log(`- Creating new Dispatcher`)
     const receipt = await deployments.execute(
         'DispatcherFactory', 
@@ -55,7 +61,8 @@ if (require.main === module) {
         TRADER_ADDRESS,
         SUPPLIER_ADDRESS,
         INITIAL_MAX_LIQUIDITY,
-        LP_WHITELIST
+        LP_WHITELIST,
+        ADD_BOUNCER_TO_WHITELIST
     )
 }
 

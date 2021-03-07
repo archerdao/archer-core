@@ -6,13 +6,15 @@ import "./interfaces/IVotingPower.sol";
 import "./interfaces/IDispatcherFactory.sol";
 import "./interfaces/IDispatcher.sol";
 import "./lib/AccessControl.sol";
+import "./lib/ReentrancyGuard.sol";
 import "./lib/SafeMath.sol";
+import "./BankrollToken.sol";
 
 /**
  * @title Bouncer
  * @dev Used as an interface to provide bankroll to Dispatchers on the Archer network
  */
-contract Bouncer is AccessControl {
+contract Bouncer is AccessControl, ReentrancyGuard {
     using SafeMath for uint256;
 
     /// @notice Dispatcher Factory
@@ -33,11 +35,11 @@ contract Bouncer is AccessControl {
     /// @notice Total amount of bankroll provided to the network via this contract
     uint256 public totalAmountDeposited;
 
+    /// @notice Mapping of bankroll Dispatcher > asset > bankroll token
+    mapping(address => mapping(address => BankrollToken)) public bankrollTokens;
+
     /// @notice Mapping of Dispatcher address > bankroll provided
     mapping(address => uint256) public amountDeposited;
-
-    /// @notice Mapping of account > Dispatcher > bankroll provided
-    mapping(address => mapping(address => uint256)) public bankrollProvidedETH;
 
     /// @notice Admin role to manage Bouncer
     bytes32 public constant BOUNCER_ADMIN_ROLE = keccak256("BOUNCER_ADMIN_ROLE");
@@ -63,11 +65,14 @@ contract Bouncer is AccessControl {
     /// @notice Event emitted when per dispatcher cap is changed
     event DispatcherMaxChanged(uint32 oldPct, uint32 newPct);
 
+    /// @notice Event emitted when a new Dispatcher/asset is added to the bankroll program
+    event BankrollTokenCreated(address indexed tokenAddress, address indexed asset, address dispatcher);
+
     /// @notice Event emitted when bankroll is provided to a dispatcher
-    event BankrollProvided(address indexed dispatcher, address indexed sender, address indexed account, uint256 amount);
+    event BankrollProvided(address indexed dispatcher, address indexed sender, address indexed account, address asset, uint256 amount);
     
     /// @notice Event emitted when bankroll is removed from a dispatcher
-    event BankrollRemoved(address indexed dispatcher, address indexed sender, address indexed account, uint256 amount);
+    event BankrollRemoved(address indexed dispatcher, address indexed sender, address indexed account, address asset, uint256 amount);
 
     /**
      * @notice Construct a new Bouncer contract
@@ -96,6 +101,12 @@ contract Bouncer is AccessControl {
         _setupRole(BOUNCER_ADMIN_ROLE, _bouncerAdmin);
         _setupRole(DEFAULT_ADMIN_ROLE, _roleAdmin);
     }
+
+    /// @notice Receive function to allow contract to accept ETH
+    receive() external payable {}
+    
+    /// @notice Fallback function in case receive function is not matched
+    fallback() external payable {}
 
     /**
      * @notice Amount of voting power a given account has currently
@@ -238,7 +249,8 @@ contract Bouncer is AccessControl {
         }
 
         uint256 maxBankroll = maxBankrollPerAccount(IDispatcher(dispatcher));
-        uint256 existingBankroll = bankrollProvidedETH[account][dispatcher];
+        BankrollToken bToken = bankrollTokens[dispatcher][address(0)];
+        uint256 existingBankroll = bToken.balanceOf(account);
 
         if (maxBankroll <= existingBankroll) {
             return 0;
@@ -264,27 +276,51 @@ contract Bouncer is AccessControl {
      * 7) bankroll already provided by user to this dispatcher
      */
     function bankrollBalances(address account, address dispatcher) external view returns (uint256[7] memory balances) {
+        BankrollToken bToken = bankrollTokens[dispatcher][address(0)];
         balances[0] = bankrollAvailable(IDispatcher(dispatcher));
         balances[1] = requiredVotingPower;
         balances[2] = votingPower(account);
         balances[3] = maxDepositPerAccount();
         balances[4] = amountDeposited[account];
         balances[5] = maxBankrollPerAccount(IDispatcher(dispatcher));
-        balances[6] = bankrollProvidedETH[account][dispatcher];
+        balances[6] = bToken.balanceOf(account);
+    }
+
+    /**
+     * @notice Function to allow a dispatcher to join the bankroll program
+     * @param dispatcher Dispatcher address
+     */
+    function join(address dispatcher) external {
+        if(bankrollTokens[dispatcher][address(0)] == BankrollToken(0)) {
+            BankrollToken bToken = new BankrollToken(address(0), dispatcher, address(this));
+            bankrollTokens[dispatcher][address(0)] = bToken;
+            emit BankrollTokenCreated(address(bToken), address(0), dispatcher);
+        }
+    }
+
+    /**
+     * @notice Admin function to migrate token to new Bouncer
+     * @param token the token
+     * @param newBouncer Bouncer address
+     */
+    function migrate(BankrollToken token, address newBouncer) external onlyAdmin {
+        token.setSupplyManager(newBouncer);
     }
 
     /**
      * @notice Provide ETH bankroll to Dispatcher
      * @param dispatcher Dispatcher address
      */
-    function provideETHBankroll(address dispatcher) external payable {
-        require(!dispatcherFactory.exists(msg.sender), "dispatchers cannot provide bankroll");
+    function provideETHBankroll(address dispatcher) external payable nonReentrant {
+        require(bankrollTokens[dispatcher][address(0)] != BankrollToken(0), "create bankroll token first");
         require(amountAvailableToBankroll(tx.origin, dispatcher) >= msg.value, "amount exceeds max");
-        bankrollProvidedETH[tx.origin][dispatcher] = bankrollProvidedETH[tx.origin][dispatcher].add(msg.value);
+        require(!dispatcherFactory.exists(msg.sender), "dispatchers cannot provide bankroll");
         amountDeposited[tx.origin] = amountDeposited[tx.origin].add(msg.value);
         totalAmountDeposited = totalAmountDeposited.add(msg.value);
         IDispatcher(dispatcher).provideETHLiquidity{value:msg.value}();
-        emit BankrollProvided(dispatcher, msg.sender, tx.origin, msg.value);
+        BankrollToken bToken = bankrollTokens[dispatcher][address(0)];
+        bToken.mint(tx.origin, msg.value);
+        emit BankrollProvided(dispatcher, msg.sender, tx.origin, address(0), msg.value);
     }
 
     /**
@@ -292,18 +328,19 @@ contract Bouncer is AccessControl {
      * @param dispatcher Dispatcher address
      * @param amount Amount of bankroll to remove
      */
-    function removeETHBankroll(address dispatcher, uint256 amount) external {
-        require(bankrollProvidedETH[tx.origin][dispatcher] >= amount, "amount exceeds bankroll");
+    function removeETHBankroll(address dispatcher, uint256 amount) external nonReentrant {
+        require(bankrollTokens[dispatcher][address(0)] != BankrollToken(0), "create bankroll token first");
+        BankrollToken bToken = bankrollTokens[dispatcher][address(0)];
+        require(bToken.balanceOf(tx.origin) >= amount, "not enough bankroll tokens");
         require(amountDeposited[tx.origin] >= amount, "amount exceeds deposit");
         require(totalAmountDeposited >= amount, "amount exceeds total");
-        bankrollProvidedETH[tx.origin][dispatcher] = bankrollProvidedETH[tx.origin][dispatcher].sub(amount);
         amountDeposited[tx.origin] = amountDeposited[tx.origin].sub(amount);
         totalAmountDeposited = totalAmountDeposited.sub(amount);
         IDispatcher(dispatcher).removeETHLiquidity(amount);
-        // TODO: look into potential exploits involving msg.sender vs. tx.origin
+        bToken.burn(tx.origin, amount);
         (bool success, ) = msg.sender.call{value:amount}("");
         require(success, "Transfer failed");
-        emit BankrollRemoved(dispatcher, msg.sender, tx.origin, amount);
+        emit BankrollRemoved(dispatcher, msg.sender, tx.origin, address(0), amount);
     }
 
     /**

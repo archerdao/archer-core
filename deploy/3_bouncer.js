@@ -16,7 +16,7 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     contract: "Bouncer",
     gas: 4000000,
     args: [dispatcherFactory.address, VOTING_POWER_PRISM_ADDRESS, GLOBAL_MAX_CONTRIBUTION_PCT, DISPATCHER_MAX_CONTRIBUTION_PCT, BANKROLL_REQUIRED_VOTING_POWER, DISPATCHER_FACTORY_ADMIN_ADDRESS, DISPATCHER_FACTORY_ROLE_ADMIN_ADDRESS],
-    skipIfAlreadyDeployed: true
+    skipIfAlreadyDeployed: false
   });
 
   if (deployResult.newlyDeployed) {

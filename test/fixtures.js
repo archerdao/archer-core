@@ -12,6 +12,8 @@ const bankrollFixture = deployments.createFixture(async ({deployments, getNamedA
     const admin = accounts[1]
     const alice = accounts[2]
     const bob = accounts[3]
+    const QueryEngineFactory = await ethers.getContractFactory("QueryEngine")
+    const QueryEngine = await QueryEngineFactory.deploy()
     const DispatcherFactoryFactory = await ethers.getContractFactory("DispatcherFactory")
     const DispatcherFactory = await DispatcherFactoryFactory.deploy(admin.address, admin.address)
     const BouncerFactory = await ethers.getContractFactory("Bouncer")
@@ -32,6 +34,7 @@ const bankrollFixture = deployments.createFixture(async ({deployments, getNamedA
         bob: bob,
         dispatcherFactory: DispatcherFactory,
         bouncer: Bouncer,
+        queryEngine: QueryEngine,
         ZERO_ADDRESS: ZERO_ADDRESS
     };
 })

@@ -133,7 +133,7 @@ contract Bouncer is AccessControl, ReentrancyGuard {
         address[] memory allDispatchers = dispatcherFactory.dispatchers();
         for(uint i = 0; i < allDispatchers.length; i++) {
             IDispatcher dispatcher = IDispatcher(allDispatchers[i]);
-            if (dispatcher.isWhitelistedLP(address(this))) {
+            if (dispatcher.isWhitelistedLP(address(this)) && bankrollTokens[allDispatchers[i]][address(0)] != BankrollToken(0)) {
                 amount = amount + bankrollRequested(dispatcher);
             }
         }
@@ -147,9 +147,7 @@ contract Bouncer is AccessControl, ReentrancyGuard {
         address[] memory allDispatchers = dispatcherFactory.dispatchers();
         for(uint i = 0; i < allDispatchers.length; i++) {
             IDispatcher dispatcher = IDispatcher(allDispatchers[i]);
-            if (dispatcher.isWhitelistedLP(address(this))) {
-                amount = amount + bankrollAvailable(dispatcher);
-            }
+            amount = amount + bankrollAvailable(dispatcher);
         }
     }
 
@@ -163,11 +161,9 @@ contract Bouncer is AccessControl, ReentrancyGuard {
         uint numAvailable = 0;
         for(uint i = 0; i < allDispatchers.length; i++) {
             IDispatcher dispatcher = IDispatcher(allDispatchers[i]);
-            if (dispatcher.isWhitelistedLP(address(this))) {
-                if(bankrollAvailable(dispatcher) > 0) {
-                    filteredDispatchers[numAvailable] = allDispatchers[i];
-                    numAvailable++;
-                }
+            if(bankrollAvailable(dispatcher) > 0) {
+                filteredDispatchers[numAvailable] = allDispatchers[i];
+                numAvailable++;
             }
         }
         dispatchers = new address[](numAvailable);
@@ -198,6 +194,13 @@ contract Bouncer is AccessControl, ReentrancyGuard {
      * @return amount Bankroll available for Dispatcher
      */
     function bankrollAvailable(IDispatcher dispatcher) public view returns (uint256 amount) {
+        if (!dispatcher.isWhitelistedLP(address(this))) {
+            return 0;
+        }
+        if (bankrollTokens[address(dispatcher)][address(0)] == BankrollToken(0)) {
+            return 0;
+        }
+
         return bankrollRequested(dispatcher).sub(bankrollProvided(dispatcher));
     }
 
@@ -304,6 +307,7 @@ contract Bouncer is AccessControl, ReentrancyGuard {
      * @param newBouncer Bouncer address
      */
     function migrate(BankrollToken token, address newBouncer) external onlyAdmin {
+        require(newBouncer != address(0), "cannot migrate to zero");
         token.setSupplyManager(newBouncer);
     }
 

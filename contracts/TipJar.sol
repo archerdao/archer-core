@@ -19,6 +19,9 @@ contract TipJar is AccessControl {
     /// @notice TipJar Admin role
     bytes32 public constant TIPJAR_ADMIN_ROLE = keccak256("TIPJAR_ADMIN_ROLE");
 
+    /// @notice Fee setter role
+    bytes32 public constant FEE_SETTER_ROLE = keccak256("FEE_SETTER_ROLE");
+
     /// @notice Network fee (measured in bips: 10,000 bips = 1% of contract balance)
     uint32 public networkFee;
 
@@ -34,9 +37,16 @@ contract TipJar is AccessControl {
         _;
     }
 
+    /// @notice modifier to restrict functions to fee setters
+    modifier onlyFeeSetter() {
+        require(hasRole(FEE_SETTER_ROLE, msg.sender), "Caller must have FEE_SETTER_ROLE role");
+        _;
+    }
+
     /// @notice Initializes contract, setting admin roles + network fee
     /// @param _roleAdmin admin in control of roles
     /// @param _tipJarAdmin admin of tip jar
+    /// @param _feeSetter fee setter address
     /// @param _networkFeeCollector address that collects network fees
     /// @param _networkFee % of fee collected by the network
     /// @param _accountant accountant address
@@ -44,12 +54,14 @@ contract TipJar is AccessControl {
     constructor(
         address _roleAdmin,
         address _tipJarAdmin,
+        address _feeSetter,
         address _networkFeeCollector,
         uint32 _networkFee,
         address _accountant,
         address[] memory _knownMiners
     ) {
         _setupRole(TIPJAR_ADMIN_ROLE, _tipJarAdmin);
+        _setupRole(FEE_SETTER_ROLE, _feeSetter);
         _setupRole(DEFAULT_ADMIN_ROLE, _roleAdmin);
         networkFeeCollector = _networkFeeCollector;
         networkFee = _networkFee;
@@ -84,6 +96,15 @@ contract TipJar is AccessControl {
     // TODO: determine if should make public getter methods + events for miner address set
 
     /**
+     * @notice Determine whether a given address is a known miner
+     * @param miner Miner address
+     * @return true if miner is known 
+     */
+    function isKnownMiner(address miner) external view returns (bool) {
+        return knownMiners.contains(miner);
+    }
+
+    /**
      * @notice Admin function to add miners to known miners set
      * @param miners Array of miner addresses
      */
@@ -104,19 +125,18 @@ contract TipJar is AccessControl {
     }
 
     /**
-     * @notice Determine whether a given address is a known miner
-     * @param miner Miner address
-     * @return true if miner is known 
+     * @notice Admin function to set accountant address
+     * @param newAccountant new accountant address
      */
-    function isKnownMiner(address miner) external view returns (bool) {
-        return knownMiners.contains(miner);
+    function setAccountant(address newAccountant) external onlyAdmin {
+        accountant = newAccountant;
     }
 
     /**
      * @notice Admin function to set network fee
      * @param newFee new fee
      */
-    function setFee(uint32 newFee) external onlyAdmin {
+    function setFee(uint32 newFee) external onlyFeeSetter {
         networkFee = newFee;
     }
 
@@ -124,15 +144,7 @@ contract TipJar is AccessControl {
      * @notice Admin function to set fee collector address
      * @param newCollector new fee collector address
      */
-    function setFeeCollector(address newCollector) external onlyAdmin {
+    function setFeeCollector(address newCollector) external onlyFeeSetter {
         networkFeeCollector = newCollector;
-    }
-
-    /**
-     * @notice Admin function to set accountant address
-     * @param newAccountant new accountant address
-     */
-    function setAccountant(address newAccountant) external onlyAdmin {
-        accountant = newAccountant;
     }
 }

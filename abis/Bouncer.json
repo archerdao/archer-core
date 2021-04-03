@@ -23,6 +23,11 @@
       },
       {
         "internalType": "uint256",
+        "name": "_maxBankrollRequestable",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
         "name": "_requiredVotingPower",
         "type": "uint256"
       },
@@ -35,10 +40,47 @@
         "internalType": "address",
         "name": "_roleAdmin",
         "type": "address"
+      },
+      {
+        "internalType": "bool",
+        "name": "_requireApproval",
+        "type": "bool"
       }
     ],
     "stateMutability": "nonpayable",
     "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bool",
+        "name": "requireApproval",
+        "type": "bool"
+      }
+    ],
+    "name": "ApprovalChanged",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "dispatcher",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "bToken",
+        "type": "address"
+      }
+    ],
+    "name": "ApprovalRequested",
+    "type": "event"
   },
   {
     "anonymous": false,
@@ -72,6 +114,12 @@
         "internalType": "uint256",
         "name": "amount",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "getRewards",
+        "type": "bool"
       }
     ],
     "name": "BankrollProvided",
@@ -109,9 +157,34 @@
         "internalType": "uint256",
         "name": "amount",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "useRMBalance",
+        "type": "bool"
       }
     ],
     "name": "BankrollRemoved",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "bankrollToken",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "dispatcher",
+        "type": "address"
+      }
+    ],
+    "name": "BankrollTokenApproved",
     "type": "event"
   },
   {
@@ -182,6 +255,25 @@
     "inputs": [
       {
         "indexed": false,
+        "internalType": "uint256",
+        "name": "oldMax",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "newMax",
+        "type": "uint256"
+      }
+    ],
+    "name": "DispatcherMaxRequestableChanged",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
         "internalType": "uint32",
         "name": "oldPct",
         "type": "uint32"
@@ -213,6 +305,25 @@
       }
     ],
     "name": "RequiredVotingPowerChanged",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "oldAddress",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "newAddress",
+        "type": "address"
+      }
+    ],
+    "name": "RewardsManagerChanged",
     "type": "event"
   },
   {
@@ -404,6 +515,24 @@
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "dispatcher",
+        "type": "address"
+      },
+      {
+        "internalType": "contract BankrollToken",
+        "name": "bToken",
+        "type": "address"
+      }
+    ],
+    "name": "approveBankrollToken",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "contract IDispatcher",
         "name": "dispatcher",
         "type": "address"
@@ -436,9 +565,9 @@
     "name": "bankrollBalances",
     "outputs": [
       {
-        "internalType": "uint256[7]",
+        "internalType": "uint256[8]",
         "name": "balances",
-        "type": "uint256[7]"
+        "type": "uint256[8]"
       }
     ],
     "stateMutability": "view",
@@ -671,7 +800,18 @@
       }
     ],
     "name": "join",
-    "outputs": [],
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "bankrollToken",
+        "type": "address"
+      },
+      {
+        "internalType": "bool",
+        "name": "isApproved",
+        "type": "bool"
+      }
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -708,6 +848,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "maximumBankrollRequestable",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "contract BankrollToken",
@@ -731,6 +884,11 @@
         "internalType": "address",
         "name": "dispatcher",
         "type": "address"
+      },
+      {
+        "internalType": "bool",
+        "name": "getRewards",
+        "type": "bool"
       }
     ],
     "name": "provideETHBankroll",
@@ -749,6 +907,11 @@
         "internalType": "uint256",
         "name": "amount",
         "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "useRMBalance",
+        "type": "bool"
       }
     ],
     "name": "removeETHBankroll",
@@ -772,6 +935,19 @@
     "name": "renounceRole",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "requireApproval",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -806,6 +982,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "rewardsManager",
+    "outputs": [
+      {
+        "internalType": "contract IRewardsManager",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -814,6 +1003,19 @@
       }
     ],
     "name": "setDispatcherFactory",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "newMaxRequestable",
+        "type": "uint256"
+      }
+    ],
+    "name": "setDispatcherMaxBankrollRequestable",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -861,11 +1063,31 @@
     "inputs": [
       {
         "internalType": "address",
+        "name": "rewardsManagerAddress",
+        "type": "address"
+      }
+    ],
+    "name": "setRewardsManager",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
         "name": "votingPowerAddress",
         "type": "address"
       }
     ],
     "name": "setVotingPower",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "toggleApproval",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

@@ -10,6 +10,7 @@ let BOUNCER_ADDRESS = process.env.BOUNCER_ADDRESS
 
 let LP_WHITELIST = [SUPPLIER_ADDRESS]
 const ADD_BOUNCER_TO_WHITELIST = true
+const JOIN_BANKROLL_PROGRAM = true
 
 async function getBouncerAddress() {
     const bouncer = await deployments.get("Bouncer")
@@ -19,6 +20,29 @@ async function getBouncerAddress() {
 async function getQueryEngineAddress() {
     const queryEngine = await deployments.get('QueryEngine')
     return queryEngine.address
+}
+
+async function joinBankrollProgram(dispatcher) {
+    const { admin } = await getNamedAccounts()
+    console.log(`- Dispatcher ${dispatcher} joining bankroll program`)
+    const receipt = await deployments.execute(
+        'Bouncer', 
+        { from: admin, gasLimit: 2000000 }, 
+        'join',
+        dispatcher
+    );
+
+    if(receipt.status) {
+        for(const event of receipt.events) {
+            if(event.event == 'BankrollTokenCreated') {
+                console.log(`- New Bankroll Token created at: ${event.args.tokenAddress}`)
+                return event.args.tokenAddress;
+            }
+        }
+    } else {
+        console.log(`- Error joining bankroll program:`)
+        console.log(receipt)
+    }
 }
 
 async function createDispatcher(
@@ -79,7 +103,11 @@ if (require.main === module) {
                         SUPPLIER_ADDRESS,
                         INITIAL_MAX_LIQUIDITY,
                         LP_WHITELIST 
-                    )
+                    ).then((dispatcher) => {
+                        if (JOIN_BANKROLL_PROGRAM) {
+                            joinBankrollProgram(dispatcher)
+                        }
+                    })
                 })
             })
         } else {
@@ -96,7 +124,11 @@ if (require.main === module) {
                     SUPPLIER_ADDRESS,
                     INITIAL_MAX_LIQUIDITY,
                     LP_WHITELIST 
-                )
+                ).then((dispatcher) => {
+                    if (JOIN_BANKROLL_PROGRAM) {
+                        joinBankrollProgram(dispatcher)
+                    }
+                })
             })
         }
         

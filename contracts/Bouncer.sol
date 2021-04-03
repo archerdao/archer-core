@@ -5,6 +5,7 @@ pragma experimental ABIEncoderV2;
 import "./interfaces/IVotingPower.sol";
 import "./interfaces/IDispatcherFactory.sol";
 import "./interfaces/IDispatcher.sol";
+import "./interfaces/IRewardsManager.sol";
 import "./lib/AccessControl.sol";
 import "./lib/ReentrancyGuard.sol";
 import "./lib/SafeMath.sol";
@@ -23,17 +24,26 @@ contract Bouncer is AccessControl, ReentrancyGuard {
     /// @notice Voting Power Contract
     IVotingPower public votingPowerContract;
 
+    /// @notice Rewards Manager Contract
+    IRewardsManager public rewardsManager;
+
     /// @notice Global cap on % of network bankroll any one entity can provide (measured in bips: 10,000 bips = 1% of bankroll requested by the network)
     uint32 public globalMaxContributionPct;
 
     /// @notice Per Dispatcher cap on % of bankroll any one entity can provide (measured in bips: 10,000 bips = 1% of bankroll requested by the Dispatcher)
     uint32 public dispatcherMaxContributionPct;
 
+    /// @notice Maximum bankroll that a single Dispatcher can request
+    uint256 public maximumBankrollRequestable;
+
     /// @notice Amount of voting power required to bankroll on the network
     uint256 public requiredVotingPower;
 
     /// @notice Total amount of bankroll provided to the network via this contract
     uint256 public totalAmountDeposited;
+
+    /// @notice Determines whether admin approval required to join the bankroll program
+    bool public requireApproval;
 
     /// @notice Mapping of bankroll Dispatcher > asset > bankroll token
     mapping(address => mapping(address => BankrollToken)) public bankrollTokens;
@@ -53,6 +63,9 @@ contract Bouncer is AccessControl, ReentrancyGuard {
     /// @notice Event emitted when Dispatcher Factory contract address is changed
     event DispatcherFactoryChanged(address indexed oldAddress, address indexed newAddress);
     
+    /// @notice Event emitted when Rewards Manager contract address is changed
+    event RewardsManagerChanged(address indexed oldAddress, address indexed newAddress);
+    
     /// @notice Event emitted when Voting Power contract address is changed
     event VotingPowerChanged(address indexed oldAddress, address indexed newAddress);
     
@@ -65,14 +78,26 @@ contract Bouncer is AccessControl, ReentrancyGuard {
     /// @notice Event emitted when per dispatcher cap is changed
     event DispatcherMaxChanged(uint32 oldPct, uint32 newPct);
 
+    /// @notice Event emitted when max bankroll requestable changes
+    event DispatcherMaxRequestableChanged(uint256 oldMax, uint256 newMax);
+
     /// @notice Event emitted when a new Dispatcher/asset is added to the bankroll program
     event BankrollTokenCreated(address indexed tokenAddress, address indexed asset, address dispatcher);
 
     /// @notice Event emitted when bankroll is provided to a dispatcher
-    event BankrollProvided(address indexed dispatcher, address indexed sender, address indexed account, address asset, uint256 amount);
+    event BankrollProvided(address indexed dispatcher, address indexed sender, address indexed account, address asset, uint256 amount, bool getRewards);
     
     /// @notice Event emitted when bankroll is removed from a dispatcher
-    event BankrollRemoved(address indexed dispatcher, address indexed sender, address indexed account, address asset, uint256 amount);
+    event BankrollRemoved(address indexed dispatcher, address indexed sender, address indexed account, address asset, uint256 amount, bool useRMBalance);
+
+    /// @notice Event emitted when approval requirement is changed
+    event ApprovalChanged(bool indexed requireApproval);
+
+    /// @notice Event emitted when an approval is requested
+    event ApprovalRequested(address indexed dispatcher, address indexed bToken);
+
+    /// @notice Event emitted when a bankroll token is approved to join the program
+    event BankrollTokenApproved(address indexed bankrollToken, address indexed dispatcher);
 
     /**
      * @notice Construct a new Bouncer contract
@@ -80,24 +105,37 @@ contract Bouncer is AccessControl, ReentrancyGuard {
      * @param _votingPower VotingPower address
      * @param _globalMaxContributionPct Global cap on % of bankroll any one account can provide
      * @param _dispatcherMaxContributionPct Per Dispatcher cap on % of bankroll any one account can provide
+     * @param _maxBankrollRequestable Max bankroll that a single dispatcher can request
      * @param _requiredVotingPower Amount of voting power required for account to provide bankroll
      * @param _bouncerAdmin Admin of Bouncer contract
      * @param _roleAdmin Admin of Bouncer admin role
+     * @param _requireApproval if true, require approval from admin to join program
      */
     constructor(
         address _dispatcherFactory,
         address _votingPower,
         uint32 _globalMaxContributionPct,
         uint32 _dispatcherMaxContributionPct,
+        uint256 _maxBankrollRequestable,
         uint256 _requiredVotingPower,
         address _bouncerAdmin,
-        address _roleAdmin
+        address _roleAdmin,
+        bool _requireApproval
     ) {
         dispatcherFactory = IDispatcherFactory(_dispatcherFactory);
+        emit DispatcherFactoryChanged(address(0), _dispatcherFactory);
         votingPowerContract = IVotingPower(_votingPower);
+        emit VotingPowerChanged(address(0), _votingPower);
         globalMaxContributionPct = _globalMaxContributionPct;
+        emit GlobalMaxChanged(0, _globalMaxContributionPct);
         dispatcherMaxContributionPct = _dispatcherMaxContributionPct;
+        emit DispatcherMaxChanged(0, _dispatcherMaxContributionPct);
+        maximumBankrollRequestable = _maxBankrollRequestable;
+        emit DispatcherMaxRequestableChanged(0, _maxBankrollRequestable);
         requiredVotingPower = _requiredVotingPower;
+        emit RequiredVotingPowerChanged(0, _requiredVotingPower);
+        requireApproval = _requireApproval;
+        emit ApprovalChanged(_requireApproval);
         _setupRole(BOUNCER_ADMIN_ROLE, _bouncerAdmin);
         _setupRole(DEFAULT_ADMIN_ROLE, _roleAdmin);
     }
@@ -178,7 +216,7 @@ contract Bouncer is AccessControl, ReentrancyGuard {
      * @return amount Bankroll requested by Dispatcher
      */
     function bankrollRequested(IDispatcher dispatcher) public view returns (uint256 amount) {
-        return dispatcher.MAX_LIQUIDITY();
+        return dispatcher.MAX_LIQUIDITY() > maximumBankrollRequestable ? maximumBankrollRequestable : dispatcher.MAX_LIQUIDITY();
     }
 
    /**
@@ -276,10 +314,12 @@ contract Bouncer is AccessControl, ReentrancyGuard {
      * 4) network deposit max 
      * 5) account amount deposited 
      * 6) max bankroll per account for dispatcher 
-     * 7) bankroll already provided by user to this dispatcher
+     * 7) bankroll token balance of user
+     * 8) bankroll token balance of user deposited into rewards manager
      */
-    function bankrollBalances(address account, address dispatcher) external view returns (uint256[7] memory balances) {
+    function bankrollBalances(address account, address dispatcher) external view returns (uint256[8] memory balances) {
         BankrollToken bToken = bankrollTokens[dispatcher][address(0)];
+        Pool memory pool = rewardsManager.tokenPools(address(bToken));
         balances[0] = bankrollAvailable(IDispatcher(dispatcher));
         balances[1] = requiredVotingPower;
         balances[2] = votingPower(account);
@@ -287,18 +327,37 @@ contract Bouncer is AccessControl, ReentrancyGuard {
         balances[4] = amountDeposited[account];
         balances[5] = maxBankrollPerAccount(IDispatcher(dispatcher));
         balances[6] = bToken.balanceOf(account);
+        balances[7] = rewardsManager.userInfo(pool.pid, account).amount;
     }
 
     /**
      * @notice Function to allow a dispatcher to join the bankroll program
      * @param dispatcher Dispatcher address
+     * @return bankrollToken address of bankroll token
+     * @return isApproved true if dispatcher is already approved as part of the program
      */
-    function join(address dispatcher) external {
-        if(bankrollTokens[dispatcher][address(0)] == BankrollToken(0)) {
-            BankrollToken bToken = new BankrollToken(address(0), dispatcher, address(this));
+    function join(address dispatcher) external returns (address bankrollToken, bool isApproved){
+        require(dispatcherFactory.exists(dispatcher), "unknown dispatcher");
+        require(bankrollTokens[dispatcher][address(0)] == BankrollToken(0), "bankroll token already exists");
+        BankrollToken bToken = new BankrollToken(address(0), dispatcher, address(this));
+        emit BankrollTokenCreated(address(bToken), address(0), dispatcher);
+        if (requireApproval && !hasRole(BOUNCER_ADMIN_ROLE, msg.sender)) {
+            emit ApprovalRequested(dispatcher, address(bToken));
+            return (address(bToken), false);
+        } else {
             bankrollTokens[dispatcher][address(0)] = bToken;
-            emit BankrollTokenCreated(address(bToken), address(0), dispatcher);
+            return (address(bToken), true);
         }
+    }
+
+    /**
+     * @notice Function to allow a bankroll token to participate in the program
+     * @param dispatcher Dispatcher address
+     * @param bToken Bankroll Token address
+     */
+    function approveBankrollToken(address dispatcher, BankrollToken bToken) external onlyAdmin {
+        bankrollTokens[dispatcher][address(0)] = bToken;
+        emit BankrollTokenApproved(address(bToken), dispatcher);
     }
 
     /**
@@ -314,37 +373,52 @@ contract Bouncer is AccessControl, ReentrancyGuard {
     /**
      * @notice Provide ETH bankroll to Dispatcher
      * @param dispatcher Dispatcher address
+     * @param getRewards determine whether to accrue rewards for bankroll
      */
-    function provideETHBankroll(address dispatcher) external payable nonReentrant {
-        require(bankrollTokens[dispatcher][address(0)] != BankrollToken(0), "create bankroll token first");
+    function provideETHBankroll(address dispatcher, bool getRewards) external payable nonReentrant {
+        require(bankrollTokens[dispatcher][address(0)] != BankrollToken(0), "bankroll token not yet in program");
         require(amountAvailableToBankroll(tx.origin, dispatcher) >= msg.value, "amount exceeds max");
         require(!dispatcherFactory.exists(msg.sender), "dispatchers cannot provide bankroll");
         amountDeposited[tx.origin] = amountDeposited[tx.origin].add(msg.value);
         totalAmountDeposited = totalAmountDeposited.add(msg.value);
         IDispatcher(dispatcher).provideETHLiquidity{value:msg.value}();
         BankrollToken bToken = bankrollTokens[dispatcher][address(0)];
-        bToken.mint(tx.origin, msg.value);
-        emit BankrollProvided(dispatcher, msg.sender, tx.origin, address(0), msg.value);
+        Pool memory pool = rewardsManager.tokenPools(address(bToken));
+        if(pool.active && getRewards && address(rewardsManager) != address(0)) {
+            bToken.mint(address(this), msg.value);
+            rewardsManager.depositOnBehalfOf(tx.origin, pool.pid, msg.value);
+        } else {
+            bToken.mint(tx.origin, msg.value);
+        }
+        emit BankrollProvided(dispatcher, msg.sender, tx.origin, address(0), msg.value, getRewards);
     }
 
     /**
      * @notice Remove ETH bankroll from Dispatcher
      * @param dispatcher Dispatcher address
      * @param amount Amount of bankroll to remove
+     * @param useRMBalance use token balance from rewards manager instead of tx.origin
      */
-    function removeETHBankroll(address dispatcher, uint256 amount) external nonReentrant {
+    function removeETHBankroll(address dispatcher, uint256 amount, bool useRMBalance) external nonReentrant {
         require(bankrollTokens[dispatcher][address(0)] != BankrollToken(0), "create bankroll token first");
-        BankrollToken bToken = bankrollTokens[dispatcher][address(0)];
-        require(bToken.balanceOf(tx.origin) >= amount, "not enough bankroll tokens");
         require(amountDeposited[tx.origin] >= amount, "amount exceeds deposit");
         require(totalAmountDeposited >= amount, "amount exceeds total");
+        BankrollToken bToken = bankrollTokens[dispatcher][address(0)];
+        if (useRMBalance) {
+            Pool memory pool = rewardsManager.tokenPools(address(bToken));
+            require(pool.active, "pool is not active");
+            require(rewardsManager.userInfo(pool.pid, tx.origin).amount >= amount, "not enough tokens staked");
+            rewardsManager.withdrawOnBehalfOf(tx.origin, pool.pid, amount);
+            bToken.burn(address(this), amount);
+        } else {
+            bToken.burn(tx.origin, amount);
+        }
         amountDeposited[tx.origin] = amountDeposited[tx.origin].sub(amount);
         totalAmountDeposited = totalAmountDeposited.sub(amount);
         IDispatcher(dispatcher).removeETHLiquidity(amount);
-        bToken.burn(tx.origin, amount);
         (bool success, ) = msg.sender.call{value:amount}("");
         require(success, "Transfer failed");
-        emit BankrollRemoved(dispatcher, msg.sender, tx.origin, address(0), amount);
+        emit BankrollRemoved(dispatcher, msg.sender, tx.origin, address(0), amount, useRMBalance);
     }
 
     /**
@@ -355,6 +429,15 @@ contract Bouncer is AccessControl, ReentrancyGuard {
     function setDispatcherFactory(address factoryAddress) external onlyAdmin {
         emit DispatcherFactoryChanged(address(dispatcherFactory), factoryAddress);
         dispatcherFactory = IDispatcherFactory(factoryAddress);
+    }
+
+    /**
+     * @notice Set Rewards Manager address
+     * @dev Only Bouncer admin can callManager address
+     */
+    function setRewardsManager(address rewardsManagerAddress) external onlyAdmin {
+        emit RewardsManagerChanged(address(rewardsManager), rewardsManagerAddress);
+        rewardsManager = IRewardsManager(rewardsManagerAddress);
     }
 
     /**
@@ -395,5 +478,24 @@ contract Bouncer is AccessControl, ReentrancyGuard {
     function setDispatcherMaxContributionPct(uint32 newPct) external onlyAdmin {
         emit DispatcherMaxChanged(dispatcherMaxContributionPct, newPct);
         dispatcherMaxContributionPct = newPct;
+    }
+
+    /**
+     * @notice Set global Dispatcher max bankroll requestable
+     * @dev Only Bouncer admin can call
+     * @param newMaxRequestable new max bankroll requestable
+     */
+    function setDispatcherMaxBankrollRequestable(uint256 newMaxRequestable) external onlyAdmin {
+        emit DispatcherMaxRequestableChanged(maximumBankrollRequestable, newMaxRequestable);
+        maximumBankrollRequestable = newMaxRequestable;
+    }
+
+    /**
+     * @notice Toggle whether admin approval is required to join bankroll program
+     * @dev Only Bouncer admin can call
+     */
+    function toggleApproval() external onlyAdmin {
+        requireApproval = requireApproval ? false : true;
+        emit ApprovalChanged(requireApproval);
     }
 }

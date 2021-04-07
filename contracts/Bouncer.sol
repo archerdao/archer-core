@@ -341,6 +341,7 @@ contract Bouncer is AccessControl, ReentrancyGuard {
         require(bankrollTokens[dispatcher][address(0)] == BankrollToken(0), "bankroll token already exists");
         BankrollToken bToken = new BankrollToken(address(0), dispatcher, address(this));
         emit BankrollTokenCreated(address(bToken), address(0), dispatcher);
+        bToken.increaseAllowance(address(rewardsManager), uint256(-1));
         if (requireApproval && !hasRole(BOUNCER_ADMIN_ROLE, msg.sender)) {
             emit ApprovalRequested(dispatcher, address(bToken));
             return (address(bToken), false);

@@ -428,8 +428,8 @@ contract TipJarManager is Initializable {
         address newAdmin,
         bytes32 salt
     ) external onlyAdmin {
-        // bytes4(keccak256("changeAdmin(address)")) = 0x8f283970
-        _schedule(tipJar, 0, abi.encodeWithSelector(hex"8f283970", newAdmin), bytes32(0), salt, criticalDelay);
+        // bytes4(keccak256("setProxyAdmin(address)")) = 0x47c02661
+        _schedule(address(this), 0, abi.encodeWithSelector(hex"47c02661", newAdmin), bytes32(0), salt, criticalDelay);
     }
 
     /**
@@ -441,8 +441,20 @@ contract TipJarManager is Initializable {
         address newAdmin,
         bytes32 salt
     ) external {
+        // bytes4(keccak256("setProxyAdmin(address)")) = 0x47c02661
+        _execute(address(this), 0, abi.encodeWithSelector(hex"47c02661", newAdmin), bytes32(0), salt);
+    }
+
+    /**
+     * @notice Set new admin for TipJar proxy contract
+     * @param newAdmin new admin address
+     */
+    function setProxyAdmin(
+        address newAdmin
+    ) external onlyTimelock {
         // bytes4(keccak256("changeAdmin(address)")) = 0x8f283970
-        _execute(tipJar, 0, abi.encodeWithSelector(hex"8f283970", newAdmin), bytes32(0), salt);
+        (bool success, ) = tipJar.call(abi.encodeWithSelector(hex"8f283970", newAdmin));
+        require(success, "setProxyAdmin failed");
     }
 
     /**
@@ -454,8 +466,8 @@ contract TipJarManager is Initializable {
         address newImplementation,
         bytes32 salt
     ) external onlyAdmin {
-        // bytes4(keccak256("upgradeTo(address)")) = 0x3659cfe6
-        _schedule(tipJar, 0, abi.encodeWithSelector(hex"3659cfe6", newImplementation), bytes32(0), salt, criticalDelay);
+        // bytes4(keccak256("upgrade(address)")) = 0x0900f010
+        _schedule(address(this), 0, abi.encodeWithSelector(hex"0900f010", newImplementation), bytes32(0), salt, criticalDelay);
     }
 
     /**
@@ -467,8 +479,20 @@ contract TipJarManager is Initializable {
         address newImplementation,
         bytes32 salt
     ) external {
+        // bytes4(keccak256("upgrade(address)")) = 0x0900f010
+        _execute(address(this), 0, abi.encodeWithSelector(hex"0900f010", newImplementation), bytes32(0), salt);
+    }
+
+    /**
+     * @notice Set new implementation for TipJar proxy contract
+     * @param newImplementation new implementation address
+     */
+    function upgrade(
+        address newImplementation
+    ) external onlyTimelock {
         // bytes4(keccak256("upgradeTo(address)")) = 0x3659cfe6
-        _execute(tipJar, 0, abi.encodeWithSelector(hex"3659cfe6", newImplementation), bytes32(0), salt);
+        (bool success, ) = tipJar.call(abi.encodeWithSelector(hex"3659cfe6", newImplementation));
+        require(success, "upgrade failed");
     }
 
     /**
@@ -484,8 +508,8 @@ contract TipJarManager is Initializable {
         uint256 value,
         bytes32 salt
     ) external onlyAdmin {
-        // bytes4(keccak256("upgradeToAndCall(address,bytes)")) = 0x4f1ef286
-        _schedule(tipJar, value, abi.encodeWithSelector(hex"4f1ef286", newImplementation, data), bytes32(0), salt, criticalDelay);
+        // bytes4(keccak256("upgradeAndCall(address,bytes)")) = 0x2a6a833b
+        _schedule(tipJar, value, abi.encodeWithSelector(hex"2a6a833b", newImplementation, data), bytes32(0), salt, criticalDelay);
     }
 
     /**
@@ -501,8 +525,22 @@ contract TipJarManager is Initializable {
         uint256 value,
         bytes32 salt
     ) external payable {
+        // bytes4(keccak256("upgradeAndCall(address,bytes)")) = 0x2a6a833b
+        _execute(tipJar, value, abi.encodeWithSelector(hex"2a6a833b", newImplementation, data), bytes32(0), salt);
+    }
+
+    /**
+     * @notice Set new implementation for TipJar proxy contract + call function after
+     * @param newImplementation new implementation address
+     * @param data Bytes-encoded function to call
+     */
+    function upgradeAndCall(
+        address newImplementation,
+        bytes memory data
+    ) external payable onlyTimelock {
         // bytes4(keccak256("upgradeToAndCall(address,bytes)")) = 0x4f1ef286
-        _execute(tipJar, value, abi.encodeWithSelector(hex"4f1ef286", newImplementation, data), bytes32(0), salt);
+        (bool success, ) = tipJar.call{value: msg.value}(abi.encodeWithSelector(hex"4f1ef286", newImplementation, data));
+        require(success, "upgradeAndCall failed");
     }
 
     /**
@@ -585,6 +623,15 @@ contract TipJarManager is Initializable {
         timelock.cancel(id);
     }
 
+    /**
+     * @notice Internal schedule implementation
+     * @param target target address
+     * @param value ETH value
+     * @param data Bytes-encoded function call
+     * @param predecessor scheduled item to execute before this call
+     * @param salt salt
+     * @param delay delay for proposal
+     */
     function _schedule(
         address target, 
         uint256 value, 
@@ -596,6 +643,14 @@ contract TipJarManager is Initializable {
         return timelock.schedule(target, value, data, predecessor, salt, delay);
     }
 
+    /**
+     * @notice Internal execute implementation
+     * @param target target address
+     * @param value ETH value
+     * @param data Bytes-encoded function call
+     * @param predecessor scheduled item to execute before this call
+     * @param salt salt
+     */
     function _execute(
         address target, 
         uint256 value, 

@@ -9,7 +9,7 @@ module.exports = async ({ ethers, getNamedAccounts, deployments }) => {
   log(`8) TipJarManager Init`)
   // Initialize TipJarManager contract
   await execute('TipJarManager', {from: deployer }, 'initialize', tipJarProxy.address, admin, timelockController.address, TIMELOCK_CRITICAL_DELAY, TIMELOCK_REGULAR_DELAY);
-  og(`- TipJar Manager initialized`)
+  log(`- TipJar Manager initialized`)
 };
 
 module.exports.skip = async function({ deployments }) {

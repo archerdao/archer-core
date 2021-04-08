@@ -5,6 +5,7 @@ module.exports = async ({ ethers, getNamedAccounts, deployments }) => {
   const timelockController = await deployments.get("TimelockController")
   const TIP_JAR_FEE_COLLECTOR = process.env.TIP_JAR_FEE_COLLECTOR
   const TIP_JAR_FEE = process.env.TIP_JAR_FEE
+  const tipJarManager = await deployments.get("TipJarManager")
   const tipJarInterface = new ethers.utils.Interface(tipJar.abi);
   const initData = tipJarInterface.encodeFunctionData("initialize", [
       timelockController.address,
@@ -20,7 +21,7 @@ module.exports = async ({ ethers, getNamedAccounts, deployments }) => {
     from: deployer,
     contract: "TipJarProxy",
     gas: 4000000,
-    args: [tipJar.address, timelockController.address, initData],
+    args: [tipJar.address, tipJarManager.address, initData],
     skipIfAlreadyDeployed: true
   });
 

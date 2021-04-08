@@ -17,9 +17,6 @@ contract TipJar is AccessControlUpgradeable, CheckAndSend {
     /// @notice TipJar Admin role
     bytes32 public constant TIP_JAR_ADMIN_ROLE = keccak256("TIP_JAR_ADMIN_ROLE");
 
-    /// @notice Miner manager role
-    bytes32 public constant MINER_MANAGER_ROLE = keccak256("MINER_MANAGER_ROLE");
-
     /// @notice Fee setter role
     bytes32 public constant FEE_SETTER_ROLE = keccak256("FEE_SETTER_ROLE");
 
@@ -56,9 +53,9 @@ contract TipJar is AccessControlUpgradeable, CheckAndSend {
         _;
     }
 
-    /// @notice modifier to restrict functions to miner managers
-    modifier onlyMinerManager(address miner) {
-        require(msg.sender == miner || hasRole(MINER_MANAGER_ROLE, msg.sender), "Caller must have MINER_MANAGER_ROLE role");
+    /// @notice modifier to restrict functions to miners or admin
+    modifier onlyMinerOrAdmin(address miner) {
+        require(msg.sender == miner || hasRole(TIP_JAR_ADMIN_ROLE, msg.sender), "Caller must be miner or have TIP_JAR_ADMIN_ROLE role");
         _;
     }
 
@@ -69,24 +66,20 @@ contract TipJar is AccessControlUpgradeable, CheckAndSend {
     }
 
     /// @notice Initializes contract, setting admin roles + network fee
-    /// @param _roleAdmin admin in control of roles
     /// @param _tipJarAdmin admin of tip pool
-    /// @param _minerManager miner manager address
     /// @param _feeSetter fee setter address
     /// @param _networkFeeCollector address that collects network fees
     /// @param _networkFee % of fee collected by the network
     function initialize(
-        address _roleAdmin,
         address _tipJarAdmin,
-        address _minerManager,
         address _feeSetter,
         address _networkFeeCollector,
         uint32 _networkFee
     ) public initializer {
+        _setRoleAdmin(TIP_JAR_ADMIN_ROLE, TIP_JAR_ADMIN_ROLE);
+        _setRoleAdmin(FEE_SETTER_ROLE, TIP_JAR_ADMIN_ROLE);
         _setupRole(TIP_JAR_ADMIN_ROLE, _tipJarAdmin);
-        _setupRole(MINER_MANAGER_ROLE, _minerManager);
         _setupRole(FEE_SETTER_ROLE, _feeSetter);
-        _setupRole(DEFAULT_ADMIN_ROLE, _roleAdmin);
         networkFeeCollector = _networkFeeCollector;
         emit FeeCollectorSet(_networkFeeCollector, address(0));
         networkFee = _networkFee;
@@ -272,7 +265,7 @@ contract TipJar is AccessControlUpgradeable, CheckAndSend {
         address minerAddress, 
         address splitTo, 
         uint32 splitPct
-    ) external onlyMinerManager(minerAddress) {
+    ) external onlyMinerOrAdmin(minerAddress) {
         Split memory oldSplit = minerSplits[minerAddress];
         address oldSplitTo = oldSplit.splitTo;
         uint32 oldSplitPct = oldSplit.splitPct;

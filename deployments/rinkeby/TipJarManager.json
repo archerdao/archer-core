@@ -1,0 +1,1557 @@
+{
+  "address": "0xfCa2258275D4A514a3E3a060f4A056CD6d8200cD",
+  "abi": [
+    {
+      "inputs": [],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "oldAdmin",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "newAdmin",
+          "type": "address"
+        }
+      ],
+      "name": "AdminChanged",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "string",
+          "name": "delayType",
+          "type": "string"
+        },
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "oldDelay",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "newDelay",
+          "type": "uint256"
+        }
+      ],
+      "name": "DelayChanged",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "approver",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint32",
+          "name": "newFee",
+          "type": "uint32"
+        }
+      ],
+      "name": "FeeApproval",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "approver",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "newCollector",
+          "type": "address"
+        }
+      ],
+      "name": "FeeCollectorApproval",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "proposer",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "newCollector",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "eta",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes32",
+          "name": "proposalID",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes32",
+          "name": "salt",
+          "type": "bytes32"
+        }
+      ],
+      "name": "FeeCollectorProposal",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "proposer",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint32",
+          "name": "newFee",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "eta",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes32",
+          "name": "proposalID",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes32",
+          "name": "salt",
+          "type": "bytes32"
+        }
+      ],
+      "name": "FeeProposal",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "approver",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "miner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "splitTo",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint32",
+          "name": "splitPct",
+          "type": "uint32"
+        }
+      ],
+      "name": "MinerSplitApproval",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "proposer",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "miner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "splitTo",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint32",
+          "name": "splitPct",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "eta",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes32",
+          "name": "proposalID",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes32",
+          "name": "salt",
+          "type": "bytes32"
+        }
+      ],
+      "name": "MinerSplitProposal",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "oldTimelock",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "newTimelock",
+          "type": "address"
+        }
+      ],
+      "name": "TimelockChanged",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "oldTipJar",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "newTipJar",
+          "type": "address"
+        }
+      ],
+      "name": "TipJarChanged",
+      "type": "event"
+    },
+    {
+      "stateMutability": "payable",
+      "type": "fallback"
+    },
+    {
+      "inputs": [],
+      "name": "admin",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newAdmin",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "salt",
+          "type": "bytes32"
+        }
+      ],
+      "name": "approveNewAdmin",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "newDelay",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "salt",
+          "type": "bytes32"
+        }
+      ],
+      "name": "approveNewCriticalDelay",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "newFee",
+          "type": "uint32"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "salt",
+          "type": "bytes32"
+        }
+      ],
+      "name": "approveNewFee",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newFeeCollector",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "salt",
+          "type": "bytes32"
+        }
+      ],
+      "name": "approveNewFeeCollector",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "minerAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "splitTo",
+          "type": "address"
+        },
+        {
+          "internalType": "uint32",
+          "name": "splitPct",
+          "type": "uint32"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "salt",
+          "type": "bytes32"
+        }
+      ],
+      "name": "approveNewMinerSplit",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newAdmin",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "salt",
+          "type": "bytes32"
+        }
+      ],
+      "name": "approveNewProxyAdmin",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "newDelay",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "salt",
+          "type": "bytes32"
+        }
+      ],
+      "name": "approveNewRegularDelay",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newTimelock",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "salt",
+          "type": "bytes32"
+        }
+      ],
+      "name": "approveNewTimelock",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newTipJar",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "salt",
+          "type": "bytes32"
+        }
+      ],
+      "name": "approveNewTipJar",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newImplementation",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "salt",
+          "type": "bytes32"
+        }
+      ],
+      "name": "approveUpgrade",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newImplementation",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes",
+          "name": "data",
+          "type": "bytes"
+        },
+        {
+          "internalType": "uint256",
+          "name": "value",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "salt",
+          "type": "bytes32"
+        }
+      ],
+      "name": "approveUpgradeAndCall",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "id",
+          "type": "bytes32"
+        }
+      ],
+      "name": "cancelProposal",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "target",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "value",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bytes",
+          "name": "data",
+          "type": "bytes"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "predecessor",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "salt",
+          "type": "bytes32"
+        }
+      ],
+      "name": "createProposal",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "targets",
+          "type": "address[]"
+        },
+        {
+          "internalType": "uint256[]",
+          "name": "values",
+          "type": "uint256[]"
+        },
+        {
+          "internalType": "bytes[]",
+          "name": "datas",
+          "type": "bytes[]"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "predecessor",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "salt",
+          "type": "bytes32"
+        }
+      ],
+      "name": "createProposalBatch",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "criticalDelay",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "target",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "value",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bytes",
+          "name": "data",
+          "type": "bytes"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "predecessor",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "salt",
+          "type": "bytes32"
+        }
+      ],
+      "name": "executeProposal",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "targets",
+          "type": "address[]"
+        },
+        {
+          "internalType": "uint256[]",
+          "name": "values",
+          "type": "uint256[]"
+        },
+        {
+          "internalType": "bytes[]",
+          "name": "datas",
+          "type": "bytes[]"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "predecessor",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "salt",
+          "type": "bytes32"
+        }
+      ],
+      "name": "executeProposalBatch",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getProxyAdmin",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getProxyImplementation",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_tipJar",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_admin",
+          "type": "address"
+        },
+        {
+          "internalType": "address payable",
+          "name": "_timelock",
+          "type": "address"
+        }
+      ],
+      "name": "initialize",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newAdmin",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "salt",
+          "type": "bytes32"
+        }
+      ],
+      "name": "proposeNewAdmin",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "newDelay",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "salt",
+          "type": "bytes32"
+        }
+      ],
+      "name": "proposeNewCriticalDelay",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "newFee",
+          "type": "uint32"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "salt",
+          "type": "bytes32"
+        }
+      ],
+      "name": "proposeNewFee",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newFeeCollector",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "salt",
+          "type": "bytes32"
+        }
+      ],
+      "name": "proposeNewFeeCollector",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "minerAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "splitTo",
+          "type": "address"
+        },
+        {
+          "internalType": "uint32",
+          "name": "splitPct",
+          "type": "uint32"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "salt",
+          "type": "bytes32"
+        }
+      ],
+      "name": "proposeNewMinerSplit",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newAdmin",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "salt",
+          "type": "bytes32"
+        }
+      ],
+      "name": "proposeNewProxyAdmin",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "newDelay",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "salt",
+          "type": "bytes32"
+        }
+      ],
+      "name": "proposeNewRegularDelay",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newTimelock",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "salt",
+          "type": "bytes32"
+        }
+      ],
+      "name": "proposeNewTimelock",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newTipJar",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "salt",
+          "type": "bytes32"
+        }
+      ],
+      "name": "proposeNewTipJar",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newImplementation",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "salt",
+          "type": "bytes32"
+        }
+      ],
+      "name": "proposeUpgrade",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newImplementation",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes",
+          "name": "data",
+          "type": "bytes"
+        },
+        {
+          "internalType": "uint256",
+          "name": "value",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "salt",
+          "type": "bytes32"
+        }
+      ],
+      "name": "proposeUpgradeAndCall",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "regularDelay",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newAdmin",
+          "type": "address"
+        }
+      ],
+      "name": "setAdmin",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "newDelay",
+          "type": "uint256"
+        }
+      ],
+      "name": "setCriticalDelay",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "newDelay",
+          "type": "uint256"
+        }
+      ],
+      "name": "setRegularDelay",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address payable",
+          "name": "newTimelock",
+          "type": "address"
+        }
+      ],
+      "name": "setTimelock",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newTipJar",
+          "type": "address"
+        }
+      ],
+      "name": "setTipJar",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "timelock",
+      "outputs": [
+        {
+          "internalType": "contract ITimelockController",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "tipJar",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "stateMutability": "payable",
+      "type": "receive"
+    }
+  ],
+  "transactionHash": "0x249b768b8edee4854c282c8b1a3fa7f26218084bc081a7c97f4fb02ea9d4f030",
+  "receipt": {
+    "to": null,
+    "from": "0x4F8f512Dab59F227EA70B1D8A0044aFa95CC80C3",
+    "contractAddress": "0xfCa2258275D4A514a3E3a060f4A056CD6d8200cD",
+    "transactionIndex": 20,
+    "gasUsed": "2061317",
+    "logsBloom": "0x00000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000000000000000000000020000000000000000000800008000800000000000000000002000000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000000000000000400000000000000000020000000000000000000000000000000000002000000000000000000000000000000",
+    "blockHash": "0x6c92deb02e6c155ab2f9bcb3cb4ceff29d5d6a61b639b280de1d55b7c2242074",
+    "transactionHash": "0x249b768b8edee4854c282c8b1a3fa7f26218084bc081a7c97f4fb02ea9d4f030",
+    "logs": [
+      {
+        "transactionIndex": 20,
+        "blockNumber": 8375767,
+        "transactionHash": "0x249b768b8edee4854c282c8b1a3fa7f26218084bc081a7c97f4fb02ea9d4f030",
+        "address": "0xfCa2258275D4A514a3E3a060f4A056CD6d8200cD",
+        "topics": [
+          "0x7e644d79422f17c01e4894b5f4f588d331ebfa28653d42ae832dc59e38c9798f",
+          "0x0000000000000000000000000000000000000000000000000000000000000000",
+          "0x0000000000000000000000004f8f512dab59f227ea70b1d8a0044afa95cc80c3"
+        ],
+        "data": "0x",
+        "logIndex": 17,
+        "blockHash": "0x6c92deb02e6c155ab2f9bcb3cb4ceff29d5d6a61b639b280de1d55b7c2242074"
+      }
+    ],
+    "blockNumber": 8375767,
+    "cumulativeGasUsed": "4937283",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [],
+  "solcInputHash": "4be84afe0e7f89dfa8b65dc6619871f5",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.3+commit.8d00100c\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"oldAdmin\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newAdmin\",\"type\":\"address\"}],\"name\":\"AdminChanged\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"string\",\"name\":\"delayType\",\"type\":\"string\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"oldDelay\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"newDelay\",\"type\":\"uint256\"}],\"name\":\"DelayChanged\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"approver\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint32\",\"name\":\"newFee\",\"type\":\"uint32\"}],\"name\":\"FeeApproval\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"approver\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newCollector\",\"type\":\"address\"}],\"name\":\"FeeCollectorApproval\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"proposer\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newCollector\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"eta\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"proposalID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"salt\",\"type\":\"bytes32\"}],\"name\":\"FeeCollectorProposal\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"proposer\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint32\",\"name\":\"newFee\",\"type\":\"uint32\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"eta\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"proposalID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"salt\",\"type\":\"bytes32\"}],\"name\":\"FeeProposal\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"approver\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"miner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"splitTo\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint32\",\"name\":\"splitPct\",\"type\":\"uint32\"}],\"name\":\"MinerSplitApproval\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"proposer\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"miner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"splitTo\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint32\",\"name\":\"splitPct\",\"type\":\"uint32\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"eta\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"proposalID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"salt\",\"type\":\"bytes32\"}],\"name\":\"MinerSplitProposal\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"oldTimelock\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newTimelock\",\"type\":\"address\"}],\"name\":\"TimelockChanged\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"oldTipJar\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newTipJar\",\"type\":\"address\"}],\"name\":\"TipJarChanged\",\"type\":\"event\"},{\"stateMutability\":\"payable\",\"type\":\"fallback\"},{\"inputs\":[],\"name\":\"admin\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newAdmin\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"salt\",\"type\":\"bytes32\"}],\"name\":\"approveNewAdmin\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"newDelay\",\"type\":\"uint256\"},{\"internalType\":\"bytes32\",\"name\":\"salt\",\"type\":\"bytes32\"}],\"name\":\"approveNewCriticalDelay\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"newFee\",\"type\":\"uint32\"},{\"internalType\":\"bytes32\",\"name\":\"salt\",\"type\":\"bytes32\"}],\"name\":\"approveNewFee\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newFeeCollector\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"salt\",\"type\":\"bytes32\"}],\"name\":\"approveNewFeeCollector\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"minerAddress\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"splitTo\",\"type\":\"address\"},{\"internalType\":\"uint32\",\"name\":\"splitPct\",\"type\":\"uint32\"},{\"internalType\":\"bytes32\",\"name\":\"salt\",\"type\":\"bytes32\"}],\"name\":\"approveNewMinerSplit\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newAdmin\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"salt\",\"type\":\"bytes32\"}],\"name\":\"approveNewProxyAdmin\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"newDelay\",\"type\":\"uint256\"},{\"internalType\":\"bytes32\",\"name\":\"salt\",\"type\":\"bytes32\"}],\"name\":\"approveNewRegularDelay\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newTimelock\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"salt\",\"type\":\"bytes32\"}],\"name\":\"approveNewTimelock\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newTipJar\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"salt\",\"type\":\"bytes32\"}],\"name\":\"approveNewTipJar\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newImplementation\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"salt\",\"type\":\"bytes32\"}],\"name\":\"approveUpgrade\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newImplementation\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"bytes32\",\"name\":\"salt\",\"type\":\"bytes32\"}],\"name\":\"approveUpgradeAndCall\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"id\",\"type\":\"bytes32\"}],\"name\":\"cancelProposal\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"target\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"},{\"internalType\":\"bytes32\",\"name\":\"predecessor\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"salt\",\"type\":\"bytes32\"}],\"name\":\"createProposal\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address[]\",\"name\":\"targets\",\"type\":\"address[]\"},{\"internalType\":\"uint256[]\",\"name\":\"values\",\"type\":\"uint256[]\"},{\"internalType\":\"bytes[]\",\"name\":\"datas\",\"type\":\"bytes[]\"},{\"internalType\":\"bytes32\",\"name\":\"predecessor\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"salt\",\"type\":\"bytes32\"}],\"name\":\"createProposalBatch\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"criticalDelay\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"target\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"},{\"internalType\":\"bytes32\",\"name\":\"predecessor\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"salt\",\"type\":\"bytes32\"}],\"name\":\"executeProposal\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address[]\",\"name\":\"targets\",\"type\":\"address[]\"},{\"internalType\":\"uint256[]\",\"name\":\"values\",\"type\":\"uint256[]\"},{\"internalType\":\"bytes[]\",\"name\":\"datas\",\"type\":\"bytes[]\"},{\"internalType\":\"bytes32\",\"name\":\"predecessor\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"salt\",\"type\":\"bytes32\"}],\"name\":\"executeProposalBatch\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getProxyAdmin\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getProxyImplementation\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_tipJar\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_admin\",\"type\":\"address\"},{\"internalType\":\"address payable\",\"name\":\"_timelock\",\"type\":\"address\"}],\"name\":\"initialize\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newAdmin\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"salt\",\"type\":\"bytes32\"}],\"name\":\"proposeNewAdmin\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"newDelay\",\"type\":\"uint256\"},{\"internalType\":\"bytes32\",\"name\":\"salt\",\"type\":\"bytes32\"}],\"name\":\"proposeNewCriticalDelay\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"newFee\",\"type\":\"uint32\"},{\"internalType\":\"bytes32\",\"name\":\"salt\",\"type\":\"bytes32\"}],\"name\":\"proposeNewFee\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newFeeCollector\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"salt\",\"type\":\"bytes32\"}],\"name\":\"proposeNewFeeCollector\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"minerAddress\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"splitTo\",\"type\":\"address\"},{\"internalType\":\"uint32\",\"name\":\"splitPct\",\"type\":\"uint32\"},{\"internalType\":\"bytes32\",\"name\":\"salt\",\"type\":\"bytes32\"}],\"name\":\"proposeNewMinerSplit\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newAdmin\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"salt\",\"type\":\"bytes32\"}],\"name\":\"proposeNewProxyAdmin\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"newDelay\",\"type\":\"uint256\"},{\"internalType\":\"bytes32\",\"name\":\"salt\",\"type\":\"bytes32\"}],\"name\":\"proposeNewRegularDelay\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newTimelock\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"salt\",\"type\":\"bytes32\"}],\"name\":\"proposeNewTimelock\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newTipJar\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"salt\",\"type\":\"bytes32\"}],\"name\":\"proposeNewTipJar\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newImplementation\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"salt\",\"type\":\"bytes32\"}],\"name\":\"proposeUpgrade\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newImplementation\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"bytes32\",\"name\":\"salt\",\"type\":\"bytes32\"}],\"name\":\"proposeUpgradeAndCall\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"regularDelay\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newAdmin\",\"type\":\"address\"}],\"name\":\"setAdmin\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"newDelay\",\"type\":\"uint256\"}],\"name\":\"setCriticalDelay\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"newDelay\",\"type\":\"uint256\"}],\"name\":\"setRegularDelay\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address payable\",\"name\":\"newTimelock\",\"type\":\"address\"}],\"name\":\"setTimelock\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newTipJar\",\"type\":\"address\"}],\"name\":\"setTipJar\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"timelock\",\"outputs\":[{\"internalType\":\"contract ITimelockController\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"tipJar\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"stateMutability\":\"payable\",\"type\":\"receive\"}],\"devdoc\":{\"details\":\"Responsible for enacting decisions related to sensitive TipJar parameters Decisions are made via a timelock contract\",\"kind\":\"dev\",\"methods\":{\"approveNewAdmin(address,bytes32)\":{\"params\":{\"newAdmin\":\"new admin address\",\"salt\":\"salt\"}},\"approveNewCriticalDelay(uint256,bytes32)\":{\"params\":{\"newDelay\":\"new delay time\",\"salt\":\"salt\"}},\"approveNewFee(uint32,bytes32)\":{\"params\":{\"newFee\":\"New fee\",\"salt\":\"salt\"}},\"approveNewFeeCollector(address,bytes32)\":{\"params\":{\"newFeeCollector\":\"New fee collector\",\"salt\":\"salt\"}},\"approveNewMinerSplit(address,address,uint32,bytes32)\":{\"params\":{\"minerAddress\":\"Address of miner\",\"salt\":\"salt\",\"splitPct\":\"% of tip that splitTo receives\",\"splitTo\":\"Address that receives split\"}},\"approveNewProxyAdmin(address,bytes32)\":{\"params\":{\"newAdmin\":\"new admin address\",\"salt\":\"salt\"}},\"approveNewRegularDelay(uint256,bytes32)\":{\"params\":{\"newDelay\":\"new delay time\",\"salt\":\"salt\"}},\"approveNewTimelock(address,bytes32)\":{\"params\":{\"newTimelock\":\"new timelock address\",\"salt\":\"salt\"}},\"approveNewTipJar(address,bytes32)\":{\"params\":{\"newTipJar\":\"new tip jar address\",\"salt\":\"salt\"}},\"approveUpgrade(address,bytes32)\":{\"params\":{\"newImplementation\":\"new implementation address\",\"salt\":\"salt\"}},\"approveUpgradeAndCall(address,bytes,uint256,bytes32)\":{\"params\":{\"data\":\"Bytes-encoded function to call\",\"newImplementation\":\"new implementation address\",\"salt\":\"salt\",\"value\":\"Amount of ETH to send on call\"}},\"cancelProposal(bytes32)\":{\"params\":{\"id\":\"ID of proposal\"}},\"createProposal(address,uint256,bytes,bytes32,bytes32)\":{\"params\":{\"data\":\"function call bytes\",\"predecessor\":\"predecessor function call\",\"salt\":\"salt used in proposal\",\"target\":\"target address\",\"value\":\"ETH value\"}},\"createProposalBatch(address[],uint256[],bytes[],bytes32,bytes32)\":{\"params\":{\"datas\":\"function call bytes\",\"predecessor\":\"predecessor function call\",\"salt\":\"salt used in proposal\",\"targets\":\"target address\",\"values\":\"ETH value\"}},\"executeProposal(address,uint256,bytes,bytes32,bytes32)\":{\"params\":{\"data\":\"function call bytes\",\"predecessor\":\"predecessor function call\",\"salt\":\"salt used in proposal\",\"target\":\"target address\",\"value\":\"ETH value\"}},\"executeProposalBatch(address[],uint256[],bytes[],bytes32,bytes32)\":{\"params\":{\"datas\":\"function call bytes\",\"predecessor\":\"predecessor function call\",\"salt\":\"salt used in proposal\",\"targets\":\"target address\",\"values\":\"ETH value\"}},\"initialize(address,address,address)\":{\"params\":{\"_admin\":\"Admin address\",\"_timelock\":\"TimelockController contract address\",\"_tipJar\":\"TipJar proxy contract address\"}},\"proposeNewAdmin(address,bytes32)\":{\"params\":{\"newAdmin\":\"new admin address\",\"salt\":\"salt\"}},\"proposeNewCriticalDelay(uint256,bytes32)\":{\"params\":{\"newDelay\":\"new delay time\",\"salt\":\"salt\"}},\"proposeNewFee(uint32,bytes32)\":{\"params\":{\"newFee\":\"New fee\",\"salt\":\"salt\"}},\"proposeNewFeeCollector(address,bytes32)\":{\"params\":{\"newFeeCollector\":\"New fee collector\",\"salt\":\"salt\"}},\"proposeNewMinerSplit(address,address,uint32,bytes32)\":{\"params\":{\"minerAddress\":\"Address of miner\",\"salt\":\"salt\",\"splitPct\":\"% of tip that splitTo receives\",\"splitTo\":\"Address that receives split\"}},\"proposeNewProxyAdmin(address,bytes32)\":{\"params\":{\"newAdmin\":\"new admin address\",\"salt\":\"salt\"}},\"proposeNewRegularDelay(uint256,bytes32)\":{\"params\":{\"newDelay\":\"new delay time\",\"salt\":\"salt\"}},\"proposeNewTimelock(address,bytes32)\":{\"params\":{\"newTimelock\":\"new timelock address\",\"salt\":\"salt\"}},\"proposeNewTipJar(address,bytes32)\":{\"params\":{\"newTipJar\":\"new tip jar address\",\"salt\":\"salt\"}},\"proposeUpgrade(address,bytes32)\":{\"params\":{\"newImplementation\":\"new implementation address\",\"salt\":\"salt\"}},\"proposeUpgradeAndCall(address,bytes,uint256,bytes32)\":{\"params\":{\"data\":\"Bytes-encoded function to call\",\"newImplementation\":\"new implementation address\",\"salt\":\"salt\",\"value\":\"Amount of ETH to send on call\"}},\"setAdmin(address)\":{\"details\":\"Can only be executed by Timelock contract\",\"params\":{\"newAdmin\":\"new admin address\"}},\"setCriticalDelay(uint256)\":{\"details\":\"Can only be executed by Timelock contract\",\"params\":{\"newDelay\":\"new delay time\"}},\"setRegularDelay(uint256)\":{\"details\":\"Can only be executed by Timelock contract\",\"params\":{\"newDelay\":\"new delay time\"}},\"setTimelock(address)\":{\"details\":\"Can only be executed by Timelock contract or anyone if timelock has not yet been set\",\"params\":{\"newTimelock\":\"new timelock address\"}},\"setTipJar(address)\":{\"details\":\"Can only be executed by Timelock contract\",\"params\":{\"newTipJar\":\"new tip jar address\"}}},\"title\":\"TipJarManager\",\"version\":1},\"userdoc\":{\"events\":{\"AdminChanged(address,address)\":{\"notice\":\"New admin event\"},\"DelayChanged(string,uint256,uint256)\":{\"notice\":\"New delay event\"},\"FeeApproval(address,uint32)\":{\"notice\":\"Fee Approval event\"},\"FeeCollectorApproval(address,address)\":{\"notice\":\"Fee Collector Approval event\"},\"FeeCollectorProposal(address,address,uint256,bytes32,bytes32)\":{\"notice\":\"Fee Collector Proposal event\"},\"FeeProposal(address,uint32,uint256,bytes32,bytes32)\":{\"notice\":\"Fee Proposal event\"},\"MinerSplitApproval(address,address,address,uint32)\":{\"notice\":\"Miner Split Approval event\"},\"MinerSplitProposal(address,address,address,uint32,uint256,bytes32,bytes32)\":{\"notice\":\"Miner Split Proposal event\"},\"TimelockChanged(address,address)\":{\"notice\":\"New timelock event\"},\"TipJarChanged(address,address)\":{\"notice\":\"New tip jar event\"}},\"kind\":\"user\",\"methods\":{\"admin()\":{\"notice\":\"TipJarManager admin\"},\"approveNewAdmin(address,bytes32)\":{\"notice\":\"Approve new admin for this contract\"},\"approveNewCriticalDelay(uint256,bytes32)\":{\"notice\":\"Approve new critical delay for this contract\"},\"approveNewFee(uint32,bytes32)\":{\"notice\":\"Approve a new network fee\"},\"approveNewFeeCollector(address,bytes32)\":{\"notice\":\"Approve a new fee collector\"},\"approveNewMinerSplit(address,address,uint32,bytes32)\":{\"notice\":\"Approve a new miner split\"},\"approveNewProxyAdmin(address,bytes32)\":{\"notice\":\"Approve new admin for TipJar proxy contract\"},\"approveNewRegularDelay(uint256,bytes32)\":{\"notice\":\"Approve new regular delay for this contract\"},\"approveNewTimelock(address,bytes32)\":{\"notice\":\"Approve new timelock contract\"},\"approveNewTipJar(address,bytes32)\":{\"notice\":\"Approve new tip jar contract\"},\"approveUpgrade(address,bytes32)\":{\"notice\":\"Approve new implementation for TipJar proxy\"},\"approveUpgradeAndCall(address,bytes,uint256,bytes32)\":{\"notice\":\"Approve new implementation for TipJar proxy + call function after\"},\"cancelProposal(bytes32)\":{\"notice\":\"Cancel proposal\"},\"constructor\":{\"notice\":\"Construct new TipJarManager contract, setting msg.sender as admin\"},\"createProposal(address,uint256,bytes,bytes32,bytes32)\":{\"notice\":\"Create proposal\"},\"createProposalBatch(address[],uint256[],bytes[],bytes32,bytes32)\":{\"notice\":\"Create batch proposal\"},\"criticalDelay()\":{\"notice\":\"Delay for critical changes\"},\"executeProposal(address,uint256,bytes,bytes32,bytes32)\":{\"notice\":\"Execute proposal\"},\"executeProposalBatch(address[],uint256[],bytes[],bytes32,bytes32)\":{\"notice\":\"Execute batch proposal\"},\"getProxyAdmin()\":{\"notice\":\"Public getter for TipJar Proxy admin address\"},\"getProxyImplementation()\":{\"notice\":\"Public getter for TipJar Proxy implementation contract address\"},\"initialize(address,address,address)\":{\"notice\":\"Initialize contract\"},\"proposeNewAdmin(address,bytes32)\":{\"notice\":\"Propose new admin for this contract\"},\"proposeNewCriticalDelay(uint256,bytes32)\":{\"notice\":\"Propose new critical delay for this contract\"},\"proposeNewFee(uint32,bytes32)\":{\"notice\":\"Propose a new network fee\"},\"proposeNewFeeCollector(address,bytes32)\":{\"notice\":\"Propose a new fee collector\"},\"proposeNewMinerSplit(address,address,uint32,bytes32)\":{\"notice\":\"Propose a new miner split\"},\"proposeNewProxyAdmin(address,bytes32)\":{\"notice\":\"Propose new admin for TipJar proxy contract\"},\"proposeNewRegularDelay(uint256,bytes32)\":{\"notice\":\"Propose new regular delay for this contract\"},\"proposeNewTimelock(address,bytes32)\":{\"notice\":\"Propose new timelock contract\"},\"proposeNewTipJar(address,bytes32)\":{\"notice\":\"Propose new tip jar contract\"},\"proposeUpgrade(address,bytes32)\":{\"notice\":\"Propose new implementation for TipJar proxy contract\"},\"proposeUpgradeAndCall(address,bytes,uint256,bytes32)\":{\"notice\":\"Propose new implementation for TipJar proxy contract + call function after\"},\"regularDelay()\":{\"notice\":\"Delay for non-critical changes\"},\"setAdmin(address)\":{\"notice\":\"Set new admin for this contract\"},\"setCriticalDelay(uint256)\":{\"notice\":\"Set new critical delay for this contract\"},\"setRegularDelay(uint256)\":{\"notice\":\"Set new regular delay for this contract\"},\"setTimelock(address)\":{\"notice\":\"Set new timelock contract\"},\"setTipJar(address)\":{\"notice\":\"Set new tip jar contract\"},\"timelock()\":{\"notice\":\"Timelock contract\"},\"tipJar()\":{\"notice\":\"TipJarProxy address\"}},\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/TipJarManager.sol\":\"TipJarManager\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"contracts/TipJarManager.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\npragma solidity ^0.8.0;\\n\\n/*\\n  Copyright 2021 Archer DAO: Chris Piatt (chris@archerdao.io).\\n*/\\n\\nimport \\\"./interfaces/ITimelockController.sol\\\";\\nimport \\\"./lib/0.8/Initializable.sol\\\";\\n\\n/**\\n * @title TipJarManager\\n * @dev Responsible for enacting decisions related to sensitive TipJar parameters\\n * Decisions are made via a timelock contract\\n */\\ncontract TipJarManager is Initializable {\\n\\n    /// @notice TipJarManager admin\\n    address public admin;\\n\\n    /// @notice Delay for critical changes\\n    uint256 public criticalDelay = 48 hours;\\n\\n    /// @notice Delay for non-critical changes\\n    uint256 public regularDelay = 24 hours;\\n\\n    /// @notice TipJarProxy address\\n    address public tipJar;\\n\\n    /// @notice Timelock contract\\n    ITimelockController public timelock;\\n\\n    /// @notice Admin modifier\\n    modifier onlyAdmin() {\\n        require(msg.sender == admin, \\\"not admin\\\");\\n        _;\\n    }\\n\\n    /// @notice Timelock modifier\\n    modifier onlyTimelock() {\\n        require(msg.sender == address(timelock), \\\"not timelock\\\");\\n        _;\\n    }\\n\\n    /// @notice Miner Split Proposal event\\n    event MinerSplitProposal(address indexed proposer, address indexed miner, address indexed splitTo, uint32 splitPct, uint256 eta, bytes32 proposalID, bytes32 salt);\\n\\n    /// @notice Miner Split Approval event\\n    event MinerSplitApproval(address indexed approver, address indexed miner, address indexed splitTo, uint32 splitPct);\\n\\n    /// @notice Fee Proposal event\\n    event FeeProposal(address indexed proposer, uint32 newFee, uint256 eta, bytes32 proposalID, bytes32 salt);\\n\\n    /// @notice Fee Approval event\\n    event FeeApproval(address indexed approver, uint32 newFee);\\n\\n    /// @notice Fee Collector Proposal event\\n    event FeeCollectorProposal(address indexed proposer, address indexed newCollector, uint256 eta, bytes32 proposalID, bytes32 salt);\\n\\n    /// @notice Fee Collector Approval event\\n    event FeeCollectorApproval(address indexed approver, address indexed newCollector);\\n\\n    /// @notice New admin event\\n    event AdminChanged(address indexed oldAdmin, address indexed newAdmin);\\n\\n    /// @notice New delay event\\n    event DelayChanged(string indexed delayType, uint256 indexed oldDelay, uint256 indexed newDelay);\\n\\n    /// @notice New timelock event\\n    event TimelockChanged(address indexed oldTimelock, address indexed newTimelock);\\n\\n    /// @notice New tip jar event\\n    event TipJarChanged(address indexed oldTipJar, address indexed newTipJar);\\n\\n    /// @notice Receive function to allow contract to accept ETH\\n    receive() external payable {}\\n\\n    /// @notice Fallback function to allow contract to accept ETH\\n    fallback() external payable {}\\n\\n    /**\\n     * @notice Construct new TipJarManager contract, setting msg.sender as admin\\n     */\\n    constructor() {\\n        admin = msg.sender;\\n        emit AdminChanged(address(0), msg.sender);\\n    }\\n\\n    /**\\n     * @notice Initialize contract\\n     * @param _tipJar TipJar proxy contract address\\n     * @param _admin Admin address\\n     * @param _timelock TimelockController contract address\\n     */\\n    function initialize(\\n        address _tipJar,\\n        address _admin,\\n        address payable _timelock\\n    ) external initializer onlyAdmin {\\n        tipJar = _tipJar;\\n        emit TipJarChanged(address(0), _tipJar);\\n        emit AdminChanged(admin, _admin);\\n        admin = _admin;\\n        timelock = ITimelockController(_timelock);\\n        emit TimelockChanged(address(0), _timelock);\\n    }\\n\\n    /**\\n     * @notice Propose a new miner split\\n     * @param minerAddress Address of miner\\n     * @param splitTo Address that receives split\\n     * @param splitPct % of tip that splitTo receives\\n     * @param salt salt\\n     */\\n    function proposeNewMinerSplit(\\n        address minerAddress,\\n        address splitTo,\\n        uint32 splitPct,\\n        bytes32 salt\\n    ) external onlyAdmin {\\n        // bytes4(keccak256(\\\"updateMinerSplit(address,address,uint32)\\\")) = 0x8d916340\\n        bytes32 id = _schedule(tipJar, 0, abi.encodeWithSelector(hex\\\"8d916340\\\", minerAddress, splitTo, splitPct), bytes32(0), salt, regularDelay);\\n        emit MinerSplitProposal(msg.sender, minerAddress, splitTo, splitPct, block.timestamp + regularDelay, id, salt);\\n    }\\n\\n    /**\\n     * @notice Approve a new miner split\\n     * @param minerAddress Address of miner\\n     * @param splitTo Address that receives split\\n     * @param splitPct % of tip that splitTo receives\\n     * @param salt salt\\n     */\\n    function approveNewMinerSplit(\\n        address minerAddress,\\n        address splitTo,\\n        uint32 splitPct,\\n        bytes32 salt\\n    ) external {\\n        // bytes4(keccak256(\\\"updateMinerSplit(address,address,uint32)\\\")) = 0x8d916340\\n        _execute(tipJar, 0, abi.encodeWithSelector(hex\\\"8d916340\\\", minerAddress, splitTo, splitPct), bytes32(0), salt);\\n        emit MinerSplitApproval(msg.sender, minerAddress, splitTo, splitPct);\\n    }\\n\\n    /**\\n     * @notice Propose a new network fee\\n     * @param newFee New fee\\n     * @param salt salt\\n     */\\n    function proposeNewFee(\\n        uint32 newFee, \\n        bytes32 salt\\n    ) external onlyAdmin {\\n        // bytes4(keccak256(\\\"setFee(uint32)\\\")) = 0x1ab971ab\\n        bytes32 id = _schedule(tipJar, 0, abi.encodeWithSelector(hex\\\"1ab971ab\\\", newFee), bytes32(0), salt, criticalDelay);\\n        emit FeeProposal(msg.sender, newFee, block.timestamp + regularDelay, id, salt);\\n    }\\n\\n    /**\\n     * @notice Approve a new network fee\\n     * @param newFee New fee\\n     * @param salt salt\\n     */\\n    function approveNewFee(\\n        uint32 newFee, \\n        bytes32 salt\\n    ) external {\\n        // bytes4(keccak256(\\\"setFee(uint32)\\\")) = 0x1ab971ab\\n        _execute(tipJar, 0, abi.encodeWithSelector(hex\\\"1ab971ab\\\", newFee), bytes32(0), salt);\\n        emit FeeApproval(msg.sender, newFee);\\n    }\\n\\n    /**\\n     * @notice Propose a new fee collector\\n     * @param newFeeCollector New fee collector\\n     * @param salt salt\\n     */\\n    function proposeNewFeeCollector(\\n        address newFeeCollector, \\n        bytes32 salt\\n    ) external onlyAdmin {\\n        // bytes4(keccak256(\\\"setFeeCollector(address)\\\")) = 0xa42dce80\\n        bytes32 id = _schedule(tipJar, 0, abi.encodeWithSelector(hex\\\"a42dce80\\\", newFeeCollector), bytes32(0), salt, criticalDelay);\\n        emit FeeCollectorProposal(msg.sender, newFeeCollector, block.timestamp + regularDelay, id, salt);\\n    }\\n\\n    /**\\n     * @notice Approve a new fee collector\\n     * @param newFeeCollector New fee collector\\n     * @param salt salt\\n     */\\n    function approveNewFeeCollector(\\n        address newFeeCollector, \\n        bytes32 salt\\n    ) external {\\n        // bytes4(keccak256(\\\"setFeeCollector(address)\\\")) = 0xa42dce80\\n        _execute(tipJar, 0, abi.encodeWithSelector(hex\\\"a42dce80\\\", newFeeCollector), bytes32(0), salt);\\n        emit FeeCollectorApproval(msg.sender, newFeeCollector);\\n    }\\n\\n    /**\\n     * @notice Propose new admin for this contract\\n     * @param newAdmin new admin address\\n     * @param salt salt\\n     */\\n    function proposeNewAdmin(\\n        address newAdmin,\\n        bytes32 salt\\n    ) external onlyAdmin {\\n        // bytes4(keccak256(\\\"setAdmin(address)\\\")) = 0x704b6c02\\n        _schedule(address(this), 0, abi.encodeWithSelector(hex\\\"704b6c02\\\", newAdmin), bytes32(0), salt, criticalDelay);\\n    }\\n\\n    /**\\n     * @notice Approve new admin for this contract\\n     * @param newAdmin new admin address\\n     * @param salt salt\\n     */\\n    function approveNewAdmin(\\n        address newAdmin,\\n        bytes32 salt\\n    ) external {\\n        // bytes4(keccak256(\\\"setAdmin(address)\\\")) = 0x704b6c02\\n        _execute(address(this), 0, abi.encodeWithSelector(hex\\\"704b6c02\\\", newAdmin), bytes32(0), salt);\\n    }\\n\\n    /**\\n     * @notice Set new admin for this contract\\n     * @dev Can only be executed by Timelock contract\\n     * @param newAdmin new admin address\\n     */\\n    function setAdmin(\\n        address newAdmin\\n    ) external onlyTimelock {\\n        emit AdminChanged(admin, newAdmin);\\n        admin = newAdmin;\\n    }\\n\\n    /**\\n     * @notice Propose new critical delay for this contract\\n     * @param newDelay new delay time\\n     * @param salt salt\\n     */\\n    function proposeNewCriticalDelay(\\n        uint256 newDelay,\\n        bytes32 salt\\n    ) external onlyAdmin {\\n        // bytes4(keccak256(\\\"setCriticalDelay(uint256)\\\")) = 0xdad8a096\\n        _schedule(address(this), 0, abi.encodeWithSelector(hex\\\"dad8a096\\\", newDelay), bytes32(0), salt, criticalDelay);\\n    }\\n\\n    /**\\n     * @notice Approve new critical delay for this contract\\n     * @param newDelay new delay time\\n     * @param salt salt\\n     */\\n    function approveNewCriticalDelay(\\n        uint256 newDelay,\\n        bytes32 salt\\n    ) external {\\n        // bytes4(keccak256(\\\"setCriticalDelay(uint256)\\\")) = 0xdad8a096\\n        _execute(address(this), 0, abi.encodeWithSelector(hex\\\"dad8a096\\\", newDelay), bytes32(0), salt);\\n    }\\n\\n    /**\\n     * @notice Set new critical delay for this contract\\n     * @dev Can only be executed by Timelock contract\\n     * @param newDelay new delay time\\n     */\\n    function setCriticalDelay(\\n        uint256 newDelay\\n    ) external onlyTimelock {\\n        emit DelayChanged(\\\"critical\\\", criticalDelay, newDelay);\\n        criticalDelay = newDelay;\\n    }\\n\\n    /**\\n     * @notice Propose new regular delay for this contract\\n     * @param newDelay new delay time\\n     * @param salt salt\\n     */\\n    function proposeNewRegularDelay(\\n        uint256 newDelay,\\n        bytes32 salt\\n    ) external onlyAdmin {\\n        // bytes4(keccak256(\\\"setRegularDelay(uint256)\\\")) = 0x8023dc81\\n        _schedule(address(this), 0, abi.encodeWithSelector(hex\\\"8023dc81\\\", newDelay), bytes32(0), salt, criticalDelay);\\n    }\\n\\n    /**\\n     * @notice Approve new regular delay for this contract\\n     * @param newDelay new delay time\\n     * @param salt salt\\n     */\\n    function approveNewRegularDelay(\\n        uint256 newDelay,\\n        bytes32 salt\\n    ) external {\\n        // bytes4(keccak256(\\\"setRegularDelay(uint256)\\\")) = 0x8023dc81\\n        _execute(address(this), 0, abi.encodeWithSelector(hex\\\"8023dc81\\\", newDelay), bytes32(0), salt);\\n    }\\n\\n    /**\\n     * @notice Set new regular delay for this contract\\n     * @dev Can only be executed by Timelock contract\\n     * @param newDelay new delay time\\n     */\\n    function setRegularDelay(\\n        uint256 newDelay\\n    ) external onlyTimelock {\\n        emit DelayChanged(\\\"regular\\\", regularDelay, newDelay);\\n        regularDelay = newDelay;\\n    }\\n\\n    /**\\n     * @notice Propose new tip jar contract\\n     * @param newTipJar new tip jar address\\n     * @param salt salt\\n     */\\n    function proposeNewTipJar(\\n        address newTipJar,\\n        bytes32 salt\\n    ) external onlyAdmin {\\n        // bytes4(keccak256(\\\"setTipJar(address)\\\")) = 0x5c66e3da\\n        _schedule(address(this), 0, abi.encodeWithSelector(hex\\\"5c66e3da\\\", newTipJar), bytes32(0), salt, criticalDelay);\\n    }\\n\\n    /**\\n     * @notice Approve new tip jar contract\\n     * @param newTipJar new tip jar address\\n     * @param salt salt\\n     */\\n    function approveNewTipJar(\\n        address newTipJar,\\n        bytes32 salt\\n    ) external {\\n        // bytes4(keccak256(\\\"setTipJar(address)\\\")) = 0x5c66e3da\\n        _execute(address(this), 0, abi.encodeWithSelector(hex\\\"5c66e3da\\\", newTipJar), bytes32(0), salt);\\n    }\\n\\n    /**\\n     * @notice Set new tip jar contract\\n     * @dev Can only be executed by Timelock contract\\n     * @param newTipJar new tip jar address\\n     */\\n    function setTipJar(\\n        address newTipJar\\n    ) external onlyTimelock {\\n        emit TipJarChanged(tipJar, newTipJar);\\n        tipJar = newTipJar;\\n    }\\n\\n    /**\\n     * @notice Propose new timelock contract\\n     * @param newTimelock new timelock address\\n     * @param salt salt\\n     */\\n    function proposeNewTimelock(\\n        address newTimelock,\\n        bytes32 salt\\n    ) external onlyAdmin {\\n        // bytes4(keccak256(\\\"setTimelock(address)\\\")) = 0xbdacb303\\n        _schedule(address(this), 0, abi.encodeWithSelector(hex\\\"bdacb303\\\", newTimelock), bytes32(0), salt, criticalDelay);\\n    }\\n\\n    /**\\n     * @notice Approve new timelock contract\\n     * @param newTimelock new timelock address\\n     * @param salt salt\\n     */\\n    function approveNewTimelock(\\n        address newTimelock,\\n        bytes32 salt\\n    ) external {\\n        // bytes4(keccak256(\\\"setTimelock(address)\\\")) = 0xbdacb303\\n        _execute(address(this), 0, abi.encodeWithSelector(hex\\\"bdacb303\\\", newTimelock), bytes32(0), salt);\\n    }\\n\\n    /**\\n     * @notice Set new timelock contract\\n     * @dev Can only be executed by Timelock contract or anyone if timelock has not yet been set\\n     * @param newTimelock new timelock address\\n     */\\n    function setTimelock(\\n        address payable newTimelock\\n    ) external onlyTimelock {\\n        emit TimelockChanged(address(timelock), newTimelock);\\n        timelock = ITimelockController(newTimelock);\\n    }\\n\\n    /**\\n     * @notice Public getter for TipJar Proxy implementation contract address\\n     */\\n    function getProxyImplementation() public view returns (address) {\\n        // We need to manually run the static call since the getter cannot be flagged as view\\n        // bytes4(keccak256(\\\"implementation()\\\")) == 0x5c60da1b\\n        (bool success, bytes memory returndata) = tipJar.staticcall(hex\\\"5c60da1b\\\");\\n        require(success);\\n        return abi.decode(returndata, (address));\\n    }\\n\\n    /**\\n     * @notice Public getter for TipJar Proxy admin address\\n     */\\n    function getProxyAdmin() public view returns (address) {\\n        // We need to manually run the static call since the getter cannot be flagged as view\\n        // bytes4(keccak256(\\\"admin()\\\")) == 0xf851a440\\n        (bool success, bytes memory returndata) = tipJar.staticcall(hex\\\"f851a440\\\");\\n        require(success);\\n        return abi.decode(returndata, (address));\\n    }\\n\\n    /**\\n     * @notice Propose new admin for TipJar proxy contract\\n     * @param newAdmin new admin address\\n     * @param salt salt\\n     */\\n    function proposeNewProxyAdmin(\\n        address newAdmin,\\n        bytes32 salt\\n    ) external onlyAdmin {\\n        // bytes4(keccak256(\\\"changeAdmin(address)\\\")) = 0x8f283970\\n        _schedule(tipJar, 0, abi.encodeWithSelector(hex\\\"8f283970\\\", newAdmin), bytes32(0), salt, criticalDelay);\\n    }\\n\\n    /**\\n     * @notice Approve new admin for TipJar proxy contract\\n     * @param newAdmin new admin address\\n     * @param salt salt\\n     */\\n    function approveNewProxyAdmin(\\n        address newAdmin,\\n        bytes32 salt\\n    ) external {\\n        // bytes4(keccak256(\\\"changeAdmin(address)\\\")) = 0x8f283970\\n        _execute(tipJar, 0, abi.encodeWithSelector(hex\\\"8f283970\\\", newAdmin), bytes32(0), salt);\\n    }\\n\\n    /**\\n     * @notice Propose new implementation for TipJar proxy contract\\n     * @param newImplementation new implementation address\\n     * @param salt salt\\n     */\\n    function proposeUpgrade(\\n        address newImplementation,\\n        bytes32 salt\\n    ) external onlyAdmin {\\n        // bytes4(keccak256(\\\"upgradeTo(address)\\\")) = 0x3659cfe6\\n        _schedule(tipJar, 0, abi.encodeWithSelector(hex\\\"3659cfe6\\\", newImplementation), bytes32(0), salt, criticalDelay);\\n    }\\n\\n    /**\\n     * @notice Approve new implementation for TipJar proxy\\n     * @param newImplementation new implementation address\\n     * @param salt salt\\n     */\\n    function approveUpgrade(\\n        address newImplementation,\\n        bytes32 salt\\n    ) external {\\n        // bytes4(keccak256(\\\"upgradeTo(address)\\\")) = 0x3659cfe6\\n        _execute(tipJar, 0, abi.encodeWithSelector(hex\\\"3659cfe6\\\", newImplementation), bytes32(0), salt);\\n    }\\n\\n    /**\\n     * @notice Propose new implementation for TipJar proxy contract + call function after\\n     * @param newImplementation new implementation address\\n     * @param data Bytes-encoded function to call\\n     * @param value Amount of ETH to send on call\\n     * @param salt salt\\n     */\\n    function proposeUpgradeAndCall(\\n        address newImplementation,\\n        bytes memory data,\\n        uint256 value,\\n        bytes32 salt\\n    ) external onlyAdmin {\\n        // bytes4(keccak256(\\\"upgradeToAndCall(address,bytes)\\\")) = 0x4f1ef286\\n        _schedule(tipJar, value, abi.encodeWithSelector(hex\\\"4f1ef286\\\", newImplementation, data), bytes32(0), salt, criticalDelay);\\n    }\\n\\n    /**\\n     * @notice Approve new implementation for TipJar proxy + call function after\\n     * @param newImplementation new implementation address\\n     * @param data Bytes-encoded function to call\\n     * @param value Amount of ETH to send on call\\n     * @param salt salt\\n     */\\n    function approveUpgradeAndCall(\\n        address newImplementation,\\n        bytes memory data,\\n        uint256 value,\\n        bytes32 salt\\n    ) external payable {\\n        // bytes4(keccak256(\\\"upgradeToAndCall(address,bytes)\\\")) = 0x4f1ef286\\n        _execute(tipJar, value, abi.encodeWithSelector(hex\\\"4f1ef286\\\", newImplementation, data), bytes32(0), salt);\\n    }\\n\\n    /**\\n     * @notice Create proposal\\n     * @param target target address\\n     * @param value ETH value\\n     * @param data function call bytes\\n     * @param predecessor predecessor function call\\n     * @param salt salt used in proposal\\n     */\\n    function createProposal(\\n        address target, \\n        uint256 value, \\n        bytes memory data, \\n        bytes32 predecessor, \\n        bytes32 salt\\n    ) external onlyAdmin {\\n        _schedule(target, value, data, predecessor, salt, criticalDelay);\\n    }\\n\\n    /**\\n     * @notice Create batch proposal\\n     * @param targets target address\\n     * @param values ETH value\\n     * @param datas function call bytes\\n     * @param predecessor predecessor function call\\n     * @param salt salt used in proposal\\n     */\\n    function createProposalBatch(\\n        address[] calldata targets, \\n        uint256[] calldata values, \\n        bytes[] calldata datas, \\n        bytes32 predecessor, \\n        bytes32 salt\\n    ) external onlyAdmin {\\n        timelock.scheduleBatch(targets, values, datas, predecessor, salt, criticalDelay);\\n    }\\n\\n    /**\\n     * @notice Execute proposal\\n     * @param target target address\\n     * @param value ETH value\\n     * @param data function call bytes\\n     * @param predecessor predecessor function call\\n     * @param salt salt used in proposal\\n     */\\n    function executeProposal(\\n        address target, \\n        uint256 value, \\n        bytes memory data, \\n        bytes32 predecessor, \\n        bytes32 salt\\n    ) external payable onlyAdmin {\\n        _execute(target, value, data, predecessor, salt);\\n    }\\n\\n    /**\\n     * @notice Execute batch proposal\\n     * @param targets target address\\n     * @param values ETH value\\n     * @param datas function call bytes\\n     * @param predecessor predecessor function call\\n     * @param salt salt used in proposal\\n     */\\n    function executeProposalBatch(\\n        address[] calldata targets, \\n        uint256[] calldata values, \\n        bytes[] calldata datas, \\n        bytes32 predecessor, \\n        bytes32 salt\\n    ) external payable onlyAdmin {\\n        timelock.executeBatch{value: msg.value}(targets, values, datas, predecessor, salt);\\n    }\\n\\n    /**\\n     * @notice Cancel proposal\\n     * @param id ID of proposal\\n     */\\n    function cancelProposal(bytes32 id) external onlyAdmin {\\n        timelock.cancel(id);\\n    }\\n\\n    function _schedule(\\n        address target, \\n        uint256 value, \\n        bytes memory data, \\n        bytes32 predecessor, \\n        bytes32 salt, \\n        uint256 delay\\n    ) private returns (bytes32 id) {\\n        return timelock.schedule(target, value, data, predecessor, salt, delay);\\n    }\\n\\n    function _execute(\\n        address target, \\n        uint256 value, \\n        bytes memory data, \\n        bytes32 predecessor, \\n        bytes32 salt\\n    ) private {\\n        timelock.execute{value: value}(target, value, data, predecessor, salt);\\n    }\\n}\\n\",\"keccak256\":\"0xe12b79dce07f6dd5de112de580eca640d765aa79dd4ce55c3df12b3cc5094943\",\"license\":\"MIT\"},\"contracts/interfaces/ITimelockController.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\npragma solidity ^0.8.0;\\n\\ninterface ITimelockController {\\n    function TIMELOCK_ADMIN_ROLE() external view returns (bytes32);\\n    function PROPOSER_ROLE() external view returns (bytes32);\\n    function EXECUTOR_ROLE() external view returns (bytes32);\\n    function _DONE_TIMESTAMP() external view returns (uint256);\\n    receive() external payable;\\n    function isOperation(bytes32 id) external view returns (bool pending);\\n    function isOperationPending(bytes32 id) external view returns (bool pending);\\n    function isOperationReady(bytes32 id) external view returns (bool ready);\\n    function isOperationDone(bytes32 id) external view returns (bool done);\\n    function getTimestamp(bytes32 id) external view returns (uint256 timestamp);\\n    function getMinDelay() external view returns (uint256 duration);\\n    function hashOperation(address target, uint256 value, bytes calldata data, bytes32 predecessor, bytes32 salt) external pure returns (bytes32 hash);\\n    function hashOperationBatch(address[] calldata targets, uint256[] calldata values, bytes[] calldata datas, bytes32 predecessor, bytes32 salt) external pure returns (bytes32 hash);\\n    function schedule(address target, uint256 value, bytes calldata data, bytes32 predecessor, bytes32 salt, uint256 delay) external returns (bytes32 id);\\n    function scheduleBatch(address[] calldata targets, uint256[] calldata values, bytes[] calldata datas, bytes32 predecessor, bytes32 salt, uint256 delay) external returns (bytes32 id);\\n    function cancel(bytes32 id) external;\\n    function execute(address target, uint256 value, bytes calldata data, bytes32 predecessor, bytes32 salt) external payable;\\n    function executeBatch(address[] calldata targets, uint256[] calldata values, bytes[] calldata datas, bytes32 predecessor, bytes32 salt) external payable;\\n    function updateDelay(uint256 newDelay) external;\\n    function hasRole(bytes32 role, address account) external view returns (bool);\\n    function getRoleMemberCount(bytes32 role) external view returns (uint256);\\n    function getRoleMember(bytes32 role, uint256 index) external view returns (address);\\n    function getRoleAdmin(bytes32 role) external view returns (bytes32);\\n    function grantRole(bytes32 role, address account) external;\\n    function revokeRole(bytes32 role, address account) external;\\n    function renounceRole(bytes32 role, address account) external;\\n    event CallScheduled(bytes32 indexed id, uint256 indexed index, address target, uint256 value, bytes data, bytes32 predecessor, uint256 delay);\\n    event CallExecuted(bytes32 indexed id, uint256 indexed index, address target, uint256 value, bytes data);\\n    event Cancelled(bytes32 indexed id);\\n    event MinDelayChange(uint256 oldDuration, uint256 newDuration);\\n    event RoleAdminChanged(bytes32 indexed role, bytes32 indexed previousAdminRole, bytes32 indexed newAdminRole);\\n    event RoleGranted(bytes32 indexed role, address indexed account, address indexed sender);\\n    event RoleRevoked(bytes32 indexed role, address indexed account, address indexed sender);\\n}\",\"keccak256\":\"0x44ed25d06de07350d9b2cc5697edfb1fd74c4398f757c17637b2123c0a394934\",\"license\":\"MIT\"},\"contracts/lib/0.8/AddressUpgradeable.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n\\npragma solidity ^0.8.0;\\n\\n/**\\n * @dev Collection of functions related to the address type\\n */\\nlibrary AddressUpgradeable {\\n    /**\\n     * @dev Returns true if `account` is a contract.\\n     *\\n     * [IMPORTANT]\\n     * ====\\n     * It is unsafe to assume that an address for which this function returns\\n     * false is an externally-owned account (EOA) and not a contract.\\n     *\\n     * Among others, `isContract` will return false for the following\\n     * types of addresses:\\n     *\\n     *  - an externally-owned account\\n     *  - a contract in construction\\n     *  - an address where a contract will be created\\n     *  - an address where a contract lived, but was destroyed\\n     * ====\\n     */\\n    function isContract(address account) internal view returns (bool) {\\n        // This method relies on extcodesize, which returns 0 for contracts in\\n        // construction, since the code is only stored at the end of the\\n        // constructor execution.\\n\\n        uint256 size;\\n        // solhint-disable-next-line no-inline-assembly\\n        assembly { size := extcodesize(account) }\\n        return size > 0;\\n    }\\n\\n    /**\\n     * @dev Replacement for Solidity's `transfer`: sends `amount` wei to\\n     * `recipient`, forwarding all available gas and reverting on errors.\\n     *\\n     * https://eips.ethereum.org/EIPS/eip-1884[EIP1884] increases the gas cost\\n     * of certain opcodes, possibly making contracts go over the 2300 gas limit\\n     * imposed by `transfer`, making them unable to receive funds via\\n     * `transfer`. {sendValue} removes this limitation.\\n     *\\n     * https://diligence.consensys.net/posts/2019/09/stop-using-soliditys-transfer-now/[Learn more].\\n     *\\n     * IMPORTANT: because control is transferred to `recipient`, care must be\\n     * taken to not create reentrancy vulnerabilities. Consider using\\n     * {ReentrancyGuard} or the\\n     * https://solidity.readthedocs.io/en/v0.5.11/security-considerations.html#use-the-checks-effects-interactions-pattern[checks-effects-interactions pattern].\\n     */\\n    function sendValue(address payable recipient, uint256 amount) internal {\\n        require(address(this).balance >= amount, \\\"Address: insufficient balance\\\");\\n\\n        // solhint-disable-next-line avoid-low-level-calls, avoid-call-value\\n        (bool success, ) = recipient.call{ value: amount }(\\\"\\\");\\n        require(success, \\\"Address: unable to send value, recipient may have reverted\\\");\\n    }\\n\\n    /**\\n     * @dev Performs a Solidity function call using a low level `call`. A\\n     * plain`call` is an unsafe replacement for a function call: use this\\n     * function instead.\\n     *\\n     * If `target` reverts with a revert reason, it is bubbled up by this\\n     * function (like regular Solidity function calls).\\n     *\\n     * Returns the raw returned data. To convert to the expected return value,\\n     * use https://solidity.readthedocs.io/en/latest/units-and-global-variables.html?highlight=abi.decode#abi-encoding-and-decoding-functions[`abi.decode`].\\n     *\\n     * Requirements:\\n     *\\n     * - `target` must be a contract.\\n     * - calling `target` with `data` must not revert.\\n     *\\n     * _Available since v3.1._\\n     */\\n    function functionCall(address target, bytes memory data) internal returns (bytes memory) {\\n      return functionCall(target, data, \\\"Address: low-level call failed\\\");\\n    }\\n\\n    /**\\n     * @dev Same as {xref-Address-functionCall-address-bytes-}[`functionCall`], but with\\n     * `errorMessage` as a fallback revert reason when `target` reverts.\\n     *\\n     * _Available since v3.1._\\n     */\\n    function functionCall(address target, bytes memory data, string memory errorMessage) internal returns (bytes memory) {\\n        return functionCallWithValue(target, data, 0, errorMessage);\\n    }\\n\\n    /**\\n     * @dev Same as {xref-Address-functionCall-address-bytes-}[`functionCall`],\\n     * but also transferring `value` wei to `target`.\\n     *\\n     * Requirements:\\n     *\\n     * - the calling contract must have an ETH balance of at least `value`.\\n     * - the called Solidity function must be `payable`.\\n     *\\n     * _Available since v3.1._\\n     */\\n    function functionCallWithValue(address target, bytes memory data, uint256 value) internal returns (bytes memory) {\\n        return functionCallWithValue(target, data, value, \\\"Address: low-level call with value failed\\\");\\n    }\\n\\n    /**\\n     * @dev Same as {xref-Address-functionCallWithValue-address-bytes-uint256-}[`functionCallWithValue`], but\\n     * with `errorMessage` as a fallback revert reason when `target` reverts.\\n     *\\n     * _Available since v3.1._\\n     */\\n    function functionCallWithValue(address target, bytes memory data, uint256 value, string memory errorMessage) internal returns (bytes memory) {\\n        require(address(this).balance >= value, \\\"Address: insufficient balance for call\\\");\\n        require(isContract(target), \\\"Address: call to non-contract\\\");\\n\\n        // solhint-disable-next-line avoid-low-level-calls\\n        (bool success, bytes memory returndata) = target.call{ value: value }(data);\\n        return _verifyCallResult(success, returndata, errorMessage);\\n    }\\n\\n    /**\\n     * @dev Same as {xref-Address-functionCall-address-bytes-}[`functionCall`],\\n     * but performing a static call.\\n     *\\n     * _Available since v3.3._\\n     */\\n    function functionStaticCall(address target, bytes memory data) internal view returns (bytes memory) {\\n        return functionStaticCall(target, data, \\\"Address: low-level static call failed\\\");\\n    }\\n\\n    /**\\n     * @dev Same as {xref-Address-functionCall-address-bytes-string-}[`functionCall`],\\n     * but performing a static call.\\n     *\\n     * _Available since v3.3._\\n     */\\n    function functionStaticCall(address target, bytes memory data, string memory errorMessage) internal view returns (bytes memory) {\\n        require(isContract(target), \\\"Address: static call to non-contract\\\");\\n\\n        // solhint-disable-next-line avoid-low-level-calls\\n        (bool success, bytes memory returndata) = target.staticcall(data);\\n        return _verifyCallResult(success, returndata, errorMessage);\\n    }\\n\\n    function _verifyCallResult(bool success, bytes memory returndata, string memory errorMessage) private pure returns(bytes memory) {\\n        if (success) {\\n            return returndata;\\n        } else {\\n            // Look for revert reason and bubble it up if present\\n            if (returndata.length > 0) {\\n                // The easiest way to bubble the revert reason is using memory via assembly\\n\\n                // solhint-disable-next-line no-inline-assembly\\n                assembly {\\n                    let returndata_size := mload(returndata)\\n                    revert(add(32, returndata), returndata_size)\\n                }\\n            } else {\\n                revert(errorMessage);\\n            }\\n        }\\n    }\\n}\",\"keccak256\":\"0xbf8dc250aa07ec2837ce70f902e3964a22b749a26160e39865f85f659dc48b66\",\"license\":\"MIT\"},\"contracts/lib/0.8/Initializable.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n\\n// solhint-disable-next-line compiler-version\\npragma solidity ^0.8.0;\\n\\nimport \\\"./AddressUpgradeable.sol\\\";\\n\\n/**\\n * @dev This is a base contract to aid in writing upgradeable contracts, or any kind of contract that will be deployed\\n * behind a proxy. Since a proxied contract can't have a constructor, it's common to move constructor logic to an\\n * external initializer function, usually called `initialize`. It then becomes necessary to protect this initializer\\n * function so it can only be called once. The {initializer} modifier provided by this contract will have this effect.\\n *\\n * TIP: To avoid leaving the proxy in an uninitialized state, the initializer function should be called as early as\\n * possible by providing the encoded function call as the `_data` argument to {UpgradeableProxy-constructor}.\\n *\\n * CAUTION: When used with inheritance, manual care must be taken to not invoke a parent initializer twice, or to ensure\\n * that all initializers are idempotent. This is not verified automatically as constructors are by Solidity.\\n */\\nabstract contract Initializable {\\n\\n    /**\\n     * @dev Indicates that the contract has been initialized.\\n     */\\n    bool private _initialized;\\n\\n    /**\\n     * @dev Indicates that the contract is in the process of being initialized.\\n     */\\n    bool private _initializing;\\n\\n    /**\\n     * @dev Modifier to protect an initializer function from being invoked twice.\\n     */\\n    modifier initializer() {\\n        require(_initializing || !_initialized, \\\"Initializable: contract is already initialized\\\");\\n\\n        bool isTopLevelCall = !_initializing;\\n        if (isTopLevelCall) {\\n            _initializing = true;\\n            _initialized = true;\\n        }\\n\\n        _;\\n\\n        if (isTopLevelCall) {\\n            _initializing = false;\\n        }\\n    }\\n}\",\"keccak256\":\"0xc445e701fc984ebd4faf7aa82e40cd0068f5893a31c1557ca86c74fec69f1e8e\",\"license\":\"MIT\"}},\"version\":1}",
+  "bytecode": "0x60806040526202a3006001556201518060025534801561001e57600080fd5b506000805462010000600160b01b031916336201000081029190911782556040519091907f7e644d79422f17c01e4894b5f4f588d331ebfa28653d42ae832dc59e38c9798f908290a3612314806100766000396000f3fe60806040526004361061023f5760003560e01c80639982cb2e1161012e578063d33219b4116100ab578063dd107d131161006f578063dd107d131461068f578063e58d3078146106af578063e5e6c5fe146106cf578063e61dd418146106ef578063f851a4401461070257610246565b8063d33219b414610606578063d86cf60114610626578063da25301514610646578063dad8a0961461065c578063dc2ba9461461067c57610246565b8063bc58ca69116100f2578063bc58ca6914610566578063bdacb30314610586578063c0c53b8b146105a6578063c14734a8146105c6578063c77324dc146105e657610246565b80639982cb2e146104c25780639b8c30a0146104e65780639dfa346414610506578063aa87cc8114610526578063b1e60f751461054657610246565b806369c40231116101bc5780637b8bf297116101805780637b8bf297146104385780638023dc81146104585780638b3240a01461047857806390e4b7201461048d57806397d43d65146104a257610246565b806369c402311461037b5780636d3d1bcb1461039b578063704b6c02146103bb57806378c72075146103db5780637aaceb95146103fb57610246565b806333ddddce1161020357806333ddddce146102e857806337376ca8146102fb578063433645091461031b578063512e14351461033b5780635c66e3da1461035b57610246565b80630d5a5b8b146102485780630edaeb0f14610268578063102aff801461028857806324ef737c146102a8578063317636f2146102c857610246565b3661024657005b005b34801561025457600080fd5b50610246610263366004611f4c565b610728565b34801561027457600080fd5b50610246610283366004611d64565b610830565b34801561029457600080fd5b506102466102a3366004611f2b565b610884565b3480156102b457600080fd5b506102466102c3366004611f2b565b6108cf565b3480156102d457600080fd5b506102466102e3366004611d8f565b610954565b6102466102f6366004611ded565b6109e8565b34801561030757600080fd5b50610246610316366004611efb565b610a25565b34801561032757600080fd5b50610246610336366004611d64565b610aad565b34801561034757600080fd5b50610246610356366004611f2b565b610b32565b34801561036757600080fd5b50610246610376366004611c8d565b610bb2565b34801561038757600080fd5b50610246610396366004611d64565b610c38565b3480156103a757600080fd5b506102466103b6366004611d64565b610c88565b3480156103c757600080fd5b506102466103d6366004611c8d565b610cdc565b3480156103e757600080fd5b506102466103f6366004611d64565b610d6f565b34801561040757600080fd5b5060035461041b906001600160a01b031681565b6040516001600160a01b0390911681526020015b60405180910390f35b34801561044457600080fd5b50610246610453366004611d64565b610dc3565b34801561046457600080fd5b50610246610473366004611efb565b610e48565b34801561048457600080fd5b5061041b610ec5565b34801561049957600080fd5b5061041b610f54565b3480156104ae57600080fd5b506102466104bd366004611d64565b610f7d565b3480156104ce57600080fd5b506104d860025481565b60405190815260200161042f565b3480156104f257600080fd5b50610246610501366004611d64565b611002565b34801561051257600080fd5b50610246610521366004611f2b565b6110f6565b34801561053257600080fd5b50610246610541366004611d64565b611141565b34801561055257600080fd5b50610246610561366004611d64565b6111ca565b34801561057257600080fd5b50610246610581366004611d64565b611258565b34801561059257600080fd5b506102466105a1366004611c8d565b6112e1565b3480156105b257600080fd5b506102466105c1366004611ccc565b611367565b3480156105d257600080fd5b506102466105e1366004611e56565b61153f565b3480156105f257600080fd5b50610246610601366004611f4c565b61160c565b34801561061257600080fd5b5060045461041b906001600160a01b031681565b34801561063257600080fd5b50610246610641366004611ded565b6116a3565b34801561065257600080fd5b506104d860015481565b34801561066857600080fd5b50610246610677366004611efb565b6116eb565b61024661068a366004611e56565b611769565b34801561069b57600080fd5b506102466106aa366004611d16565b611814565b3480156106bb57600080fd5b506102466106ca366004611d64565b6118cd565b3480156106db57600080fd5b506102466106ea366004611d16565b61191d565b6102466106fd366004611d8f565b611a41565b34801561070e57600080fd5b5060005461041b906201000090046001600160a01b031681565b6000546201000090046001600160a01b031633146107615760405162461bcd60e51b815260040161075890612269565b60405180910390fd5b60035460405163ffffffff841660248201526000916107c2916001600160a01b0390911690839060440160408051601f198184030181529190526020810180516001600160e01b0316631ab971ab60e01b1790526001546000908790611a99565b9050336001600160a01b03167fe55e13505decce9f7ba3ff5c145bea70776719c2eb4af7502d6c7a58f8a774a084600254426107fe919061228c565b6040805163ffffffff9093168352602083019190915281018490526060810185905260800160405180910390a2505050565b6040516001600160a01b038316602482015261088090309060009060440160408051601f198184030181529190526020810180516001600160e01b0316633825b60160e11b179052600085611b31565b5050565b6108803060008460405160240161089d91815260200190565b60408051601f198184030181529190526020810180516001600160e01b0316638023dc8160e01b179052600085611b31565b6000546201000090046001600160a01b031633146108ff5760405162461bcd60e51b815260040161075890612269565b61094f3060008460405160240161091891815260200190565b60408051601f198184030181529190526020810180516001600160e01b0316636d6c504b60e11b1790526001546000908690611a99565b505050565b6000546201000090046001600160a01b031633146109845760405162461bcd60e51b815260040161075890612269565b6003546040516109e1916001600160a01b03169084906109aa90889088906024016120e5565b60408051601f198184030181529190526020810180516001600160e01b031663278f794360e11b1790526001546000908690611a99565b5050505050565b6000546201000090046001600160a01b03163314610a185760405162461bcd60e51b815260040161075890612269565b6109e18585858585611b31565b6000546201000090046001600160a01b03163314610a555760405162461bcd60e51b815260040161075890612269565b6004805460405163c4d252f560e01b81529182018390526001600160a01b03169063c4d252f590602401600060405180830381600087803b158015610a9957600080fd5b505af11580156109e1573d6000803e3d6000fd5b6000546201000090046001600160a01b03163314610add5760405162461bcd60e51b815260040161075890612269565b6040516001600160a01b038316602482015261094f90309060009060440160408051601f198184030181529190526020810180516001600160e01b031663bdacb30360e01b1790526001546000908690611a99565b6000546201000090046001600160a01b03163314610b625760405162461bcd60e51b815260040161075890612269565b61094f30600084604051602401610b7b91815260200190565b60408051601f198184030181529190526020810180516001600160e01b0316638023dc8160e01b1790526001546000908690611a99565b6004546001600160a01b03163314610bdc5760405162461bcd60e51b815260040161075890612243565b6003546040516001600160a01b038084169216907fff9651e81ae7f692ad8df7b6184e00536887c968984c58a568083a1cac82451e90600090a3600380546001600160a01b0319166001600160a01b0392909216919091179055565b6040516001600160a01b038316602482015261088090309060009060440160408051601f198184030181529190526020810180516001600160e01b031663bdacb30360e01b179052600085611b31565b6003546040516001600160a01b03848116602483015261088092169060009060440160408051601f198184030181529190526020810180516001600160e01b03166308f2839760e41b179052600085611b31565b6004546001600160a01b03163314610d065760405162461bcd60e51b815260040161075890612243565b600080546040516001600160a01b03808516936201000090930416917f7e644d79422f17c01e4894b5f4f588d331ebfa28653d42ae832dc59e38c9798f91a3600080546001600160a01b03909216620100000262010000600160b01b0319909216919091179055565b6003546040516001600160a01b03848116602483015261088092169060009060440160408051601f198184030181529190526020810180516001600160e01b0316631b2ce7f360e11b179052600085611b31565b6000546201000090046001600160a01b03163314610df35760405162461bcd60e51b815260040161075890612269565b6040516001600160a01b038316602482015261094f90309060009060440160408051601f198184030181529190526020810180516001600160e01b0316633825b60160e11b1790526001546000908690611a99565b6004546001600160a01b03163314610e725760405162461bcd60e51b815260040161075890612243565b80600254604051610e9090663932b3bab630b960c91b815260070190565b604051908190038120907fd4ec76c9ec44b1200102d7e181ebeff8008a397ea9e4c71b50f9e1dc1a9d5bd390600090a4600255565b6003546040516303e1469160e61b8152600091829182916001600160a01b0316906004015b600060405180830381855afa9150503d8060008114610f25576040519150601f19603f3d011682016040523d82523d6000602084013e610f2a565b606091505b509150915081610f3957600080fd5b80806020019051810190610f4d9190611cb0565b9250505090565b600354604051635c60da1b60e01b8152600091829182916001600160a01b031690600401610eea565b6000546201000090046001600160a01b03163314610fad5760405162461bcd60e51b815260040161075890612269565b6040516001600160a01b038316602482015261094f90309060009060440160408051601f198184030181529190526020810180516001600160e01b0316632e3371ed60e11b1790526001546000908690611a99565b6000546201000090046001600160a01b031633146110325760405162461bcd60e51b815260040161075890612269565b6003546040516001600160a01b03848116602483015260009261108e92911690839060440160408051601f198184030181529190526020810180516001600160e01b03166301485b9d60e71b1790526001546000908790611a99565b9050826001600160a01b0316336001600160a01b03167ffba3e2c833e27f6f78cc221cd889899ecd8c5ccd6be29eb0468f8859334ecaed600254426110d3919061228c565b6040805191825260208201869052810186905260600160405180910390a3505050565b6108803060008460405160240161110f91815260200190565b60408051601f198184030181529190526020810180516001600160e01b0316636d6c504b60e11b179052600085611b31565b6000546201000090046001600160a01b031633146111715760405162461bcd60e51b815260040161075890612269565b6003546040516001600160a01b03848116602483015261094f92169060009060440160408051601f198184030181529190526020810180516001600160e01b0316631b2ce7f360e11b1790526001546000908690611a99565b6003546040516001600160a01b03848116602483015261121e92169060009060440160408051601f198184030181529190526020810180516001600160e01b03166301485b9d60e71b179052600085611b31565b6040516001600160a01b0383169033907f53ac1c5cdda51e6aa0635375b348ae7d51f618deaddadd72fc2860057b1ffd9190600090a35050565b6000546201000090046001600160a01b031633146112885760405162461bcd60e51b815260040161075890612269565b6003546040516001600160a01b03848116602483015261094f92169060009060440160408051601f198184030181529190526020810180516001600160e01b03166308f2839760e41b1790526001546000908690611a99565b6004546001600160a01b0316331461130b5760405162461bcd60e51b815260040161075890612243565b6004546040516001600160a01b038084169216907f0b16e94338dda95fa1e5c779ff12c1c00489fca89839afd381c4c5faffd6e2a190600090a3600480546001600160a01b0319166001600160a01b0392909216919091179055565b600054610100900460ff1680611380575060005460ff16155b6113e35760405162461bcd60e51b815260206004820152602e60248201527f496e697469616c697a61626c653a20636f6e747261637420697320616c72656160448201526d191e481a5b9a5d1a585b1a5e995960921b6064820152608401610758565b600054610100900460ff16158015611405576000805461ffff19166101011790555b6000546201000090046001600160a01b031633146114355760405162461bcd60e51b815260040161075890612269565b600380546001600160a01b0319166001600160a01b0386169081179091556040516000907fff9651e81ae7f692ad8df7b6184e00536887c968984c58a568083a1cac82451e908290a3600080546040516001600160a01b03808716936201000090930416917f7e644d79422f17c01e4894b5f4f588d331ebfa28653d42ae832dc59e38c9798f91a3600080546001600160a01b03808616620100000262010000600160b01b0319909216919091178255600480549185166001600160a01b0319909216821790556040519091907f0b16e94338dda95fa1e5c779ff12c1c00489fca89839afd381c4c5faffd6e2a1908290a38015611539576000805461ff00191690555b50505050565b6000546201000090046001600160a01b0316331461156f5760405162461bcd60e51b815260040161075890612269565b600480546001546040516308f2a0bb60e41b81526001600160a01b0390921692638f2a0bb0926115af928d928d928d928d928d928d928d928d92016121e5565b602060405180830381600087803b1580156115c957600080fd5b505af11580156115dd573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906116019190611f13565b505050505050505050565b60035460405163ffffffff84166024820152611664916001600160a01b03169060009060440160408051601f198184030181529190526020810180516001600160e01b0316631ab971ab60e01b179052600085611b31565b60405163ffffffff8316815233907fa94ad53bf43f2f6061cd0a2613212f8444ad7b078cfc41699eb70baff751f67b9060200160405180910390a25050565b6000546201000090046001600160a01b031633146116d35760405162461bcd60e51b815260040161075890612269565b6116e38585858585600154611a99565b505050505050565b6004546001600160a01b031633146117155760405162461bcd60e51b815260040161075890612243565b80600154604051611734906718dc9a5d1a58d85b60c21b815260080190565b604051908190038120907fd4ec76c9ec44b1200102d7e181ebeff8008a397ea9e4c71b50f9e1dc1a9d5bd390600090a4600155565b6000546201000090046001600160a01b031633146117995760405162461bcd60e51b815260040161075890612269565b6004805460405163e38335e560e01b81526001600160a01b039091169163e38335e59134916117d8918d918d918d918d918d918d918d918d9101612191565b6000604051808303818588803b1580156117f157600080fd5b505af1158015611805573d6000803e3d6000fd5b50505050505050505050505050565b6003546040516001600160a01b038681166024830152858116604483015263ffffffff8516606483015261187c92169060009060840160408051601f198184030181529190526020810180516001600160e01b0316630236458d60e61b179052600085611b31565b60405163ffffffff831681526001600160a01b03808516919086169033907f2c4ba364085ee54b447db6f054cd4cefd890878196bb741dc447490df29a64a69060200160405180910390a450505050565b6040516001600160a01b038316602482015261088090309060009060440160408051601f198184030181529190526020810180516001600160e01b0316632e3371ed60e11b179052600085611b31565b6000546201000090046001600160a01b0316331461194d5760405162461bcd60e51b815260040161075890612269565b6003546040516001600160a01b038681166024830152858116604483015263ffffffff851660648301526000926119bd92911690839060840160408051601f198184030181529190526020810180516001600160e01b0316630236458d60e61b1790526002546000908790611a99565b9050836001600160a01b0316856001600160a01b0316336001600160a01b03167fa00a72f457c9f3e2f029eea91af16988e9b48415f9c9985d730652deb40a372e8660025442611a0d919061228c565b6040805163ffffffff9093168352602083019190915281018690526060810187905260800160405180910390a45050505050565b600354604051611539916001600160a01b0316908490611a6790889088906024016120e5565b60408051601f198184030181529190526020810180516001600160e01b031663278f794360e11b179052600085611b31565b6004805460405162ea831560e11b81526000926001600160a01b03909216916301d5062a91611ad4918b918b918b918b918b918b910161214c565b602060405180830381600087803b158015611aee57600080fd5b505af1158015611b02573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190611b269190611f13565b979650505050505050565b6004805460405163134008d360e01b81526001600160a01b039091169163134008d3918791611b6a918a9184918a918a918a9101612111565b6000604051808303818588803b158015611b8357600080fd5b505af1158015611b97573d6000803e3d6000fd5b50505050505050505050565b60008083601f840112611bb4578182fd5b50813567ffffffffffffffff811115611bcb578182fd5b6020830191508360208260051b8501011115611be657600080fd5b9250929050565b600082601f830112611bfd578081fd5b813567ffffffffffffffff80821115611c1857611c186122b0565b604051601f8301601f19908116603f01168101908282118183101715611c4057611c406122b0565b81604052838152866020858801011115611c58578485fd5b8360208701602083013792830160200193909352509392505050565b803563ffffffff81168114611c8857600080fd5b919050565b600060208284031215611c9e578081fd5b8135611ca9816122c6565b9392505050565b600060208284031215611cc1578081fd5b8151611ca9816122c6565b600080600060608486031215611ce0578182fd5b8335611ceb816122c6565b92506020840135611cfb816122c6565b91506040840135611d0b816122c6565b809150509250925092565b60008060008060808587031215611d2b578081fd5b8435611d36816122c6565b93506020850135611d46816122c6565b9250611d5460408601611c74565b9396929550929360600135925050565b60008060408385031215611d76578182fd5b8235611d81816122c6565b946020939093013593505050565b60008060008060808587031215611da4578384fd5b8435611daf816122c6565b9350602085013567ffffffffffffffff811115611dca578384fd5b611dd687828801611bed565b949794965050505060408301359260600135919050565b600080600080600060a08688031215611e04578081fd5b8535611e0f816122c6565b945060208601359350604086013567ffffffffffffffff811115611e31578182fd5b611e3d88828901611bed565b9598949750949560608101359550608001359392505050565b60008060008060008060008060a0898b031215611e71578283fd5b883567ffffffffffffffff80821115611e88578485fd5b611e948c838d01611ba3565b909a50985060208b0135915080821115611eac578485fd5b611eb88c838d01611ba3565b909850965060408b0135915080821115611ed0578485fd5b50611edd8b828c01611ba3565b999c989b509699959896976060870135966080013595509350505050565b600060208284031215611f0c578081fd5b5035919050565b600060208284031215611f24578081fd5b5051919050565b60008060408385031215611f3d578182fd5b50508035926020909101359150565b60008060408385031215611f5e578182fd5b611d8183611c74565b60008284526020808501945082825b85811015611fa4578135611f89816122c6565b6001600160a01b031687529582019590820190600101611f76565b509495945050505050565b60008284526020808501808196508560051b8101915084845b8781101561202f5782840389528135601e19883603018112611fe8578687fd5b8701803567ffffffffffffffff811115612000578788fd5b80360389131561200e578788fd5b61201b8682898501612070565b9a87019a9550505090840190600101611fc8565b5091979650505050505050565b81835260006001600160fb1b03831115612054578081fd5b8260051b80836020870137939093016020019283525090919050565b60008284528282602086013780602084860101526020601f19601f85011685010190509392505050565b60008151808452815b818110156120bf576020818501810151868301820152016120a3565b818111156120d05782602083870101525b50601f01601f19169290920160200192915050565b6001600160a01b03831681526040602082018190526000906121099083018461209a565b949350505050565b600060018060a01b038716825285602083015260a0604083015261213860a083018661209a565b606083019490945250608001529392505050565b600060018060a01b038816825286602083015260c0604083015261217360c083018761209a565b606083019590955250608081019290925260a0909101529392505050565b600060a082526121a560a083018a8c611f67565b82810360208401526121b881898b61203c565b905082810360408401526121cd818789611faf565b60608401959095525050608001529695505050505050565b600060c082526121f960c083018b8d611f67565b828103602084015261220c818a8c61203c565b9050828103604084015261222181888a611faf565b60608401969096525050608081019290925260a0909101529695505050505050565b6020808252600c908201526b6e6f742074696d656c6f636b60a01b604082015260600190565b6020808252600990820152683737ba1030b236b4b760b91b604082015260600190565b600082198211156122ab57634e487b7160e01b81526011600452602481fd5b500190565b634e487b7160e01b600052604160045260246000fd5b6001600160a01b03811681146122db57600080fd5b5056fea26469706673582212202987ff0346fc66c7f5efc313e83fbe5fa1cfd7d9d0416152156221fd7c22af5364736f6c63430008030033",
+  "deployedBytecode": "0x60806040526004361061023f5760003560e01c80639982cb2e1161012e578063d33219b4116100ab578063dd107d131161006f578063dd107d131461068f578063e58d3078146106af578063e5e6c5fe146106cf578063e61dd418146106ef578063f851a4401461070257610246565b8063d33219b414610606578063d86cf60114610626578063da25301514610646578063dad8a0961461065c578063dc2ba9461461067c57610246565b8063bc58ca69116100f2578063bc58ca6914610566578063bdacb30314610586578063c0c53b8b146105a6578063c14734a8146105c6578063c77324dc146105e657610246565b80639982cb2e146104c25780639b8c30a0146104e65780639dfa346414610506578063aa87cc8114610526578063b1e60f751461054657610246565b806369c40231116101bc5780637b8bf297116101805780637b8bf297146104385780638023dc81146104585780638b3240a01461047857806390e4b7201461048d57806397d43d65146104a257610246565b806369c402311461037b5780636d3d1bcb1461039b578063704b6c02146103bb57806378c72075146103db5780637aaceb95146103fb57610246565b806333ddddce1161020357806333ddddce146102e857806337376ca8146102fb578063433645091461031b578063512e14351461033b5780635c66e3da1461035b57610246565b80630d5a5b8b146102485780630edaeb0f14610268578063102aff801461028857806324ef737c146102a8578063317636f2146102c857610246565b3661024657005b005b34801561025457600080fd5b50610246610263366004611f4c565b610728565b34801561027457600080fd5b50610246610283366004611d64565b610830565b34801561029457600080fd5b506102466102a3366004611f2b565b610884565b3480156102b457600080fd5b506102466102c3366004611f2b565b6108cf565b3480156102d457600080fd5b506102466102e3366004611d8f565b610954565b6102466102f6366004611ded565b6109e8565b34801561030757600080fd5b50610246610316366004611efb565b610a25565b34801561032757600080fd5b50610246610336366004611d64565b610aad565b34801561034757600080fd5b50610246610356366004611f2b565b610b32565b34801561036757600080fd5b50610246610376366004611c8d565b610bb2565b34801561038757600080fd5b50610246610396366004611d64565b610c38565b3480156103a757600080fd5b506102466103b6366004611d64565b610c88565b3480156103c757600080fd5b506102466103d6366004611c8d565b610cdc565b3480156103e757600080fd5b506102466103f6366004611d64565b610d6f565b34801561040757600080fd5b5060035461041b906001600160a01b031681565b6040516001600160a01b0390911681526020015b60405180910390f35b34801561044457600080fd5b50610246610453366004611d64565b610dc3565b34801561046457600080fd5b50610246610473366004611efb565b610e48565b34801561048457600080fd5b5061041b610ec5565b34801561049957600080fd5b5061041b610f54565b3480156104ae57600080fd5b506102466104bd366004611d64565b610f7d565b3480156104ce57600080fd5b506104d860025481565b60405190815260200161042f565b3480156104f257600080fd5b50610246610501366004611d64565b611002565b34801561051257600080fd5b50610246610521366004611f2b565b6110f6565b34801561053257600080fd5b50610246610541366004611d64565b611141565b34801561055257600080fd5b50610246610561366004611d64565b6111ca565b34801561057257600080fd5b50610246610581366004611d64565b611258565b34801561059257600080fd5b506102466105a1366004611c8d565b6112e1565b3480156105b257600080fd5b506102466105c1366004611ccc565b611367565b3480156105d257600080fd5b506102466105e1366004611e56565b61153f565b3480156105f257600080fd5b50610246610601366004611f4c565b61160c565b34801561061257600080fd5b5060045461041b906001600160a01b031681565b34801561063257600080fd5b50610246610641366004611ded565b6116a3565b34801561065257600080fd5b506104d860015481565b34801561066857600080fd5b50610246610677366004611efb565b6116eb565b61024661068a366004611e56565b611769565b34801561069b57600080fd5b506102466106aa366004611d16565b611814565b3480156106bb57600080fd5b506102466106ca366004611d64565b6118cd565b3480156106db57600080fd5b506102466106ea366004611d16565b61191d565b6102466106fd366004611d8f565b611a41565b34801561070e57600080fd5b5060005461041b906201000090046001600160a01b031681565b6000546201000090046001600160a01b031633146107615760405162461bcd60e51b815260040161075890612269565b60405180910390fd5b60035460405163ffffffff841660248201526000916107c2916001600160a01b0390911690839060440160408051601f198184030181529190526020810180516001600160e01b0316631ab971ab60e01b1790526001546000908790611a99565b9050336001600160a01b03167fe55e13505decce9f7ba3ff5c145bea70776719c2eb4af7502d6c7a58f8a774a084600254426107fe919061228c565b6040805163ffffffff9093168352602083019190915281018490526060810185905260800160405180910390a2505050565b6040516001600160a01b038316602482015261088090309060009060440160408051601f198184030181529190526020810180516001600160e01b0316633825b60160e11b179052600085611b31565b5050565b6108803060008460405160240161089d91815260200190565b60408051601f198184030181529190526020810180516001600160e01b0316638023dc8160e01b179052600085611b31565b6000546201000090046001600160a01b031633146108ff5760405162461bcd60e51b815260040161075890612269565b61094f3060008460405160240161091891815260200190565b60408051601f198184030181529190526020810180516001600160e01b0316636d6c504b60e11b1790526001546000908690611a99565b505050565b6000546201000090046001600160a01b031633146109845760405162461bcd60e51b815260040161075890612269565b6003546040516109e1916001600160a01b03169084906109aa90889088906024016120e5565b60408051601f198184030181529190526020810180516001600160e01b031663278f794360e11b1790526001546000908690611a99565b5050505050565b6000546201000090046001600160a01b03163314610a185760405162461bcd60e51b815260040161075890612269565b6109e18585858585611b31565b6000546201000090046001600160a01b03163314610a555760405162461bcd60e51b815260040161075890612269565b6004805460405163c4d252f560e01b81529182018390526001600160a01b03169063c4d252f590602401600060405180830381600087803b158015610a9957600080fd5b505af11580156109e1573d6000803e3d6000fd5b6000546201000090046001600160a01b03163314610add5760405162461bcd60e51b815260040161075890612269565b6040516001600160a01b038316602482015261094f90309060009060440160408051601f198184030181529190526020810180516001600160e01b031663bdacb30360e01b1790526001546000908690611a99565b6000546201000090046001600160a01b03163314610b625760405162461bcd60e51b815260040161075890612269565b61094f30600084604051602401610b7b91815260200190565b60408051601f198184030181529190526020810180516001600160e01b0316638023dc8160e01b1790526001546000908690611a99565b6004546001600160a01b03163314610bdc5760405162461bcd60e51b815260040161075890612243565b6003546040516001600160a01b038084169216907fff9651e81ae7f692ad8df7b6184e00536887c968984c58a568083a1cac82451e90600090a3600380546001600160a01b0319166001600160a01b0392909216919091179055565b6040516001600160a01b038316602482015261088090309060009060440160408051601f198184030181529190526020810180516001600160e01b031663bdacb30360e01b179052600085611b31565b6003546040516001600160a01b03848116602483015261088092169060009060440160408051601f198184030181529190526020810180516001600160e01b03166308f2839760e41b179052600085611b31565b6004546001600160a01b03163314610d065760405162461bcd60e51b815260040161075890612243565b600080546040516001600160a01b03808516936201000090930416917f7e644d79422f17c01e4894b5f4f588d331ebfa28653d42ae832dc59e38c9798f91a3600080546001600160a01b03909216620100000262010000600160b01b0319909216919091179055565b6003546040516001600160a01b03848116602483015261088092169060009060440160408051601f198184030181529190526020810180516001600160e01b0316631b2ce7f360e11b179052600085611b31565b6000546201000090046001600160a01b03163314610df35760405162461bcd60e51b815260040161075890612269565b6040516001600160a01b038316602482015261094f90309060009060440160408051601f198184030181529190526020810180516001600160e01b0316633825b60160e11b1790526001546000908690611a99565b6004546001600160a01b03163314610e725760405162461bcd60e51b815260040161075890612243565b80600254604051610e9090663932b3bab630b960c91b815260070190565b604051908190038120907fd4ec76c9ec44b1200102d7e181ebeff8008a397ea9e4c71b50f9e1dc1a9d5bd390600090a4600255565b6003546040516303e1469160e61b8152600091829182916001600160a01b0316906004015b600060405180830381855afa9150503d8060008114610f25576040519150601f19603f3d011682016040523d82523d6000602084013e610f2a565b606091505b509150915081610f3957600080fd5b80806020019051810190610f4d9190611cb0565b9250505090565b600354604051635c60da1b60e01b8152600091829182916001600160a01b031690600401610eea565b6000546201000090046001600160a01b03163314610fad5760405162461bcd60e51b815260040161075890612269565b6040516001600160a01b038316602482015261094f90309060009060440160408051601f198184030181529190526020810180516001600160e01b0316632e3371ed60e11b1790526001546000908690611a99565b6000546201000090046001600160a01b031633146110325760405162461bcd60e51b815260040161075890612269565b6003546040516001600160a01b03848116602483015260009261108e92911690839060440160408051601f198184030181529190526020810180516001600160e01b03166301485b9d60e71b1790526001546000908790611a99565b9050826001600160a01b0316336001600160a01b03167ffba3e2c833e27f6f78cc221cd889899ecd8c5ccd6be29eb0468f8859334ecaed600254426110d3919061228c565b6040805191825260208201869052810186905260600160405180910390a3505050565b6108803060008460405160240161110f91815260200190565b60408051601f198184030181529190526020810180516001600160e01b0316636d6c504b60e11b179052600085611b31565b6000546201000090046001600160a01b031633146111715760405162461bcd60e51b815260040161075890612269565b6003546040516001600160a01b03848116602483015261094f92169060009060440160408051601f198184030181529190526020810180516001600160e01b0316631b2ce7f360e11b1790526001546000908690611a99565b6003546040516001600160a01b03848116602483015261121e92169060009060440160408051601f198184030181529190526020810180516001600160e01b03166301485b9d60e71b179052600085611b31565b6040516001600160a01b0383169033907f53ac1c5cdda51e6aa0635375b348ae7d51f618deaddadd72fc2860057b1ffd9190600090a35050565b6000546201000090046001600160a01b031633146112885760405162461bcd60e51b815260040161075890612269565b6003546040516001600160a01b03848116602483015261094f92169060009060440160408051601f198184030181529190526020810180516001600160e01b03166308f2839760e41b1790526001546000908690611a99565b6004546001600160a01b0316331461130b5760405162461bcd60e51b815260040161075890612243565b6004546040516001600160a01b038084169216907f0b16e94338dda95fa1e5c779ff12c1c00489fca89839afd381c4c5faffd6e2a190600090a3600480546001600160a01b0319166001600160a01b0392909216919091179055565b600054610100900460ff1680611380575060005460ff16155b6113e35760405162461bcd60e51b815260206004820152602e60248201527f496e697469616c697a61626c653a20636f6e747261637420697320616c72656160448201526d191e481a5b9a5d1a585b1a5e995960921b6064820152608401610758565b600054610100900460ff16158015611405576000805461ffff19166101011790555b6000546201000090046001600160a01b031633146114355760405162461bcd60e51b815260040161075890612269565b600380546001600160a01b0319166001600160a01b0386169081179091556040516000907fff9651e81ae7f692ad8df7b6184e00536887c968984c58a568083a1cac82451e908290a3600080546040516001600160a01b03808716936201000090930416917f7e644d79422f17c01e4894b5f4f588d331ebfa28653d42ae832dc59e38c9798f91a3600080546001600160a01b03808616620100000262010000600160b01b0319909216919091178255600480549185166001600160a01b0319909216821790556040519091907f0b16e94338dda95fa1e5c779ff12c1c00489fca89839afd381c4c5faffd6e2a1908290a38015611539576000805461ff00191690555b50505050565b6000546201000090046001600160a01b0316331461156f5760405162461bcd60e51b815260040161075890612269565b600480546001546040516308f2a0bb60e41b81526001600160a01b0390921692638f2a0bb0926115af928d928d928d928d928d928d928d928d92016121e5565b602060405180830381600087803b1580156115c957600080fd5b505af11580156115dd573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906116019190611f13565b505050505050505050565b60035460405163ffffffff84166024820152611664916001600160a01b03169060009060440160408051601f198184030181529190526020810180516001600160e01b0316631ab971ab60e01b179052600085611b31565b60405163ffffffff8316815233907fa94ad53bf43f2f6061cd0a2613212f8444ad7b078cfc41699eb70baff751f67b9060200160405180910390a25050565b6000546201000090046001600160a01b031633146116d35760405162461bcd60e51b815260040161075890612269565b6116e38585858585600154611a99565b505050505050565b6004546001600160a01b031633146117155760405162461bcd60e51b815260040161075890612243565b80600154604051611734906718dc9a5d1a58d85b60c21b815260080190565b604051908190038120907fd4ec76c9ec44b1200102d7e181ebeff8008a397ea9e4c71b50f9e1dc1a9d5bd390600090a4600155565b6000546201000090046001600160a01b031633146117995760405162461bcd60e51b815260040161075890612269565b6004805460405163e38335e560e01b81526001600160a01b039091169163e38335e59134916117d8918d918d918d918d918d918d918d918d9101612191565b6000604051808303818588803b1580156117f157600080fd5b505af1158015611805573d6000803e3d6000fd5b50505050505050505050505050565b6003546040516001600160a01b038681166024830152858116604483015263ffffffff8516606483015261187c92169060009060840160408051601f198184030181529190526020810180516001600160e01b0316630236458d60e61b179052600085611b31565b60405163ffffffff831681526001600160a01b03808516919086169033907f2c4ba364085ee54b447db6f054cd4cefd890878196bb741dc447490df29a64a69060200160405180910390a450505050565b6040516001600160a01b038316602482015261088090309060009060440160408051601f198184030181529190526020810180516001600160e01b0316632e3371ed60e11b179052600085611b31565b6000546201000090046001600160a01b0316331461194d5760405162461bcd60e51b815260040161075890612269565b6003546040516001600160a01b038681166024830152858116604483015263ffffffff851660648301526000926119bd92911690839060840160408051601f198184030181529190526020810180516001600160e01b0316630236458d60e61b1790526002546000908790611a99565b9050836001600160a01b0316856001600160a01b0316336001600160a01b03167fa00a72f457c9f3e2f029eea91af16988e9b48415f9c9985d730652deb40a372e8660025442611a0d919061228c565b6040805163ffffffff9093168352602083019190915281018690526060810187905260800160405180910390a45050505050565b600354604051611539916001600160a01b0316908490611a6790889088906024016120e5565b60408051601f198184030181529190526020810180516001600160e01b031663278f794360e11b179052600085611b31565b6004805460405162ea831560e11b81526000926001600160a01b03909216916301d5062a91611ad4918b918b918b918b918b918b910161214c565b602060405180830381600087803b158015611aee57600080fd5b505af1158015611b02573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190611b269190611f13565b979650505050505050565b6004805460405163134008d360e01b81526001600160a01b039091169163134008d3918791611b6a918a9184918a918a918a9101612111565b6000604051808303818588803b158015611b8357600080fd5b505af1158015611b97573d6000803e3d6000fd5b50505050505050505050565b60008083601f840112611bb4578182fd5b50813567ffffffffffffffff811115611bcb578182fd5b6020830191508360208260051b8501011115611be657600080fd5b9250929050565b600082601f830112611bfd578081fd5b813567ffffffffffffffff80821115611c1857611c186122b0565b604051601f8301601f19908116603f01168101908282118183101715611c4057611c406122b0565b81604052838152866020858801011115611c58578485fd5b8360208701602083013792830160200193909352509392505050565b803563ffffffff81168114611c8857600080fd5b919050565b600060208284031215611c9e578081fd5b8135611ca9816122c6565b9392505050565b600060208284031215611cc1578081fd5b8151611ca9816122c6565b600080600060608486031215611ce0578182fd5b8335611ceb816122c6565b92506020840135611cfb816122c6565b91506040840135611d0b816122c6565b809150509250925092565b60008060008060808587031215611d2b578081fd5b8435611d36816122c6565b93506020850135611d46816122c6565b9250611d5460408601611c74565b9396929550929360600135925050565b60008060408385031215611d76578182fd5b8235611d81816122c6565b946020939093013593505050565b60008060008060808587031215611da4578384fd5b8435611daf816122c6565b9350602085013567ffffffffffffffff811115611dca578384fd5b611dd687828801611bed565b949794965050505060408301359260600135919050565b600080600080600060a08688031215611e04578081fd5b8535611e0f816122c6565b945060208601359350604086013567ffffffffffffffff811115611e31578182fd5b611e3d88828901611bed565b9598949750949560608101359550608001359392505050565b60008060008060008060008060a0898b031215611e71578283fd5b883567ffffffffffffffff80821115611e88578485fd5b611e948c838d01611ba3565b909a50985060208b0135915080821115611eac578485fd5b611eb88c838d01611ba3565b909850965060408b0135915080821115611ed0578485fd5b50611edd8b828c01611ba3565b999c989b509699959896976060870135966080013595509350505050565b600060208284031215611f0c578081fd5b5035919050565b600060208284031215611f24578081fd5b5051919050565b60008060408385031215611f3d578182fd5b50508035926020909101359150565b60008060408385031215611f5e578182fd5b611d8183611c74565b60008284526020808501945082825b85811015611fa4578135611f89816122c6565b6001600160a01b031687529582019590820190600101611f76565b509495945050505050565b60008284526020808501808196508560051b8101915084845b8781101561202f5782840389528135601e19883603018112611fe8578687fd5b8701803567ffffffffffffffff811115612000578788fd5b80360389131561200e578788fd5b61201b8682898501612070565b9a87019a9550505090840190600101611fc8565b5091979650505050505050565b81835260006001600160fb1b03831115612054578081fd5b8260051b80836020870137939093016020019283525090919050565b60008284528282602086013780602084860101526020601f19601f85011685010190509392505050565b60008151808452815b818110156120bf576020818501810151868301820152016120a3565b818111156120d05782602083870101525b50601f01601f19169290920160200192915050565b6001600160a01b03831681526040602082018190526000906121099083018461209a565b949350505050565b600060018060a01b038716825285602083015260a0604083015261213860a083018661209a565b606083019490945250608001529392505050565b600060018060a01b038816825286602083015260c0604083015261217360c083018761209a565b606083019590955250608081019290925260a0909101529392505050565b600060a082526121a560a083018a8c611f67565b82810360208401526121b881898b61203c565b905082810360408401526121cd818789611faf565b60608401959095525050608001529695505050505050565b600060c082526121f960c083018b8d611f67565b828103602084015261220c818a8c61203c565b9050828103604084015261222181888a611faf565b60608401969096525050608081019290925260a0909101529695505050505050565b6020808252600c908201526b6e6f742074696d656c6f636b60a01b604082015260600190565b6020808252600990820152683737ba1030b236b4b760b91b604082015260600190565b600082198211156122ab57634e487b7160e01b81526011600452602481fd5b500190565b634e487b7160e01b600052604160045260246000fd5b6001600160a01b03811681146122db57600080fd5b5056fea26469706673582212202987ff0346fc66c7f5efc313e83fbe5fa1cfd7d9d0416152156221fd7c22af5364736f6c63430008030033",
+  "devdoc": {
+    "details": "Responsible for enacting decisions related to sensitive TipJar parameters Decisions are made via a timelock contract",
+    "kind": "dev",
+    "methods": {
+      "approveNewAdmin(address,bytes32)": {
+        "params": {
+          "newAdmin": "new admin address",
+          "salt": "salt"
+        }
+      },
+      "approveNewCriticalDelay(uint256,bytes32)": {
+        "params": {
+          "newDelay": "new delay time",
+          "salt": "salt"
+        }
+      },
+      "approveNewFee(uint32,bytes32)": {
+        "params": {
+          "newFee": "New fee",
+          "salt": "salt"
+        }
+      },
+      "approveNewFeeCollector(address,bytes32)": {
+        "params": {
+          "newFeeCollector": "New fee collector",
+          "salt": "salt"
+        }
+      },
+      "approveNewMinerSplit(address,address,uint32,bytes32)": {
+        "params": {
+          "minerAddress": "Address of miner",
+          "salt": "salt",
+          "splitPct": "% of tip that splitTo receives",
+          "splitTo": "Address that receives split"
+        }
+      },
+      "approveNewProxyAdmin(address,bytes32)": {
+        "params": {
+          "newAdmin": "new admin address",
+          "salt": "salt"
+        }
+      },
+      "approveNewRegularDelay(uint256,bytes32)": {
+        "params": {
+          "newDelay": "new delay time",
+          "salt": "salt"
+        }
+      },
+      "approveNewTimelock(address,bytes32)": {
+        "params": {
+          "newTimelock": "new timelock address",
+          "salt": "salt"
+        }
+      },
+      "approveNewTipJar(address,bytes32)": {
+        "params": {
+          "newTipJar": "new tip jar address",
+          "salt": "salt"
+        }
+      },
+      "approveUpgrade(address,bytes32)": {
+        "params": {
+          "newImplementation": "new implementation address",
+          "salt": "salt"
+        }
+      },
+      "approveUpgradeAndCall(address,bytes,uint256,bytes32)": {
+        "params": {
+          "data": "Bytes-encoded function to call",
+          "newImplementation": "new implementation address",
+          "salt": "salt",
+          "value": "Amount of ETH to send on call"
+        }
+      },
+      "cancelProposal(bytes32)": {
+        "params": {
+          "id": "ID of proposal"
+        }
+      },
+      "createProposal(address,uint256,bytes,bytes32,bytes32)": {
+        "params": {
+          "data": "function call bytes",
+          "predecessor": "predecessor function call",
+          "salt": "salt used in proposal",
+          "target": "target address",
+          "value": "ETH value"
+        }
+      },
+      "createProposalBatch(address[],uint256[],bytes[],bytes32,bytes32)": {
+        "params": {
+          "datas": "function call bytes",
+          "predecessor": "predecessor function call",
+          "salt": "salt used in proposal",
+          "targets": "target address",
+          "values": "ETH value"
+        }
+      },
+      "executeProposal(address,uint256,bytes,bytes32,bytes32)": {
+        "params": {
+          "data": "function call bytes",
+          "predecessor": "predecessor function call",
+          "salt": "salt used in proposal",
+          "target": "target address",
+          "value": "ETH value"
+        }
+      },
+      "executeProposalBatch(address[],uint256[],bytes[],bytes32,bytes32)": {
+        "params": {
+          "datas": "function call bytes",
+          "predecessor": "predecessor function call",
+          "salt": "salt used in proposal",
+          "targets": "target address",
+          "values": "ETH value"
+        }
+      },
+      "initialize(address,address,address)": {
+        "params": {
+          "_admin": "Admin address",
+          "_timelock": "TimelockController contract address",
+          "_tipJar": "TipJar proxy contract address"
+        }
+      },
+      "proposeNewAdmin(address,bytes32)": {
+        "params": {
+          "newAdmin": "new admin address",
+          "salt": "salt"
+        }
+      },
+      "proposeNewCriticalDelay(uint256,bytes32)": {
+        "params": {
+          "newDelay": "new delay time",
+          "salt": "salt"
+        }
+      },
+      "proposeNewFee(uint32,bytes32)": {
+        "params": {
+          "newFee": "New fee",
+          "salt": "salt"
+        }
+      },
+      "proposeNewFeeCollector(address,bytes32)": {
+        "params": {
+          "newFeeCollector": "New fee collector",
+          "salt": "salt"
+        }
+      },
+      "proposeNewMinerSplit(address,address,uint32,bytes32)": {
+        "params": {
+          "minerAddress": "Address of miner",
+          "salt": "salt",
+          "splitPct": "% of tip that splitTo receives",
+          "splitTo": "Address that receives split"
+        }
+      },
+      "proposeNewProxyAdmin(address,bytes32)": {
+        "params": {
+          "newAdmin": "new admin address",
+          "salt": "salt"
+        }
+      },
+      "proposeNewRegularDelay(uint256,bytes32)": {
+        "params": {
+          "newDelay": "new delay time",
+          "salt": "salt"
+        }
+      },
+      "proposeNewTimelock(address,bytes32)": {
+        "params": {
+          "newTimelock": "new timelock address",
+          "salt": "salt"
+        }
+      },
+      "proposeNewTipJar(address,bytes32)": {
+        "params": {
+          "newTipJar": "new tip jar address",
+          "salt": "salt"
+        }
+      },
+      "proposeUpgrade(address,bytes32)": {
+        "params": {
+          "newImplementation": "new implementation address",
+          "salt": "salt"
+        }
+      },
+      "proposeUpgradeAndCall(address,bytes,uint256,bytes32)": {
+        "params": {
+          "data": "Bytes-encoded function to call",
+          "newImplementation": "new implementation address",
+          "salt": "salt",
+          "value": "Amount of ETH to send on call"
+        }
+      },
+      "setAdmin(address)": {
+        "details": "Can only be executed by Timelock contract",
+        "params": {
+          "newAdmin": "new admin address"
+        }
+      },
+      "setCriticalDelay(uint256)": {
+        "details": "Can only be executed by Timelock contract",
+        "params": {
+          "newDelay": "new delay time"
+        }
+      },
+      "setRegularDelay(uint256)": {
+        "details": "Can only be executed by Timelock contract",
+        "params": {
+          "newDelay": "new delay time"
+        }
+      },
+      "setTimelock(address)": {
+        "details": "Can only be executed by Timelock contract or anyone if timelock has not yet been set",
+        "params": {
+          "newTimelock": "new timelock address"
+        }
+      },
+      "setTipJar(address)": {
+        "details": "Can only be executed by Timelock contract",
+        "params": {
+          "newTipJar": "new tip jar address"
+        }
+      }
+    },
+    "title": "TipJarManager",
+    "version": 1
+  },
+  "userdoc": {
+    "events": {
+      "AdminChanged(address,address)": {
+        "notice": "New admin event"
+      },
+      "DelayChanged(string,uint256,uint256)": {
+        "notice": "New delay event"
+      },
+      "FeeApproval(address,uint32)": {
+        "notice": "Fee Approval event"
+      },
+      "FeeCollectorApproval(address,address)": {
+        "notice": "Fee Collector Approval event"
+      },
+      "FeeCollectorProposal(address,address,uint256,bytes32,bytes32)": {
+        "notice": "Fee Collector Proposal event"
+      },
+      "FeeProposal(address,uint32,uint256,bytes32,bytes32)": {
+        "notice": "Fee Proposal event"
+      },
+      "MinerSplitApproval(address,address,address,uint32)": {
+        "notice": "Miner Split Approval event"
+      },
+      "MinerSplitProposal(address,address,address,uint32,uint256,bytes32,bytes32)": {
+        "notice": "Miner Split Proposal event"
+      },
+      "TimelockChanged(address,address)": {
+        "notice": "New timelock event"
+      },
+      "TipJarChanged(address,address)": {
+        "notice": "New tip jar event"
+      }
+    },
+    "kind": "user",
+    "methods": {
+      "admin()": {
+        "notice": "TipJarManager admin"
+      },
+      "approveNewAdmin(address,bytes32)": {
+        "notice": "Approve new admin for this contract"
+      },
+      "approveNewCriticalDelay(uint256,bytes32)": {
+        "notice": "Approve new critical delay for this contract"
+      },
+      "approveNewFee(uint32,bytes32)": {
+        "notice": "Approve a new network fee"
+      },
+      "approveNewFeeCollector(address,bytes32)": {
+        "notice": "Approve a new fee collector"
+      },
+      "approveNewMinerSplit(address,address,uint32,bytes32)": {
+        "notice": "Approve a new miner split"
+      },
+      "approveNewProxyAdmin(address,bytes32)": {
+        "notice": "Approve new admin for TipJar proxy contract"
+      },
+      "approveNewRegularDelay(uint256,bytes32)": {
+        "notice": "Approve new regular delay for this contract"
+      },
+      "approveNewTimelock(address,bytes32)": {
+        "notice": "Approve new timelock contract"
+      },
+      "approveNewTipJar(address,bytes32)": {
+        "notice": "Approve new tip jar contract"
+      },
+      "approveUpgrade(address,bytes32)": {
+        "notice": "Approve new implementation for TipJar proxy"
+      },
+      "approveUpgradeAndCall(address,bytes,uint256,bytes32)": {
+        "notice": "Approve new implementation for TipJar proxy + call function after"
+      },
+      "cancelProposal(bytes32)": {
+        "notice": "Cancel proposal"
+      },
+      "constructor": {
+        "notice": "Construct new TipJarManager contract, setting msg.sender as admin"
+      },
+      "createProposal(address,uint256,bytes,bytes32,bytes32)": {
+        "notice": "Create proposal"
+      },
+      "createProposalBatch(address[],uint256[],bytes[],bytes32,bytes32)": {
+        "notice": "Create batch proposal"
+      },
+      "criticalDelay()": {
+        "notice": "Delay for critical changes"
+      },
+      "executeProposal(address,uint256,bytes,bytes32,bytes32)": {
+        "notice": "Execute proposal"
+      },
+      "executeProposalBatch(address[],uint256[],bytes[],bytes32,bytes32)": {
+        "notice": "Execute batch proposal"
+      },
+      "getProxyAdmin()": {
+        "notice": "Public getter for TipJar Proxy admin address"
+      },
+      "getProxyImplementation()": {
+        "notice": "Public getter for TipJar Proxy implementation contract address"
+      },
+      "initialize(address,address,address)": {
+        "notice": "Initialize contract"
+      },
+      "proposeNewAdmin(address,bytes32)": {
+        "notice": "Propose new admin for this contract"
+      },
+      "proposeNewCriticalDelay(uint256,bytes32)": {
+        "notice": "Propose new critical delay for this contract"
+      },
+      "proposeNewFee(uint32,bytes32)": {
+        "notice": "Propose a new network fee"
+      },
+      "proposeNewFeeCollector(address,bytes32)": {
+        "notice": "Propose a new fee collector"
+      },
+      "proposeNewMinerSplit(address,address,uint32,bytes32)": {
+        "notice": "Propose a new miner split"
+      },
+      "proposeNewProxyAdmin(address,bytes32)": {
+        "notice": "Propose new admin for TipJar proxy contract"
+      },
+      "proposeNewRegularDelay(uint256,bytes32)": {
+        "notice": "Propose new regular delay for this contract"
+      },
+      "proposeNewTimelock(address,bytes32)": {
+        "notice": "Propose new timelock contract"
+      },
+      "proposeNewTipJar(address,bytes32)": {
+        "notice": "Propose new tip jar contract"
+      },
+      "proposeUpgrade(address,bytes32)": {
+        "notice": "Propose new implementation for TipJar proxy contract"
+      },
+      "proposeUpgradeAndCall(address,bytes,uint256,bytes32)": {
+        "notice": "Propose new implementation for TipJar proxy contract + call function after"
+      },
+      "regularDelay()": {
+        "notice": "Delay for non-critical changes"
+      },
+      "setAdmin(address)": {
+        "notice": "Set new admin for this contract"
+      },
+      "setCriticalDelay(uint256)": {
+        "notice": "Set new critical delay for this contract"
+      },
+      "setRegularDelay(uint256)": {
+        "notice": "Set new regular delay for this contract"
+      },
+      "setTimelock(address)": {
+        "notice": "Set new timelock contract"
+      },
+      "setTipJar(address)": {
+        "notice": "Set new tip jar contract"
+      },
+      "timelock()": {
+        "notice": "Timelock contract"
+      },
+      "tipJar()": {
+        "notice": "TipJarProxy address"
+      }
+    },
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [
+      {
+        "astId": 3009,
+        "contract": "contracts/TipJarManager.sol:TipJarManager",
+        "label": "_initialized",
+        "offset": 0,
+        "slot": "0",
+        "type": "t_bool"
+      },
+      {
+        "astId": 3012,
+        "contract": "contracts/TipJarManager.sol:TipJarManager",
+        "label": "_initializing",
+        "offset": 1,
+        "slot": "0",
+        "type": "t_bool"
+      },
+      {
+        "astId": 589,
+        "contract": "contracts/TipJarManager.sol:TipJarManager",
+        "label": "admin",
+        "offset": 2,
+        "slot": "0",
+        "type": "t_address"
+      },
+      {
+        "astId": 593,
+        "contract": "contracts/TipJarManager.sol:TipJarManager",
+        "label": "criticalDelay",
+        "offset": 0,
+        "slot": "1",
+        "type": "t_uint256"
+      },
+      {
+        "astId": 597,
+        "contract": "contracts/TipJarManager.sol:TipJarManager",
+        "label": "regularDelay",
+        "offset": 0,
+        "slot": "2",
+        "type": "t_uint256"
+      },
+      {
+        "astId": 600,
+        "contract": "contracts/TipJarManager.sol:TipJarManager",
+        "label": "tipJar",
+        "offset": 0,
+        "slot": "3",
+        "type": "t_address"
+      },
+      {
+        "astId": 604,
+        "contract": "contracts/TipJarManager.sol:TipJarManager",
+        "label": "timelock",
+        "offset": 0,
+        "slot": "4",
+        "type": "t_contract(ITimelockController)2127"
+      }
+    ],
+    "types": {
+      "t_address": {
+        "encoding": "inplace",
+        "label": "address",
+        "numberOfBytes": "20"
+      },
+      "t_bool": {
+        "encoding": "inplace",
+        "label": "bool",
+        "numberOfBytes": "1"
+      },
+      "t_contract(ITimelockController)2127": {
+        "encoding": "inplace",
+        "label": "contract ITimelockController",
+        "numberOfBytes": "20"
+      },
+      "t_uint256": {
+        "encoding": "inplace",
+        "label": "uint256",
+        "numberOfBytes": "32"
+      }
+    }
+  }
+}

@@ -74,7 +74,7 @@ contract TipJarProxy is ERC1967Proxy {
      *
      * NOTE: Only the admin can call this function. See {ProxyAdmin-changeProxyAdmin}.
      */
-    function changeAdmin(address newAdmin) external virtual ifAdmin {
+    function changeAdmin(address newAdmin) external ifAdmin {
         require(newAdmin != address(0), "TransparentUpgradeableProxy: new admin is the zero address");
         emit AdminChanged(_admin(), newAdmin);
         _setAdmin(newAdmin);
@@ -85,7 +85,7 @@ contract TipJarProxy is ERC1967Proxy {
      *
      * NOTE: Only the admin can call this function. See {ProxyAdmin-upgrade}.
      */
-    function upgradeTo(address newImplementation) external virtual ifAdmin {
+    function upgradeTo(address newImplementation) external ifAdmin {
         _upgradeTo(newImplementation);
     }
 
@@ -96,7 +96,7 @@ contract TipJarProxy is ERC1967Proxy {
      *
      * NOTE: Only the admin can call this function. See {ProxyAdmin-upgradeAndCall}.
      */
-    function upgradeToAndCall(address newImplementation, bytes calldata data) external payable virtual ifAdmin {
+    function upgradeToAndCall(address newImplementation, bytes calldata data) external payable ifAdmin {
         _upgradeTo(newImplementation);
         Address.functionDelegateCall(newImplementation, data);
     }
@@ -104,7 +104,7 @@ contract TipJarProxy is ERC1967Proxy {
     /**
      * @dev Returns the current admin.
      */
-    function _admin() internal view virtual returns (address adm) {
+    function _admin() internal view returns (address adm) {
         bytes32 slot = _ADMIN_SLOT;
         // solhint-disable-next-line no-inline-assembly
         assembly {
@@ -127,7 +127,7 @@ contract TipJarProxy is ERC1967Proxy {
     /**
      * @dev Makes sure the admin cannot access the fallback function. See {Proxy-_beforeFallback}.
      */
-    function _beforeFallback() internal virtual override {
+    function _beforeFallback() internal override {
         require(msg.sender != _admin(), "TipJarProxy: admin cannot fallback to proxy target");
         super._beforeFallback();
     }

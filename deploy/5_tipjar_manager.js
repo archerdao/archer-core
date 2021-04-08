@@ -2,13 +2,13 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
   const { deploy, log } = deployments;
   const { deployer } = await getNamedAccounts();
   
-  log(`4) TipJar`)
-  // Deploy TipJar contract
-  const deployResult = await deploy("TipJar", {
+  log(`5) TipJarManager`)
+  // Deploy TipJarManager contract
+  const deployResult = await deploy("TipJarManager", {
     from: deployer,
-    contract: "TipJar",
+    contract: "TipJarManager",
     gas: 4000000,
-    skipIfAlreadyDeployed: false
+    skipIfAlreadyDeployed: true
   });
 
   if (deployResult.newlyDeployed) {
@@ -18,5 +18,5 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
   }
 };
 
-module.exports.tags = ["4", "TipJar"]
-module.exports.dependencies = ["3"]
+module.exports.tags = ["5", "TipJarManager"]
+module.exports.dependencies = ["4"]

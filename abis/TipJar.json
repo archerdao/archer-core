@@ -224,19 +224,6 @@
   },
   {
     "inputs": [],
-    "name": "MINER_MANAGER_ROLE",
-    "outputs": [
-      {
-        "internalType": "bytes32",
-        "name": "",
-        "type": "bytes32"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
     "name": "TIP_JAR_ADMIN_ROLE",
     "outputs": [
       {
@@ -497,17 +484,7 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_roleAdmin",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
         "name": "_tipJarAdmin",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_minerManager",
         "type": "address"
       },
       {

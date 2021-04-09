@@ -73,13 +73,26 @@ task("accounts", "Prints the list of accounts", async () => {
 // Deploy add-ons: https://hardhat.org/plugins/hardhat-deploy.html
 module.exports = {
   solidity: {
-    version: "0.7.4",
-    settings: {
-      optimizer: {
-        enabled: true,
-        runs: 9999
+    compilers: [
+      {
+        version: "0.7.4",
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 200
+          }
+        }
+      },
+      {
+        version: "0.8.3",
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 99999
+          }
+        }
       }
-    }
+    ]
   },
   defaultNetwork: "hardhat",
   networks: {

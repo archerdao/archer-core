@@ -20,12 +20,6 @@ contract WETH2 {
     /// @notice EIP-20 token decimals for this token
     uint8 public constant decimals = 18;
 
-    /// @dev Allowance amounts on behalf of others
-    mapping (address => mapping (address => uint256)) public allowance;
-
-    /// @dev Official record of token balances for each account
-    mapping (address => uint256) public balanceOf;
-
     /// @notice WETH v1
     IWETH public immutable WETH;
 
@@ -48,6 +42,12 @@ contract WETH2 {
     /// @notice The EIP-712 typehash for receiveWithAuthorization (EIP-3009)
     /// keccak256("ReceiveWithAuthorization(address from,address to,uint256 value,uint256 validAfter,uint256 validBefore,bytes32 nonce)")
     bytes32 public constant RECEIVE_WITH_AUTHORIZATION_TYPEHASH = 0xd099cc98ef71107a616c4f0f941f04c322d8e254fe26b3c6668db87aae413de8;
+
+    /// @dev Allowance amounts on behalf of others
+    mapping (address => mapping (address => uint256)) public allowance;
+
+    /// @dev Official record of token balances for each account
+    mapping (address => uint256) public balanceOf;
 
     /// @notice A record of states for signing / validating signatures
     mapping (address => uint) public nonces;

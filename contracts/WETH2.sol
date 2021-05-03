@@ -139,7 +139,7 @@ contract WETH2 {
      * @notice Total supply of WETH2
      * @return Total supply
      */
-    function totalSupply() public view returns (uint256) {
+    function totalSupply() external view returns (uint256) {
         return address(this).balance;
     }
 
@@ -221,7 +221,7 @@ contract WETH2 {
      * @param amount The number of tokens to transfer
      * @return Whether or not the transfer succeeded
      */
-    function transferFrom(address src, address dst, uint256 amount) public returns (bool) {
+    function transferFrom(address src, address dst, uint256 amount) external returns (bool) {
         address spender = msg.sender;
         uint256 spenderAllowance = allowance[src][spender];
 

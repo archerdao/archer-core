@@ -26,6 +26,7 @@ contract WETH2 {
     /// @dev Official record of token balances for each account
     mapping (address => uint256) public balanceOf;
 
+    /// @notice WETH v1
     IWETH public immutable WETH;
 
     /// @notice The EIP-712 typehash for the contract's domain
